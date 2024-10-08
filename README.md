@@ -3,7 +3,7 @@
 - relevant to news articles (sentiment analysis)
 
 # Requirements
-	to learn scala and rust
+	to learn scala
 ## Functional requirements
 - show average news' polarity (negative/positive/neutral) towards a company (stock)
 - How FOMO they are
@@ -13,7 +13,7 @@
 	- show how an industry is dependent on news
 - Update daily
 ## Technical requirements
-- web crawling with rust (using **spider-rs**) -> to learn
+- web crawling with python (using **crawlee (python)**)
 - serving api -> scala -> to learn
 - batch/realtime calculation -> scala
 - front end -> python + streamlit
@@ -22,14 +22,14 @@
     - redis for caching
 # Solutions
 ## Tech stack
-- scraping with **spider-rs**
+- scraping with **crawlee (python)**
 - batch calculation and realtime inference with **apache-spark** + **Scala**
 - backend serving with **Scala**
 - realtime/history stock data with **vnstock-python-framework**
 ## Steps
-- For news article parallel scraping with **spider-rs**
+- For news article parallel scraping with **crawlee (python)**
 - for sentiment analysis 
-	- On-time: Create reviews dataset with: scraping reviews data on shopee with **spider-rs**
+	- On-time: Create reviews dataset with: scraping reviews data on shopee with **crawlee (python)**
 	- Generate "words polarity weight" database using
 		- Batch calculation with apache spark
 		- Storing the "words polarity weight" in key-value store **MySQL**
@@ -52,6 +52,3 @@
 - frontend
 - credentials
 - README.md
-
-# Reference
-- spider-rs: https://docs.rs/spider/latest/spider/

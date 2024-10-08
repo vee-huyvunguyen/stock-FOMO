@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "frontend"
+name = "scrape-jobs"
 version = "0.1.0"
 description = ""
 authors = ["huynv44 <huyk25sinh@gmail.com>"]
@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-streamlit = "^1.39.0"
+crawlee = {extras = ["parsel"], version = "^0.3.8"}
 
 
 [build-system]

@@ -1,7 +1,0 @@
-[package]
-name = "scrape_jobs"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-spider = "2.8.19"

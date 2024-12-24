@@ -8,7 +8,8 @@ type PSelector = string;
 type HttpUrl = string;
 
 export default class ComplexMaster
-  implements PuppetMaster<Page, ElementHandle> {
+  implements PuppetMaster<Page, ElementHandle>
+{
   constructor(
     public page: Page,
     public browser: Browser,

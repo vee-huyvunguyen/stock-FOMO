@@ -14,6 +14,7 @@
     "devDependencies": {
         "@apify/tsconfig": "^0.1.0",
         "@types/node": "^22.0.0",
+        "prettier": "^3.4.2",
         "tsx": "^4.4.0",
         "typescript": "~5.7.0"
     },
@@ -22,8 +23,16 @@
         "start:prod": "node dist/main.js",
         "start:dev": "tsx src/main.ts",
         "build": "tsc",
-        "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
+        "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1",
+        "format": "prettier --write \"src/**/*.ts\""
     },
     "author": "It's not you it's me",
-    "license": "ISC"
+    "license": "ISC",
+        "prettier": {
+        "semi": true,
+        "trailingComma": "all",
+        "singleQuote": true,
+        "printWidth": 80,
+        "tabWidth": 2
+    }
 }

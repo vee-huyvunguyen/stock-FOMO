@@ -6,22 +6,22 @@ type Miliseconds = number;
 type PSelector = string;
 type HttpUrl = string;
 
-interface PuppetMasterConfig {
+interface TheMasterConfig {
   logNullElement: boolean;
   defaultGotoOptions?: GoToOptions;
   defaultViewport?: Viewport;
 }
 
-interface PuppetMaster<P, E> {
+interface TheMaster<P, E> {
   page?: P;
-  config: PuppetMasterConfig;
+  config: TheMasterConfig;
   watcher?: BaseWatcher | undefined;
   /**
    * Check for undefined/missing fields in config, and replace them with default values
    * @param {any} config:PuppetMasterConfig to be checked
    * @returns {any}
    */
-  initConfig(config: PuppetMasterConfig): PuppetMasterConfig;
+  initConfig(config: TheMasterConfig): TheMasterConfig;
   /**
    * Check if an element is null/undefined/empty to log it, return the element itself
    * @param {any} element:ScrapedElement
@@ -89,4 +89,4 @@ interface PuppetMaster<P, E> {
   currentURL(): string;
 }
 
-export { PuppetMaster, PuppetMasterConfig };
+export { TheMaster, TheMasterConfig };

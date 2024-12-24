@@ -1,7 +1,7 @@
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import { PuppetMaster, PuppetMasterConfig } from '.';
+import { TheMaster, TheMasterConfig } from '.';
 import { CheerioAPI, load as CherioLoad, Element } from 'cheerio';
-import NoobScrapedElement from '../ScrapedElement.ts/NoobScrapedElement';
+import CheerioScrapedElement from '../ScrapedElement.ts/CheerioScrapedElement';
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
 
@@ -12,9 +12,9 @@ type Miliseconds = number;
  * using `axios` to request static html, and load it into a `CheerioAPI` object,
  * using `Cheerio` selectors to get `Element`
  */
-class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
+class CheerioMaster implements TheMaster<CheerioAPI, Element> {
   constructor(
-    public config: PuppetMasterConfig,
+    public config: TheMasterConfig,
     public page: CheerioAPI,
     public watcher: BaseWatcher,
     public loadedURL: string,
@@ -24,7 +24,7 @@ class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
     this.config = this.initConfig(config);
     this.loadedURL = loadedURL;
   }
-  initConfig(config: PuppetMasterConfig): PuppetMasterConfig {
+  initConfig(config: TheMasterConfig): TheMasterConfig {
     return config;
   }
   checkPage(): CheerioAPI {
@@ -35,9 +35,9 @@ class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
     }
   }
   logErrorNullElement(
-    element: NoobScrapedElement,
+    element: CheerioScrapedElement,
     elementName?: string,
-  ): NoobScrapedElement {
+  ): CheerioScrapedElement {
     if (this.config.logNullElement && elementName) {
       this.watcher?.checkError(element.element, {
         msg: `Cant find ${elementName} element, at xpath: ${element.selector}`,
@@ -50,7 +50,7 @@ class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
     return CherioLoad(data);
   }
   async goto(url: string): Promise<void> {
-    this.page = await NoobMaster.loadCheerioAPI(url);
+    this.page = await CheerioMaster.loadCheerioAPI(url);
     this.loadedURL = url;
     this.checkPage();
   }
@@ -64,9 +64,9 @@ class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
   }
   async selectElements(
     selector: string,
-    parentElement?: NoobScrapedElement | undefined,
+    parentElement?: CheerioScrapedElement | undefined,
     elementName?: string | undefined,
-  ): Promise<NoobScrapedElement[]> {
+  ): Promise<CheerioScrapedElement[]> {
     let foundCheerioElements: Element[] = this.checkPage()(
       selector,
       parentElement?.element,
@@ -77,14 +77,14 @@ class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
       });
     }
     return foundCheerioElements.map(
-      (ele) => new NoobScrapedElement(ele as Element, selector, this.page),
+      (ele) => new CheerioScrapedElement(ele as Element, selector, this.page),
     );
   }
   async selectElement(
     selector: string,
-    parentElement?: NoobScrapedElement,
+    parentElement?: CheerioScrapedElement,
     elementName?: string | undefined,
-  ): Promise<NoobScrapedElement | undefined> {
+  ): Promise<CheerioScrapedElement | undefined> {
     const foundElements = await this.selectElements(
       selector,
       parentElement,
@@ -110,4 +110,4 @@ class NoobMaster implements PuppetMaster<CheerioAPI, Element> {
   }
 }
 
-export default NoobMaster;
+export default CheerioMaster;

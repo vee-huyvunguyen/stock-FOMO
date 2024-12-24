@@ -2,7 +2,7 @@ import { ClickOptions } from 'puppeteer';
 import ScrapedElement from '.';
 import { Element, CheerioAPI } from 'cheerio';
 
-class NoobScrapedElement implements ScrapedElement<CheerioAPI, Element> {
+class CheerioScrapedElement implements ScrapedElement<CheerioAPI, Element> {
   constructor(
     public element: Element,
     public selector: string,
@@ -48,4 +48,4 @@ class NoobScrapedElement implements ScrapedElement<CheerioAPI, Element> {
   }
 }
 
-export default NoobScrapedElement;
+export default CheerioScrapedElement;

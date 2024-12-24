@@ -1,19 +1,18 @@
 import { Page, Browser, GoToOptions, ElementHandle } from 'puppeteer';
-import ComplexScrapedElement from '../ScrapedElement.ts/ComplexScrapedElement';
+import PuppetScrapedElement from '../ScrapedElement.ts/PuppetScrapedElement';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import { PuppetMaster, PuppetMasterConfig } from '.';
+import { TheMaster, TheMasterConfig } from '.';
 
 type Miliseconds = number;
 type PSelector = string;
 type HttpUrl = string;
 
-export default class ComplexMaster
-  implements PuppetMaster<Page, ElementHandle>
-{
+export default class PuppetMaster
+  implements TheMaster<Page, ElementHandle> {
   constructor(
     public page: Page,
     public browser: Browser,
-    public config: PuppetMasterConfig,
+    public config: TheMasterConfig,
     public watcher?: BaseWatcher,
   ) {
     this.browser = browser;
@@ -26,7 +25,7 @@ export default class ComplexMaster
    * @param {any} config:PuppetMasterConfig to be checked
    * @returns {any}
    */
-  initConfig(config: PuppetMasterConfig): PuppetMasterConfig {
+  initConfig(config: TheMasterConfig): TheMasterConfig {
     config.defaultGotoOptions = config.defaultGotoOptions ?? {
       waitUntil: 'networkidle2',
     };
@@ -38,9 +37,9 @@ export default class ComplexMaster
     return config;
   }
   logErrorNullElement(
-    element: ComplexScrapedElement,
+    element: PuppetScrapedElement,
     elementName?: string,
-  ): ComplexScrapedElement {
+  ): PuppetScrapedElement {
     if (this.config.logNullElement && elementName) {
       this.watcher?.checkError(element.element, {
         msg: `Cant find ${elementName} element, at xpath: ${element.selector}`,
@@ -81,9 +80,9 @@ export default class ComplexMaster
    */
   async selectElements(
     selector: PSelector | XPathExpression,
-    parentElement?: ComplexScrapedElement,
+    parentElement?: PuppetScrapedElement,
     elementName?: string,
-  ): Promise<ComplexScrapedElement[]> {
+  ): Promise<PuppetScrapedElement[]> {
     let elements = [];
     if (parentElement) {
       // this.page.waitForSelector(selector as string, )
@@ -94,7 +93,7 @@ export default class ComplexMaster
 
     const scrapedElements = elements.map((ele) =>
       this.logErrorNullElement(
-        new ComplexScrapedElement(
+        new PuppetScrapedElement(
           ele as ElementHandle,
           selector as string,
           this.page,
@@ -106,9 +105,9 @@ export default class ComplexMaster
   }
   async selectElement(
     selector: PSelector | XPathExpression,
-    parentElement?: ComplexScrapedElement,
+    parentElement?: PuppetScrapedElement,
     elementName: string = '',
-  ): Promise<ComplexScrapedElement | undefined> {
+  ): Promise<PuppetScrapedElement | undefined> {
     const elements = await this.selectElements(
       selector,
       parentElement,

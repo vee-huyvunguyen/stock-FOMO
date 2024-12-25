@@ -13,7 +13,7 @@
 	- show how an industry is dependent on news
 - Update daily
 ## Technical requirements
-- Web crawling news articles from: CNBC, Reuters, Wall Street Journal
+- Web crawling news articles from: CNBC, Reuters, Fox News
 - Saving data in postgresql:
 	- Scraped data
 	- Checkpoints (websites and their last scraped datetime)

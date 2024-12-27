@@ -4,7 +4,7 @@
     - `raw_news_pages`: scraped pages and their elements.
     - `scraped_links`: links, and their last scraped datetime (with tz)
     - `pending_pages_to_scrape`: store the pages to be scraped, will be read by scraping jobs, and update them to be scraped.
-- `analytics`: to store analysis, ready to be served to dashboard
+- (designing)`analytics`: to store analysis, ready to be served to dashboard
     - `news_polarity_towards_stocks`
 - `news_entity`: to store data models that represent
     - `company`(stock)

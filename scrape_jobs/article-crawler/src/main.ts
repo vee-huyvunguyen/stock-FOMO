@@ -1,15 +1,32 @@
-// For more information, see https://crawlee.dev/
-import { PuppeteerCrawler, log } from 'crawlee';
+import puppeteer from 'puppeteer';
 
-import { router } from './routes.js';
+async function scrapeUrl(url: string) {
+  // Launch a headless browser
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-const startUrls = ['https://crawlee.dev'];
+  // Navigate to the URL
+  await page.goto(url, { waitUntil: 'networkidle2' });
 
-const crawler = new PuppeteerCrawler({
-  // proxyConfiguration: new ProxyConfiguration({ proxyUrls: ['...'] }),
-  requestHandler: router,
-  // Comment this option to scrape the full website.
-  maxRequestsPerCrawl: 20,
-});
+  // Wait for a specific element to be loaded
+  // Replace 'body' with the actual selector of an element that indicates the page is fully loaded
+  await page.waitForSelector('body');
 
-await crawler.run(startUrls);
+  // Scrape the content
+  const content = await page.evaluate(() => {
+    // Replace 'body' with the actual element or content you want to scrape
+    return document.querySelector('body')?.innerHTML || '';
+  });
+
+  // Close the browser
+  await browser.close();
+
+  return content;
+}
+
+// Example usage
+(async () => {
+  const url = 'https://example.com';
+  const content = await scrapeUrl(url);
+  console.log(content);
+})();

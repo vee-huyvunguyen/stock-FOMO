@@ -1,32 +1,28 @@
 import puppeteer from 'puppeteer';
+import PuppetMaster from './PuppetShow/TheMaster/PuppetMaster';
+import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher';
 
-async function scrapeUrl(url: string) {
+async function main() {
+  const url: string = 'https://crawlee.dev/api/puppeteer-crawler/class/PuppeteerCrawler';
+
   // Launch a headless browser
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  const watcher = new ConsoleWatcher({level:'warn'})
+  var puppetMaster = new PuppetMaster(page, browser,{logNullElement:false}, watcher )
 
-  // Navigate to the URL
-  await page.goto(url, { waitUntil: 'networkidle2' });
-
-  // Wait for a specific element to be loaded
-  // Replace 'body' with the actual selector of an element that indicates the page is fully loaded
-  await page.waitForSelector('body');
-
-  // Scrape the content
-  const content = await page.evaluate(() => {
-    // Replace 'body' with the actual element or content you want to scrape
-    return document.querySelector('body')?.innerHTML || '';
-  });
-
+  try{
+    await puppetMaster.goto(url);
+    const titleElement = await puppetMaster.selectElement(
+      '.theme-doc-markdown > header:nth-child(1) > h1:nth-child(1)'
+    )
+    const title = await titleElement?.text()
+    console.log(`titleElement is ${title}`)
+  }finally{
+    await browser.close();
+  }
   // Close the browser
-  await browser.close();
-
-  return content;
 }
 
 // Example usage
-(async () => {
-  const url = 'https://example.com';
-  const content = await scrapeUrl(url);
-  console.log(content);
-})();
+main();

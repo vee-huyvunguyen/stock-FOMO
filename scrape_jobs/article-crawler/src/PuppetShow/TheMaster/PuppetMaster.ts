@@ -88,7 +88,7 @@ export default class PuppetMaster
       // this.page.waitForSelector(selector as string, )
       elements = await parentElement.element.$$(selector as string);
     } else {
-      elements = await this.checkPage().$x(selector as string);
+      elements = await this.checkPage().$$(selector as string);
     }
 
     const scrapedElements = elements.map((ele) =>

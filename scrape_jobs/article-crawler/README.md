@@ -1,3 +1,7 @@
+# Crawler for News and Articles
+- Reference: https://pptr.dev/
+
+
 # Crawlee + PuppeteerCrawler + TypeScript project
 
 This template is a production ready boilerplate for developing with `PuppeteerCrawler`. Use this to bootstrap your projects using the most up-to-date code.

@@ -7,8 +7,7 @@ type Miliseconds = number;
 type PSelector = string;
 type HttpUrl = string;
 
-export default class PuppetMaster
-  implements TheMaster<Page, ElementHandle> {
+export default class PuppetMaster implements TheMaster<Page, ElementHandle> {
   constructor(
     public page: Page,
     public browser: Browser,

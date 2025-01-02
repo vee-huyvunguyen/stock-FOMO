@@ -2,7 +2,7 @@ import { BaseWatcher } from '../TheWatcher/BaseWatcher';
 import { TheMaster, TheMasterConfig } from '.';
 import { CheerioAPI, load as CherioLoad, Element } from 'cheerio';
 import CheerioScrapedElement from '../ScrapedElement.ts/CheerioScrapedElement';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import isEmpty from 'lodash/isEmpty';
 
 type Miliseconds = number;
@@ -18,11 +18,13 @@ class CheerioMaster implements TheMaster<CheerioAPI, Element> {
     public page: CheerioAPI,
     public watcher: BaseWatcher,
     public loadedURL: string,
+    public axiosRequestConfig?: AxiosRequestConfig,
   ) {
     this.watcher = watcher;
     this.page = page;
     this.config = this.initConfig(config);
     this.loadedURL = loadedURL;
+    this.axiosRequestConfig = axiosRequestConfig;
   }
   initConfig(config: TheMasterConfig): TheMasterConfig {
     return config;
@@ -45,12 +47,18 @@ class CheerioMaster implements TheMaster<CheerioAPI, Element> {
     }
     return element;
   }
-  static async loadCheerioAPI(url: string): Promise<CheerioAPI> {
-    const { data } = await axios.get(url);
+  static async loadCheerioAPI(
+    url: string,
+    axiosRequestConfig?: AxiosRequestConfig,
+  ): Promise<CheerioAPI> {
+    const { data } = await axios.get(url, axiosRequestConfig);
     return CherioLoad(data);
   }
   async goto(url: string): Promise<void> {
-    this.page = await CheerioMaster.loadCheerioAPI(url);
+    this.page = await CheerioMaster.loadCheerioAPI(
+      url,
+      this.axiosRequestConfig,
+    );
     this.loadedURL = url;
     this.checkPage();
   }

@@ -55,6 +55,7 @@ class CheerioMaster implements TheMaster<CheerioAPI, Element> {
     return CherioLoad(data);
   }
   async goto(url: string): Promise<void> {
+    this.watcher?.info({ msg: 'Loading ' + url });
     this.page = await CheerioMaster.loadCheerioAPI(
       url,
       this.axiosRequestConfig,

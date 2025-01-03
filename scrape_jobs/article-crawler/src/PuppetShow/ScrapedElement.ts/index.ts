@@ -10,6 +10,7 @@ interface ScrapedElement<P, E> {
   href(): Promise<string>;
   hrefAndText(): Promise<{ href: string; text: string }>;
   click(option?: ClickOptions): Promise<void>;
+  getOuterHTML(): Promise<string>;
 }
 
 export default ScrapedElement;

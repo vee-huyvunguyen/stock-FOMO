@@ -55,6 +55,13 @@ class PuppetScrapedElement implements ScrapedElement<Page, ElementHandle> {
   async click(option?: ClickOptions): Promise<void> {
     await this.element.click(option);
   }
+
+  /**
+   * Get the the outer HTML: HTML of the Element, and children elements
+   */
+  async getOuterHTML(): Promise<string> {
+    return await this.getProperty("outerHTML")
+  }
 }
 
 export default PuppetScrapedElement;

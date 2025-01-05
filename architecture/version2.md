@@ -8,7 +8,7 @@ Develop a platform that predicts and displays stock changes (up, down, percentag
 **Primary Objectives**  
 1. Provide insights into stock trends based on news sentiment.
 2. Demonstrate relationships between stock performance and journalist or industry-specific news trends.
-3. Showcase daily updates and real-time predictions.
+3. Showcase daily updates and predictions (updates each night).
 4. Highlight engineering skills in web scraping, data pipeline orchestration, and advanced analytics.
 
 ---
@@ -26,7 +26,7 @@ Develop a platform that predicts and displays stock changes (up, down, percentag
      - News polarity trends.
      - Specific journalists' opinions.
    - Track relationships between industry sectors and aggregated sentiment.  
-3. **Real-Time Updates**:  
+3. **Data Timeliness**:  
    - Daily data updates and sentiment analysis pipelines.
 4. **Dashboard Filtering**:  
    - Filter by stock ticker, news source, polarity, journalist, industry, and date range.  
@@ -62,8 +62,8 @@ Develop a platform that predicts and displays stock changes (up, down, percentag
 
 #### Integration:  
 - Use **Polygon.io** for stock data ingestion:
-  - Sync historical stock data to the PostgreSQL warehouse.
-  - Right now, it will not Stream new stock price updates in real-time.
+  - Sync historical stock data, and update stockprice once each day to the PostgreSQL warehouse.
+  - Right now, it WILL NOT Stream new stock price updates in real-time.
   - Only through PostgreSQL
 
 ---

@@ -1,27 +1,28 @@
 import { Viewport, GoToOptions } from 'puppeteer';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
 import ScrapedElement from '../ScrapedElement.ts';
+import { CheerioAPI, Element } from 'cheerio';
 
 type Miliseconds = number;
 type PSelector = string;
 type HttpUrl = string;
 
-interface TheMasterConfig {
+interface ScrapeMasterConfig {
   logNullElement: boolean;
   defaultGotoOptions?: GoToOptions;
   defaultViewport?: Viewport;
 }
 
-interface TheMaster<P, E> {
+interface ScrapeMaster<P = CheerioAPI, E = Element> {
   page?: P;
-  config: TheMasterConfig;
+  config: ScrapeMasterConfig;
   watcher?: BaseWatcher | undefined;
   /**
    * Check for undefined/missing fields in config, and replace them with default values
    * @param {any} config:PuppetMasterConfig to be checked
    * @returns {any}
    */
-  initConfig(config: TheMasterConfig): TheMasterConfig;
+  initConfig(config: ScrapeMasterConfig): ScrapeMasterConfig;
   /**
    * Check if an element is null/undefined/empty to log it, return the element itself
    * @param {any} element:ScrapedElement
@@ -89,4 +90,4 @@ interface TheMaster<P, E> {
   currentURL(): string;
 }
 
-export { TheMaster, TheMasterConfig };
+export { ScrapeMaster, ScrapeMasterConfig };

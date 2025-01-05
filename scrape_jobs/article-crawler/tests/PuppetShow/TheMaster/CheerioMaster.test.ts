@@ -1,4 +1,4 @@
-import CheerioMaster from '../../../src/PuppetShow/TheMaster/CheerioMaster';
+import CheerioMaster from '../../../src/PuppetShow/ScrapeMaster/CheerioMaster';
 import ConsoleWatcher from '../../../src/PuppetShow/TheWatcher/ConsoleWatcher';
 import { firstQuote } from './testUtils';
 import { Agent } from 'http';
@@ -10,10 +10,10 @@ describe('PuppetMaster', () => {
   const url = 'https://quotes.toscrape.com/';
   const httpAgent = new Agent({ keepAlive: false });
   const httpsAgent = new HttpsAgent({ keepAlive: false });
-  
+
   beforeAll(async () => {
     // Initialize the CheerioMaster
-    const page = await CheerioMaster.loadCheerioAPI(url, {httpAgent, httpsAgent});
+    const page = await CheerioMaster.loadCheerioAPI(url, { httpAgent, httpsAgent });
     cheerioMaster = new CheerioMaster({ logNullElement: false }, page, watcher, url)
   });
 

@@ -1,5 +1,5 @@
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import { TheMaster, TheMasterConfig } from '.';
+import { ScrapeMaster, ScrapeMasterConfig } from '.';
 import { CheerioAPI, load as CherioLoad, Element } from 'cheerio';
 import CheerioScrapedElement from '../ScrapedElement.ts/CheerioScrapedElement';
 import axios, { AxiosRequestConfig } from 'axios';
@@ -12,9 +12,9 @@ type Miliseconds = number;
  * using `axios` to request static html, and load it into a `CheerioAPI` object,
  * using `Cheerio` selectors to get `Element`
  */
-class CheerioMaster implements TheMaster<CheerioAPI, Element> {
+class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
   constructor(
-    public config: TheMasterConfig,
+    public config: ScrapeMasterConfig,
     public page: CheerioAPI,
     public watcher: BaseWatcher,
     public loadedURL: string,
@@ -26,7 +26,7 @@ class CheerioMaster implements TheMaster<CheerioAPI, Element> {
     this.loadedURL = loadedURL;
     this.axiosRequestConfig = axiosRequestConfig;
   }
-  initConfig(config: TheMasterConfig): TheMasterConfig {
+  initConfig(config: ScrapeMasterConfig): ScrapeMasterConfig {
     return config;
   }
   checkPage(): CheerioAPI {

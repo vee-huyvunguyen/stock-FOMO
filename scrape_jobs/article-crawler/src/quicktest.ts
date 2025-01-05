@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
-import PuppetMaster from './PuppetShow/TheMaster/PuppetMaster';
+import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster';
 import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher';
-import CheerioMaster from './PuppetShow/TheMaster/CheerioMaster';
+import CheerioMaster from './PuppetShow/ScrapeMaster/CheerioMaster';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser

@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import PuppetMaster from './PuppetShow/TheMaster/PuppetMaster';
+import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster';
 import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher';
 
 async function main() {

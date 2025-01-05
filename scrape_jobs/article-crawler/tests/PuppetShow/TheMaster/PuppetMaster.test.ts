@@ -1,5 +1,5 @@
 import { Browser, Page, launch } from 'puppeteer';
-import PuppetMaster from '../../../src/PuppetShow/TheMaster/PuppetMaster';
+import PuppetMaster from '../../../src/PuppetShow/ScrapeMaster/PuppetMaster';
 import ConsoleWatcher from '../../../src/PuppetShow/TheWatcher/ConsoleWatcher';
 import { firstQuote } from './testUtils';
 

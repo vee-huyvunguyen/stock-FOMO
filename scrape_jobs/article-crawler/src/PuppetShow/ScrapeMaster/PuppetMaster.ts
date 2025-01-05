@@ -1,17 +1,17 @@
 import { Page, Browser, GoToOptions, ElementHandle } from 'puppeteer';
 import PuppetScrapedElement from '../ScrapedElement.ts/PuppetScrapedElement';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import { TheMaster, TheMasterConfig } from '.';
+import { ScrapeMaster, ScrapeMasterConfig } from '.';
 
 type Miliseconds = number;
 type PSelector = string;
 type HttpUrl = string;
 
-export default class PuppetMaster implements TheMaster<Page, ElementHandle> {
+export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
   constructor(
     public page: Page,
     public browser: Browser,
-    public config: TheMasterConfig,
+    public config: ScrapeMasterConfig,
     public watcher?: BaseWatcher,
   ) {
     this.browser = browser;
@@ -24,7 +24,7 @@ export default class PuppetMaster implements TheMaster<Page, ElementHandle> {
    * @param {any} config:PuppetMasterConfig to be checked
    * @returns {any}
    */
-  initConfig(config: TheMasterConfig): TheMasterConfig {
+  initConfig(config: ScrapeMasterConfig): ScrapeMasterConfig {
     config.defaultGotoOptions = config.defaultGotoOptions ?? {
       waitUntil: 'networkidle2',
     };

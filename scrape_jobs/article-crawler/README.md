@@ -1,6 +1,6 @@
 # Crawler for News and Articles
 - Reference: https://pptr.dev/
-
+- Articles site that will be scraped: CNBC, Reuters, Fox News
 
 # Crawlee + PuppeteerCrawler + TypeScript project
 

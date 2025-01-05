@@ -60,7 +60,7 @@ class PuppetScrapedElement implements ScrapedElement<Page, ElementHandle> {
    * Get the the outer HTML: HTML of the Element, and children elements
    */
   async getOuterHTML(): Promise<string> {
-    return await this.getProperty("outerHTML")
+    return await this.getProperty('outerHTML');
   }
 }
 

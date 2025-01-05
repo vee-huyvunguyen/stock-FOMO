@@ -14,20 +14,19 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
     { logNullElement: false },
     watcher,
   );
-  return puppetMaster
+  return puppetMaster;
 }
 
 async function getCheerioMaster(url: string) {
   const watcher = new ConsoleWatcher({ level: 'warn' });
   const page = await CheerioMaster.loadCheerioAPI(url);
-  return new CheerioMaster({ logNullElement: false }, page, watcher, url)
+  return new CheerioMaster({ logNullElement: false }, page, watcher, url);
 }
-
 
 async function main() {
   const url: string = 'https://quotes.toscrape.com/';
   // let master = await getCheerioMaster(url)
-  let master = await getPuppetMaster()
+  let master = await getPuppetMaster();
 
   try {
     await master.goto(url);

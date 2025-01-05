@@ -49,7 +49,6 @@ class CheerioScrapedElement implements ScrapedElement<CheerioAPI, Element> {
   async getOuterHTML(): Promise<string> {
     return this.page(this.element).toString();
   }
-
 }
 
 export default CheerioScrapedElement;

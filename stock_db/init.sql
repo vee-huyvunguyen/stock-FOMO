@@ -13,8 +13,9 @@ CREATE TABLE IF NOT EXISTS scrape.raw_news_pages (
     author TEXT,
     post_datetime TIMESTAMPTZ,
     category TEXT,
-    other_info JSONB,
-    scrape_status VARCHAR(50),
+    other_news_links TEXT[],
+    other_links TEXT[],
+    scrape_status JSONB,
     scraped_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     inserted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

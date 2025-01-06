@@ -1,7 +1,14 @@
 import { DateTime } from 'luxon';
 
-interface RawNewsPage {
-  id: number;
+type ScrapeStatus = {
+    success: boolean
+    failReport: undefined | {
+        fieldsFailedToScrape: string[]
+        errorsEachField: string[]
+    }
+}
+
+type RawNewsPage = {
   url: string;
   content_elements: string[];
   author_element: string;
@@ -11,13 +18,11 @@ interface RawNewsPage {
   author: string;
   post_datetime: DateTime;
   category: string;
-  other_info: Record<
-    string,
-    string | number | boolean | Array<string | number | boolean>
-  >;
-  scrape_status: string;
+  other_news_links: string[];
+  other_links: string[];
+  scrape_status: ScrapeStatus;
   scraped_at: DateTime;
   inserted_at: DateTime;
 }
 
-export { RawNewsPage };
+export { RawNewsPage, ScrapeStatus };

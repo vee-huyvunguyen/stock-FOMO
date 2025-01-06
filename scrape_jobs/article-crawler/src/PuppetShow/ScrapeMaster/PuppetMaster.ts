@@ -1,5 +1,5 @@
 import { Page, Browser, GoToOptions, ElementHandle } from 'puppeteer';
-import PuppetScrapedElement from '../ScrapedElement.ts/PuppetScrapedElement';
+import PuppetScrapedElement from '../ScrapedElement/PuppetScrapedElement';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
 import { ScrapeMaster, ScrapeMasterConfig } from '.';
 

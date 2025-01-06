@@ -1,7 +1,7 @@
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
 import { ScrapeMaster, ScrapeMasterConfig } from '.';
 import { CheerioAPI, load as CherioLoad, Element } from 'cheerio';
-import CheerioScrapedElement from '../ScrapedElement.ts/CheerioScrapedElement';
+import CheerioScrapedElement from '../ScrapedElement/CheerioScrapedElement';
 import axios, { AxiosRequestConfig } from 'axios';
 import isEmpty from 'lodash/isEmpty';
 

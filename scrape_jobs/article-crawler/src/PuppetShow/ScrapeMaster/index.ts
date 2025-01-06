@@ -1,6 +1,6 @@
 import { Viewport, GoToOptions } from 'puppeteer';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import ScrapedElement from '../ScrapedElement.ts';
+import ScrapedElement from '../ScrapedElement';
 import { CheerioAPI, Element } from 'cheerio';
 
 type Miliseconds = number;

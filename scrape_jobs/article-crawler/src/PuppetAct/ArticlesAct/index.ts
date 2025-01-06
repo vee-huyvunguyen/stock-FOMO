@@ -12,10 +12,10 @@ interface ArticleAct {
     scrapeMaster: ScrapeMaster
     articleURL: string
     _scrapeStatus: ScrapeStatus
-    loadNewsPage(): Promise<true>
+    loadNewsPage(): Promise<boolean>
     checkLoadedPage(): Promise<true>
 
-    updateScrapeStatus(): true
+    checkIsNewsPage(): Promise<boolean>
     getOtherNewsLinks(): string[]
     getOtherLinks(): string[]
     getScrapeStatus(): Promise<string>

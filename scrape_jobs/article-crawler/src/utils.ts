@@ -5,4 +5,4 @@ function getErrorMessage(error: unknown): string {
   return String(error); // Convert other types (e.g., string, number) to string
 }
 
-export {getErrorMessage}
+export { getErrorMessage };

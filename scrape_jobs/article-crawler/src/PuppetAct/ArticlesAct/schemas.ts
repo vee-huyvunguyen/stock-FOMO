@@ -1,19 +1,17 @@
 import { DateTime } from 'luxon';
 
-
-type FieldName = string
-type FieldError = string
-
+type FieldName = string;
+type FieldError = string;
 
 type ScrapeStatus = {
-    success: boolean
-    reloadPageCount: number,
-    failReport?: {
-        failStep: "load-page"|"scrape-element"
-        loadPageError?: string
-        fieldsFailedToScrape?: [FieldName,FieldError][]
-    }
-}
+  success: boolean;
+  reloadPageCount: number;
+  failReport?: {
+    failStep: 'load-page' | 'scrape-element';
+    loadPageError?: string;
+    fieldsFailedToScrape?: [FieldName, FieldError][];
+  };
+};
 
 type RawNewsPage = {
   url: string;
@@ -30,6 +28,6 @@ type RawNewsPage = {
   scrape_status: ScrapeStatus;
   scraped_at: DateTime;
   inserted_at: DateTime;
-}
+};
 
 export { RawNewsPage, ScrapeStatus };

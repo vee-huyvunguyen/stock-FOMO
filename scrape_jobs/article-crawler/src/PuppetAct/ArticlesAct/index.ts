@@ -8,6 +8,7 @@ type ActResult = {
 
 type LoadedPageCheck = {
   success: boolean;
+  articleType: string;
   missingElement?: {
     html: string;
     elementName: string;

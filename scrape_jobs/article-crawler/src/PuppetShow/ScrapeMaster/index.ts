@@ -2,6 +2,7 @@ import { Viewport, GoToOptions } from 'puppeteer';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
 import ScrapedElement from '../ScrapedElement';
 import { CheerioAPI, Element } from 'cheerio';
+import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;
 type PSelector = string;
@@ -87,7 +88,12 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
    * Extract current URL, in case of redirecting
    * @returns {any}
    */
-  currentURL(): string;
+  currentURL(): string; 
+  /**
+   * Get the RobotsFile object from the current Page (URL)
+   * @returns {any}
+   */
+  getRobotsFile(): Promise<RobotsFile>;
 }
 
 export { ScrapeMaster, ScrapeMasterConfig };

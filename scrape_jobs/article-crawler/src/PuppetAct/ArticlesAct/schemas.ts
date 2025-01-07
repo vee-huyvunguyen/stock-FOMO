@@ -1,12 +1,17 @@
 import { DateTime } from 'luxon';
 
+
+type FieldName = string
+type FieldError = string
+
+
 type ScrapeStatus = {
     success: boolean
+    reloadPageCount: number,
     failReport?: {
         failStep: "load-page"|"scrape-element"
         loadPageError?: string
-        fieldsFailedToScrape?: string[]
-        errorsEachField?: string[]
+        fieldsFailedToScrape?: [FieldName,FieldError][]
     }
 }
 

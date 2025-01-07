@@ -8,21 +8,30 @@ type ActResult = {
 }
 
 
+type LoadedPageCheck = {
+    success: boolean
+    missingElement?: {
+        html: string
+        elementName: string
+    }
+}
+
+
 interface ArticleAct {
     scrapeMaster: ScrapeMaster
     articleURL: string
-    _scrapeStatus: ScrapeStatus
+    scrapeStatus: ScrapeStatus
+    loadPageCheckLoopLimit: number // integer
     loadNewsPage(): Promise<boolean>
-    checkLoadedPage(): Promise<true>
+    checkLoadedPage(): Promise<LoadedPageCheck>
 
     checkIsNewsPage(): Promise<boolean>
     getOtherNewsLinks(): string[]
     getOtherLinks(): string[]
-    getScrapeStatus(): Promise<string>
 
     getNewsInfo(): Promise<RawNewsPage>
     scrape(): Promise<ActResult>
 }
 
-export {ArticleAct, ActResult}
+export {ArticleAct, ActResult, LoadedPageCheck}
 

@@ -1,33 +1,67 @@
-import { ActResult, ArticleAct } from ".";
+import { range } from "lodash";
+import { ActResult, ArticleAct, LoadedPageCheck } from ".";
 import { ScrapeMaster } from "../../PuppetShow/ScrapeMaster";
 import { getErrorMessage } from "../../utils";
 import { ScrapeStatus, RawNewsPage } from "./schemas";
 
 class CNBCAct implements ArticleAct {
-    private _scrapeStatus: ScrapeStatus ;
+    scrapeStatus: ScrapeStatus;
     constructor(
         public scrapeMaster: ScrapeMaster,
         public articleURL: string,
+        public loadPageCheckLoopLimit: number
 
     ) {
         this.scrapeMaster = scrapeMaster
         this.articleURL = articleURL
-        this._scrapeStatus = {success: true, failReport: undefined}
+        this.loadPageCheckLoopLimit = loadPageCheckLoopLimit
+        this.scrapeStatus = { success: true, reloadPageCount: 0}
+    }
+    updateStatusLoadPageFail(addLoadPageErr: unknown, addFieldsFailedToScrape?: [string, string][]) {
+        this.scrapeStatus.success = false
+        let currentError = this.scrapeStatus.failReport?.loadPageError
+        let fieldsFailedToScrape = this.scrapeStatus.failReport?.fieldsFailedToScrape
+        if (addFieldsFailedToScrape) {
+            fieldsFailedToScrape = fieldsFailedToScrape ? fieldsFailedToScrape.concat(addFieldsFailedToScrape) : fieldsFailedToScrape
+        }
+        this.scrapeStatus.failReport = {
+            failStep: "load-page",
+            loadPageError: addLoadPageErr ? `${currentError}\n${getErrorMessage(addLoadPageErr)}` : currentError,
+            fieldsFailedToScrape
+        }
     }
     async loadNewsPage(): Promise<boolean> {
-        try{
+        try {
             await this.scrapeMaster.goto(this.articleURL)
-        }catch(err){
-            this._scrapeStatus.success=false
-            this._scrapeStatus.failReport={
-                failStep: "load-page",
-                loadPageError: getErrorMessage(err)
-            }
+        } catch (err) {
+            this.updateStatusLoadPageFail(err)
             return false
         }
         return true
     }
-    async checkLoadedPage(): Promise<true> {
+    async loadNewsPageCheckLoop(): Promise<boolean> {
+        let checkPage: LoadedPageCheck = { success: true }
+        for (const checkIdx of range(1,this.loadPageCheckLoopLimit+1)) {
+            let status = await this.loadNewsPage()
+            if (!status) {
+                this.updateStatusLoadPageFail(`Retried loading page for ${checkIdx} times`)
+                return false
+            }
+            checkPage = await this.checkLoadedPage()
+            if (!checkPage.success) {
+                if (checkIdx == this.loadPageCheckLoopLimit) {
+                    var fieldsFailed = checkPage.missingElement
+                    this.updateStatusLoadPageFail(`Loaded Page is not Valid: missing Element ${fieldsFailed?.elementName}`, [
+                        [fieldsFailed?.elementName as string, fieldsFailed?.html as string]
+                    ])
+                    return false
+                }
+                this.scrapeStatus.reloadPageCount += 1
+            }
+        }
+        return true
+    }
+    async checkLoadedPage(): Promise<LoadedPageCheck> {
         throw new Error("Method not implemented.");
     }
     async checkIsNewsPage(): Promise<boolean> {
@@ -37,9 +71,6 @@ class CNBCAct implements ArticleAct {
         throw new Error("Method not implemented.");
     }
     getOtherLinks(): string[] {
-        throw new Error("Method not implemented.");
-    }
-    async getScrapeStatus(): Promise<string> {
         throw new Error("Method not implemented.");
     }
     async getNewsInfo(): Promise<RawNewsPage> {

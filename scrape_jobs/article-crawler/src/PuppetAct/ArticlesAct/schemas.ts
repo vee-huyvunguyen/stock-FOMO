@@ -7,7 +7,12 @@ type ScrapeStatus = {
   success: boolean;
   reloadPageCount: number;
   failReport?: {
-    failStep: 'load-page' | 'scrape-element';
+    failStep:
+      | 'load-page'
+      | 'unknown-page-type'
+      | 'undesired-page-type'
+      | 'scrape-element';
+    manuallyParsedPageType?: string;
     loadPageError?: string;
     fieldsFailedToScrape?: [FieldName, FieldError][];
   };

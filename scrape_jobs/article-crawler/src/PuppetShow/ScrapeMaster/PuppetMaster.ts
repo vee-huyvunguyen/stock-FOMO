@@ -2,6 +2,7 @@ import { Page, Browser, GoToOptions, ElementHandle } from 'puppeteer';
 import PuppetScrapedElement from '../ScrapedElement/PuppetScrapedElement';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
 import { ScrapeMaster, ScrapeMasterConfig } from '.';
+import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;
 type PSelector = string;
@@ -18,6 +19,12 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
     this.page = page;
     this.watcher = watcher;
     this.config = this.initConfig(config);
+  }
+  async getRobotsFile(): Promise<RobotsFile> {
+    return await RobotsFile.find(this.currentURL());
+  }
+  async getPageTitle(): Promise<string> {
+    return await this.page.title();
   }
   /**
    * Check for undefined/missing fields in config, an replace theme with default values

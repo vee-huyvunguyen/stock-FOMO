@@ -1,4 +1,4 @@
-import { range } from 'lodash';
+import { eq, range } from 'lodash';
 import { ActResult, ArticleAct, LoadedPageCheck } from '.';
 import { ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
 import { getErrorMessage } from '../../utils';
@@ -10,11 +10,15 @@ class CNBCAct implements ArticleAct {
     public scrapeMaster: ScrapeMaster,
     public articleURL: string,
     public loadPageCheckLoopLimit: number,
+    public elements: TypeCNBCActCSSselector,
+    public pageType?: string,
   ) {
     this.scrapeMaster = scrapeMaster;
     this.articleURL = articleURL;
     this.loadPageCheckLoopLimit = loadPageCheckLoopLimit;
     this.scrapeStatus = { success: true, reloadPageCount: 0 };
+    this.elements = elements
+    this.pageType = pageType;
   }
   updateStatusLoadPageFail(
     addLoadPageErr: unknown,
@@ -77,7 +81,12 @@ class CNBCAct implements ArticleAct {
     return true;
   }
   async checkLoadedPage(): Promise<LoadedPageCheck> {
-    throw new Error('Method not implemented.');
+    Object.entries(this.elements).forEach(([pageType, pageElements])=>{
+      
+    })
+  }
+  getPageTypes(): string[] {
+    return Object.keys(this.elements)
   }
   async checkIsNewsPage(): Promise<boolean> {
     throw new Error('Method not implemented.');

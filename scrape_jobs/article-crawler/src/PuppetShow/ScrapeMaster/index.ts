@@ -88,12 +88,18 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
    * Extract current URL, in case of redirecting
    * @returns {any}
    */
-  currentURL(): string; 
+  currentURL(): string;
   /**
    * Get the RobotsFile object from the current Page (URL)
    * @returns {any}
    */
   getRobotsFile(): Promise<RobotsFile>;
+
+  /**
+   * Get the title of the loaded URL
+   * @returns {string}
+   */
+  getPageTitle(): Promise<string>;
 }
 
 export { ScrapeMaster, ScrapeMasterConfig };

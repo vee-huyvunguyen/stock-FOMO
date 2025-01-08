@@ -4,6 +4,7 @@ import { CheerioAPI, load as CherioLoad, Element } from 'cheerio';
 import CheerioScrapedElement from '../ScrapedElement/CheerioScrapedElement';
 import axios, { AxiosRequestConfig } from 'axios';
 import isEmpty from 'lodash/isEmpty';
+import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;
 
@@ -25,6 +26,9 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
     this.config = this.initConfig(config);
     this.loadedURL = loadedURL;
     this.axiosRequestConfig = axiosRequestConfig;
+  }
+  async getRobotsFile(): Promise<RobotsFile> {
+    return await RobotsFile.find(this.currentURL());
   }
   initConfig(config: ScrapeMasterConfig): ScrapeMasterConfig {
     return config;
@@ -113,6 +117,9 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
       foundHrefTexts.push({ href, text });
     }
     return foundHrefTexts;
+  }
+  async getPageTitle(): Promise<string> {
+    return this.page('title').text();
   }
   async close(): Promise<void> {
     this.watcher.info({ msg: 'End of NoobMaster' });

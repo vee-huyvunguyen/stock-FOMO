@@ -8,11 +8,7 @@ type ActResult = {
 
 type LoadedPageCheck = {
   success: boolean;
-  articleType: string;
-  missingElement?: {
-    html: string;
-    elementName: string;
-  };
+  pageType?: string;
 };
 
 interface ArticleAct {
@@ -20,6 +16,8 @@ interface ArticleAct {
   articleURL: string;
   scrapeStatus: ScrapeStatus;
   loadPageCheckLoopLimit: number; // integer
+  pageType?: string;
+  elements: any;
   loadNewsPage(): Promise<boolean>;
   checkLoadedPage(): Promise<LoadedPageCheck>;
 

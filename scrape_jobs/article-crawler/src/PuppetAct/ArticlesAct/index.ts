@@ -1,5 +1,5 @@
 import { ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
-import { RawNewsPage, ScrapeStatus } from './schemas';
+import { RawNewsPage, ScrapeStatusHandler } from './schemas';
 
 type ActResult = {
   rawNewsPage: RawNewsPage;
@@ -8,14 +8,13 @@ type ActResult = {
 
 type LoadedPageCheck = {
   success: boolean;
-  pageType?: string;
+  pageType?: 'mainArticle' | string;
 };
 
 interface ArticleAct {
   scrapeMaster: ScrapeMaster;
   articleURL: string;
-  scrapeStatus: ScrapeStatus;
-  loadPageCheckLoopLimit: number; // integer
+  statusHandler: ScrapeStatusHandler;
   pageType?: string;
   elements: any;
   loadNewsPage(): Promise<boolean>;

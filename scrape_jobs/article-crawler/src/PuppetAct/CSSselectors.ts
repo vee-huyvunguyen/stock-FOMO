@@ -1,49 +1,26 @@
 type CSSSelector = string;
 type ElementAttritbuteName = string;
 type ElementAttritbute = string;
-
-type TypeCNBCActCSSselector = {
-  mainArticle: {
-    checkLoadedPageElement: [
-      CSSSelector,
-      ElementAttritbuteName,
-      ElementAttritbute,
-    ];
-    undesired: boolean
-  };
-  podcastArticle: {
-    checkLoadedPageElement: [
-      CSSSelector,
-      ElementAttritbuteName,
-      ElementAttritbute,
-    ],
-    undesired: boolean
-  };
-  makeItArticle: {
-    checkLoadedPageElement: [
-      CSSSelector,
-      ElementAttritbuteName,
-      ElementAttritbute,
-    ];
-    undesired: boolean
-  };
-  proArticle: {
-    checkLoadedPageElement: [
-      CSSSelector,
-      ElementAttritbuteName,
-      ElementAttritbute,
-    ];
-    undesired: boolean
-  };
-  selectArticle: {
-    checkLoadedPageElement: [
-      CSSSelector,
-      ElementAttritbuteName,
-      ElementAttritbute,
-    ];
-    undesired: boolean
-  };
+type PageType = 'mainArticle' | string;
+type ElementsPageTypeConfig = {
+  checkLoadedPageElement: [
+    CSSSelector,
+    ElementAttritbuteName,
+    ElementAttritbute,
+  ];
+  undesired: boolean;
+  [key: string]: any; // Allows additional fields with any type
 };
+type TypeBaseCSSSelector = {
+  mainArticle: ElementsPageTypeConfig;
+  [key: string]: any;
+};
+type TypeCNBCActCSSselector = {
+  podcastArticle: ElementsPageTypeConfig;
+  makeItArticle: ElementsPageTypeConfig;
+  proArticle: ElementsPageTypeConfig;
+  selectArticle: ElementsPageTypeConfig;
+} & TypeBaseCSSSelector;
 
 const CNBCActCSSselector: TypeCNBCActCSSselector = {
   mainArticle: {
@@ -52,7 +29,7 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       'href',
       '//www.cnbc.com/world/',
     ],
-    undesired: false
+    undesired: false,
   },
   podcastArticle: {
     checkLoadedPageElement: [
@@ -60,7 +37,7 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       'innerHTML',
       'Podcasts',
     ],
-    undesired: true
+    undesired: true,
   },
   makeItArticle: {
     checkLoadedPageElement: [
@@ -68,11 +45,11 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       'href',
       '//www.cnbc.com/make-it/',
     ],
-    undesired: false
+    undesired: false,
   },
   proArticle: {
     checkLoadedPageElement: ['.ProPill-proPillLink', 'href', '/pro/'],
-    undesired: true
+    undesired: true,
   },
   selectArticle: {
     checkLoadedPageElement: [
@@ -80,6 +57,6 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       'href',
       'https://www.cnbc.com/select/',
     ],
-    undesired: true
+    undesired: true,
   },
 };

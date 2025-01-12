@@ -1,6 +1,7 @@
 import { ArticleAct } from '.';
 import { ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
 import { RawNewsPage } from './schemas';
+import { TypeCNBCActCSSselector } from '../CSSselectors';
 
 class CNBCAct extends ArticleAct {
   constructor(

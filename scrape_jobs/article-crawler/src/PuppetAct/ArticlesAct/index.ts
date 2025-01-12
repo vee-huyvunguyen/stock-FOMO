@@ -1,4 +1,5 @@
 import { ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
+import { ElementsPageTypeConfig, TypeBaseCSSSelector } from '../CSSselectors';
 import { RawNewsPage, ScrapeStatus, ScrapeStatusHandler } from './schemas';
 
 type LoadedPageCheck = {

@@ -1,4 +1,5 @@
-type CSSSelector = string;
+import { CSSSelector } from '../PuppetShow/ScrapeMaster';
+
 type ElementAttritbuteName = string;
 type ElementAttritbute = string;
 type PageType = 'mainArticle' | string;
@@ -59,4 +60,12 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
     ],
     undesired: true,
   },
+};
+
+export {
+  CNBCActCSSselector,
+  TypeCNBCActCSSselector,
+  TypeBaseCSSSelector,
+  ElementsPageTypeConfig,
+  PageType,
 };

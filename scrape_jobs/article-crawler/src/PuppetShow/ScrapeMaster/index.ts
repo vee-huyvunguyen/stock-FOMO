@@ -5,7 +5,7 @@ import { CheerioAPI, Element } from 'cheerio';
 import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;
-type PSelector = string;
+type CSSSelector = string;
 type HttpUrl = string;
 
 interface ScrapeMasterConfig {
@@ -58,7 +58,7 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
    * @returns {any}
    */
   selectElements(
-    selector: PSelector | XPathExpression | string,
+    selector: CSSSelector,
     parentElement?: ScrapedElement<P, E>,
     elementName?: string,
   ): Promise<ScrapedElement<P, E>[]>;
@@ -70,7 +70,7 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
    * @returns {any}
    */
   selectElement(
-    selector: PSelector | XPathExpression | string,
+    selector: CSSSelector | XPathExpression | string,
     parentElement?: ScrapedElement<P, E>,
     elementName?: string,
   ): Promise<ScrapedElement<P, E> | undefined>;
@@ -102,4 +102,4 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
   getPageTitle(): Promise<string>;
 }
 
-export { ScrapeMaster, ScrapeMasterConfig };
+export { ScrapeMaster, ScrapeMasterConfig, CSSSelector };

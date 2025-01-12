@@ -20,7 +20,6 @@ interface ArticleAct {
   loadNewsPage(): Promise<boolean>;
   checkLoadedPage(): Promise<LoadedPageCheck>;
 
-  checkIsNewsPage(): Promise<boolean>;
   getOtherNewsLinks(): string[];
   getOtherLinks(): string[];
 

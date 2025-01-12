@@ -1,12 +1,19 @@
 import { ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
-import { ElementsPageTypeConfig, TypeBaseCSSSelector } from '../CSSselectors';
-import { RawNewsPage, ScrapeStatus, ScrapeStatusHandler } from './schemas';
+import {
+  ElementsPageTypeConfig,
+  PageType,
+  TypeBaseCSSSelector,
+} from '../CSSselectors';
+import { RawArticlePage, ScrapeStatus, ScrapeStatusHandler } from './schemas';
 
 type LoadedPageCheck = {
   success: boolean;
   pageType?: 'mainArticle' | string;
 };
-
+type OtherLinks = {
+  other: string[];
+  news: string[];
+};
 abstract class ArticleAct {
   protected _statusHandler: ScrapeStatusHandler;
 
@@ -84,11 +91,10 @@ abstract class ArticleAct {
     return Object.keys(this.elements);
   }
 
-  abstract checkIsNewsPage(): Promise<boolean>;
-  abstract getOtherNewsLinks(): string[];
-  abstract getOtherLinks(): string[];
-  abstract getNewsInfo(): Promise<RawNewsPage>;
-  abstract scrape(): Promise<RawNewsPage>;
+  abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
+  abstract getOtherLinks(): Promise<OtherLinks>;
+  abstract getNewsInfo(): Promise<RawArticlePage>;
+  abstract scrape(): Promise<RawArticlePage>;
 }
 
-export { ArticleAct, LoadedPageCheck };
+export { ArticleAct, LoadedPageCheck, OtherLinks };

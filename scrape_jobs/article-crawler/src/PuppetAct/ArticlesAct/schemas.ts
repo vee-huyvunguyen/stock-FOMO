@@ -87,7 +87,7 @@ class ScrapeStatusHandler {
     };
   }
 }
-type RawNewsPage = {
+type RawArticlePage = {
   url: string;
   content_elements: string[];
   author_element: string;
@@ -97,11 +97,11 @@ type RawNewsPage = {
   author: string;
   post_datetime: DateTime;
   category: string;
-  other_news_links: string[];
+  other_article_links: string[];
   other_links: string[];
   scrape_status: ScrapeStatus;
   scraped_at: DateTime;
   inserted_at: DateTime;
 };
 
-export { RawNewsPage, ScrapeStatus, ScrapeFailStep, ScrapeStatusHandler };
+export { RawArticlePage, ScrapeStatus, ScrapeFailStep, ScrapeStatusHandler };

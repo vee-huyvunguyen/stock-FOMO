@@ -1,8 +1,8 @@
 -- Create schema
 CREATE SCHEMA IF NOT EXISTS scrape;
 
--- Create table for raw_news_pages
-CREATE TABLE IF NOT EXISTS scrape.raw_news_pages (
+-- Create table for raw_article_pages
+CREATE TABLE IF NOT EXISTS scrape.raw_article_pages (
     id SERIAL PRIMARY KEY,
     url TEXT NOT NULL,
     content_elements TEXT[],
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS scrape.raw_news_pages (
     author TEXT,
     post_datetime TIMESTAMPTZ,
     category TEXT,
-    other_news_links TEXT[],
+    other_article_links TEXT[],
     other_links TEXT[],
     scrape_status JSONB,
     scraped_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

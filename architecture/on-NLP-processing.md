@@ -1,7 +1,7 @@
 1. The problem expanded much more, when account for articles that don't mention a company, but is highly relevent
     - E.g.: Petrol Companies <-> Any news regarding the Ruso-Ukranian war, and Middle East Wars
 2. The "stock-article" dependency will be devided into 4 steps:
-    - Quantify the revelancy of the article to a set of [GICS codes]([url](https://www.msci.com/our-solutions/indexes/gics))
+    - Quantify the revelancy of the article to a set of [GICS codes](https://www.msci.com/our-solutions/indexes/gics)
     - Quantify the revelancy of the article to The companies inside those codes.
     - Quantify the tone of the article (from negative, netraul, to positive )
     - Filter Only high relevancy stock-article

@@ -13,7 +13,7 @@ type ElementsPageTypeConfig = {
 };
 type TypeBaseCSSSelector = {
   mainArticle: ElementsPageTypeConfig;
-  [key: string]: any;
+  [key: string]: ElementsPageTypeConfig;
 };
 type TypeCNBCActCSSselector = {
   podcastArticle: ElementsPageTypeConfig;

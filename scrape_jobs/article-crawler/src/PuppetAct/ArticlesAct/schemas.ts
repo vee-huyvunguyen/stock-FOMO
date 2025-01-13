@@ -12,14 +12,16 @@ type ScrapeFailStep =
 
 type FailReport = {
   failStep: ScrapeFailStep;
-  manuallyParsedPageType?: string;
   loadPageError?: string;
   fieldsFailedToScrape?: [FieldName, FieldError][];
 };
 
 type ScrapeStatus = {
   success: boolean;
-  detectedPageType?: PageType;
+  pageType?: {
+    detected?: PageType;
+    manuallyParsed?: PageType;
+  };
   failReport?: FailReport;
 };
 
@@ -30,32 +32,36 @@ class ScrapeStatusHandler {
   static new() {
     return new ScrapeStatusHandler({ success: true });
   }
-  updateSuccess(pageType: PageType) {
+  updateSuccess() {
     this.scrapeStatus.success = true;
     this.scrapeStatus.failReport = undefined;
-    this.updatePageType(pageType);
   }
   updateFail() {
     this.scrapeStatus.success = false;
   }
-  getStatus(): ScrapeStatus {
-    return this.scrapeStatus;
+  getDetectedPageType(): string | undefined {
+    return this.scrapeStatus.pageType?.detected;
   }
   isSuccess(): boolean {
     return this.scrapeStatus.success;
   }
-  updatePageType(pageType: PageType) {
-    this.scrapeStatus.detectedPageType = pageType;
+  updatePageType(pageType: PageType, how: 'detected' | 'manuallyParsed') {
+    if (!this.scrapeStatus.pageType) {
+      this.scrapeStatus.pageType = {};
+    }
+    if (how == 'detected') {
+      this.scrapeStatus.pageType.detected = pageType;
+    } else this.scrapeStatus.pageType.manuallyParsed = pageType;
   }
   updateFailStep(step: ScrapeFailStep) {
     this.updateFail();
     this.updateFailReport({ failStep: step });
   }
   updateManuallyParsedPageType(parsedPageType: string) {
-    this.updateFailReport({
-      failStep: 'scrape-element',
-      manuallyParsedPageType: parsedPageType,
-    });
+    this.updatePageType(parsedPageType, 'manuallyParsed');
+  }
+  updateDetectedPageType(parsedPageType: string) {
+    this.updatePageType(parsedPageType, 'detected');
   }
   updateLoadPageError(err: unknown) {
     this.updateFailReport({

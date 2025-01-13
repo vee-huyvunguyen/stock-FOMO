@@ -6,7 +6,7 @@ import {
 } from '../CSSselectors';
 import { RawArticlePage, ScrapeStatus, ScrapeStatusHandler } from './schemas';
 
-type LoadedPageCheck = {
+type PageClassification = {
   success: boolean;
   pageType?: 'mainArticle' | string;
 };
@@ -14,6 +14,7 @@ type OtherLinks = {
   other: string[];
   news: string[];
 };
+type ArticleInfoExtractor = () => Promise<RawArticlePage>;
 abstract class ArticleAct {
   protected _statusHandler: ScrapeStatusHandler;
 
@@ -21,32 +22,41 @@ abstract class ArticleAct {
     public scrapeMaster: ScrapeMaster,
     public articleURL: string,
     public elements: TypeBaseCSSSelector,
-    public pageType?: string,
+    public manualPageType?: string,
   ) {
     this._statusHandler = ScrapeStatusHandler.new();
+    if (manualPageType) {
+      this._statusHandler.updateManuallyParsedPageType(manualPageType);
+    }
+  }
+  getPageType(): string | undefined {
+    return this.manualPageType
+      ? this.manualPageType
+      : this._statusHandler.getDetectedPageType();
   }
   getStatus(): ScrapeStatus {
     return this._statusHandler.scrapeStatus;
   }
   async loadNewsPage(): Promise<boolean> {
     await this.scrapeMaster.goto(this.articleURL);
+    if (!this.manualPageType) {
+      return await this.checkLoadedNewsPage();
+    }
     return true;
   }
 
-  async loadNewsPageCheck(): Promise<boolean> {
-    await this.loadNewsPage();
-
-    let checkPage = await this.checkLoadedPage();
+  async checkLoadedNewsPage(): Promise<boolean> {
+    let checkPage = await this.CategorizeLoadedPage();
     if (checkPage.success) {
       if (!checkPage.pageType) {
         checkPage.pageType = 'mainArticle';
       }
-      this._statusHandler.updatePageType(checkPage.pageType);
+      this._statusHandler.updateDetectedPageType(checkPage.pageType);
       if (this.elements[checkPage.pageType].undesired) {
         this._statusHandler.updateUndesiredPageError();
         return false;
       } else {
-        this._statusHandler.updateSuccess(checkPage.pageType);
+        this._statusHandler.updateSuccess();
         return true;
       }
     } else {
@@ -68,8 +78,8 @@ abstract class ArticleAct {
     return attrToCheck == attrValueExpect;
   }
 
-  async checkLoadedPage(): Promise<LoadedPageCheck> {
-    let pageCheck: LoadedPageCheck = { success: false };
+  async CategorizeLoadedPage(): Promise<PageClassification> {
+    let pageCheck: PageClassification = { success: false };
 
     for (const [pageType, pageElements] of Object.entries(this.elements)) {
       if (pageType == 'mainArticle') {
@@ -93,8 +103,9 @@ abstract class ArticleAct {
 
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getOtherLinks(): Promise<OtherLinks>;
-  abstract getNewsInfo(): Promise<RawArticlePage>;
+  abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;
+  abstract extractArticleInfo(): Promise<RawArticlePage | undefined>;
   abstract scrape(): Promise<RawArticlePage>;
 }
 
-export { ArticleAct, LoadedPageCheck, OtherLinks };
+export { ArticleAct, PageClassification, OtherLinks, ArticleInfoExtractor };

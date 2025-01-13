@@ -58,7 +58,7 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       'href',
       'https://www.cnbc.com/select/',
     ],
-    undesired: true,
+    undesired: false,
   },
 };
 

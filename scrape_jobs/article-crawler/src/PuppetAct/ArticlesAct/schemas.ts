@@ -107,7 +107,7 @@ type RawArticlePage = {
   other_links: string[];
   scrape_status: ScrapeStatus;
   scraped_at: DateTime;
-  inserted_at: DateTime;
+  // inserted_at: DateTime; //Meant to be in the database
 };
 
 export { RawArticlePage, ScrapeStatus, ScrapeFailStep, ScrapeStatusHandler };

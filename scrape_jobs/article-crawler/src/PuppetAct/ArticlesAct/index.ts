@@ -14,7 +14,19 @@ type OtherLinks = {
   other: string[];
   news: string[];
 };
-type ArticleInfoExtractor = () => Promise<RawArticlePage>;
+
+abstract class ArticleInfoExtractor {
+  constructor(
+    public scrapeMaster: ScrapeMaster,
+    public elements: TypeBaseCSSSelector,
+    public statusHandler: ScrapeStatusHandler,
+  ) {
+    this.scrapeMaster = scrapeMaster;
+    this.elements = elements;
+    this.statusHandler = statusHandler;
+  }
+  abstract extract(otherLinks: OtherLinks): Promise<RawArticlePage>;
+}
 abstract class ArticleAct {
   protected _statusHandler: ScrapeStatusHandler;
 
@@ -101,10 +113,34 @@ abstract class ArticleAct {
     return Object.keys(this.elements);
   }
 
+  async extractArticleInfo(): Promise<RawArticlePage | undefined> {
+    const pageType = this.getPageType();
+    if (!pageType) {
+      this._statusHandler.updateLoadPageError('undefined pageType');
+      return;
+    } else {
+      const infoExtractor = this.getInfoExtractor(pageType);
+      const otherLinks = await this.getOtherLinks();
+      return await infoExtractor.extract(otherLinks);
+    }
+  }
+  async getOtherLinks(): Promise<OtherLinks> {
+    let foundedHrefs = (await this.scrapeMaster.allTagAHrefsTexts()).map(
+      ({ href }) => href,
+    );
+    let distinctLinks = new Set(foundedHrefs);
+    let otherLinks: OtherLinks = { other: [], news: [] };
+    distinctLinks.forEach((href) => {
+      if (this.checkURLIsNewsPage(href, this.getPageType() as string)) {
+        otherLinks.news.push(href);
+      } else {
+        otherLinks.other.push(href);
+      }
+    });
+    return otherLinks;
+  }
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
-  abstract getOtherLinks(): Promise<OtherLinks>;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;
-  abstract extractArticleInfo(): Promise<RawArticlePage | undefined>;
   abstract scrape(): Promise<RawArticlePage>;
 }
 

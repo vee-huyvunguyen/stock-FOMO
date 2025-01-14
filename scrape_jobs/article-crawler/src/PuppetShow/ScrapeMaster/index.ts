@@ -1,13 +1,12 @@
 import { Viewport, GoToOptions } from 'puppeteer';
 import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import ScrapedElement from '../ScrapedElement';
+import { ScrapedElement, ElementTextContent } from '../ScrapedElement';
 import { CheerioAPI, Element } from 'cheerio';
 import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;
 type CSSSelector = string;
 type HttpUrl = string;
-
 interface ScrapeMasterConfig {
   logNullElement: boolean;
   defaultGotoOptions?: GoToOptions;
@@ -78,7 +77,7 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
    * get all tags and hrefs in this.page
    * @returns {any}
    */
-  allTagAHrefsTexts(): Promise<{ href: HttpUrl; text: string }[]>;
+  allTagAHrefsTexts(): Promise<{ href: HttpUrl; text: ElementTextContent }[]>;
   /**
    * Close the puppeteer browser/page, or unload the html by assigning this.page to `underfined`
    * @returns {any}
@@ -99,7 +98,7 @@ interface ScrapeMaster<P = CheerioAPI, E = Element> {
    * Get the title of the loaded URL
    * @returns {string}
    */
-  getPageTitle(): Promise<string>;
+  getPageTitle(): Promise<ElementTextContent>;
 }
 
 export { ScrapeMaster, ScrapeMasterConfig, CSSSelector };

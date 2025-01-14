@@ -1,5 +1,5 @@
 import { ClickOptions } from 'puppeteer';
-import ScrapedElement from '.';
+import { ScrapedElement } from '.';
 import { Element, CheerioAPI } from 'cheerio';
 
 class CheerioScrapedElement implements ScrapedElement<CheerioAPI, Element> {

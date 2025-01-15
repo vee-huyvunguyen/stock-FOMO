@@ -31,6 +31,8 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       '//www.cnbc.com/world/',
     ],
     undesired: false,
+    contentElements: ".PageBuilder-article",
+    authorElement: ".Author-authorName"
   },
   podcastArticle: {
     checkLoadedPageElement: [

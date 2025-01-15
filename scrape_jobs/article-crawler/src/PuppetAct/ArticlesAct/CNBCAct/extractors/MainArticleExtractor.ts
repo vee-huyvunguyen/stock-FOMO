@@ -6,7 +6,10 @@ import { DateTime } from 'luxon';
 import {
   ElementHTML,
   ElementTextContent,
+  ScrapedElement,
 } from '../../../../PuppetShow/ScrapedElement';
+import { getErrorMessage } from '../../../../utils';
+import { isEmpty } from 'lodash';
 
 export default class MainArticleExtractor implements ArticleInfoExtractor {
   constructor(
@@ -19,12 +22,56 @@ export default class MainArticleExtractor implements ArticleInfoExtractor {
     this.statusHandler = statusHandler;
   }
   async extractContentElements(): Promise<
-    [ElementHTML[], ElementTextContent[]]
+    [ElementHTML[]|undefined, ElementTextContent[]|undefined]
   > {
-    return [];
+    const fieldNameDebug = "article-content"
+    let contentEles
+    try{
+      contentEles = await this.scrapeMaster.selectElements(this.elements.mainArticle.contentElements, undefined, fieldNameDebug)
+    }catch (err){
+      this.statusHandler.addFieldsFailedToScrape([fieldNameDebug, getErrorMessage(err)])
+      return [[], []]
+    }
+    let contents: ElementTextContent[] = []
+    let contentsElesHTML: ElementHTML[] = []
+    for (const ele of contentEles){
+      try{
+        const tmpContent = await ele.text()
+        if (!tmpContent){continue}
+        contents.push(tmpContent)
+      }catch(err){
+        this.statusHandler.addFieldsFailedToScrape([fieldNameDebug,getErrorMessage(err)])
+        try{
+          contentsElesHTML.push(await ele.getOuterHTML())
+        }catch{}
+      }
+    }
+    return [contentsElesHTML, contents]
   }
-  async extractAuthorElement(): Promise<[ElementHTML, ElementTextContent]> {
-    return [];
+  async extractAuthorElement(): Promise<[ElementHTML|undefined, ElementTextContent|undefined]> {
+    const fieldNameDebug = "author-info"
+    let authorEle: ScrapedElement|undefined
+    let author = undefined
+    let authorHTML = undefined
+    let error = undefined
+    try{
+      authorEle = await this.scrapeMaster.selectElement(this.elements.mainArticle.authorElement, undefined, fieldNameDebug)
+      if (!authorEle) {
+        this.statusHandler.addFieldsFailedToScrape([fieldNameDebug, "undefined"])
+        return [undefined, undefined]
+      }else{
+        try{
+          author = await authorEle.text()
+        }catch(err){error = err}
+      }
+    }catch(err){error = err}
+    if (error){
+      this.statusHandler.addFieldsFailedToScrape([fieldNameDebug,getErrorMessage(error)])
+      try{
+        authorHTML = await (authorEle as ScrapedElement).getOuterHTML()
+      }catch{}
+    }
+    return [authorHTML, author]
   }
   async extractPostDatetimeElement(): Promise<[ElementHTML, DateTime]> {
     return [];

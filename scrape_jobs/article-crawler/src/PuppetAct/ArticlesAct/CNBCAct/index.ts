@@ -2,11 +2,15 @@ import { ArticleAct, ArticleInfoExtractor, OtherLinks } from '..';
 import { ScrapeMaster } from '../../../PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '../schemas';
 import { PageType, TypeCNBCActCSSselector } from '../../CSSselectors';
-import MainArticleExtractor from './extractors/MainArticleExtractor';
-import MakeItArticleExtractor from './extractors/MakeItArticleExtractor';
-import SelectArticleExtractor from './extractors/SelectArticleExtractor';
+import { getErrorMessage } from '../../../utils';
+import {
+  ElementHTML,
+  ElementTextContent,
+  ScrapedElement,
+} from '../../../PuppetShow/ScrapedElement';
+import { DateTime } from 'luxon';
 
-class CNBCAct extends ArticleAct {
+export default class CNBCAct extends ArticleAct {
   constructor(
     scrapeMaster: ScrapeMaster,
     articleURL: string,
@@ -30,14 +34,104 @@ class CNBCAct extends ArticleAct {
       return regex.test(url);
     }
   }
+  async extractMainArticleContentElements(): Promise<
+    [ElementHTML[] | undefined, ElementTextContent[] | undefined]
+  > {
+    const fieldNameDebug = 'article-content';
+    let contentEles;
+    try {
+      contentEles = await this.scrapeMaster.selectElements(
+        this.elements.mainArticle.contentElements,
+        undefined,
+        fieldNameDebug,
+      );
+    } catch (err) {
+      this._statusHandler.addFieldsFailedToScrape([
+        fieldNameDebug,
+        getErrorMessage(err),
+      ]);
+      return [[], []];
+    }
+    let contents: ElementTextContent[] = [];
+    let contentsElesHTML: ElementHTML[] = [];
+    for (const ele of contentEles) {
+      try {
+        const tmpContent = await ele.text();
+        if (!tmpContent) {
+          continue;
+        }
+        contents.push(tmpContent);
+      } catch (err) {
+        this._statusHandler.addFieldsFailedToScrape([
+          fieldNameDebug,
+          getErrorMessage(err),
+        ]);
+        try {
+          contentsElesHTML.push(await ele.getOuterHTML());
+        } catch {}
+      }
+    }
+    return [contentsElesHTML, contents];
+  }
+  async extractMainArticleAuthorElement(): Promise<
+    [ElementHTML | undefined, ElementTextContent | undefined]
+  > {
+    const fieldNameDebug = 'author-info';
+    let authorEle: ScrapedElement | undefined;
+    let author = undefined;
+    let authorHTML = undefined;
+    let error = undefined;
+    try {
+      authorEle = await this.scrapeMaster.selectElement(
+        this.elements.mainArticle.authorElement,
+        undefined,
+        fieldNameDebug,
+      );
+      if (!authorEle) {
+        this._statusHandler.addFieldsFailedToScrape([
+          fieldNameDebug,
+          'undefined',
+        ]);
+        return [undefined, undefined];
+      } else {
+        try {
+          author = await authorEle.text();
+        } catch (err) {
+          error = err;
+        }
+      }
+    } catch (err) {
+      error = err;
+    }
+    if (error) {
+      this._statusHandler.addFieldsFailedToScrape([
+        fieldNameDebug,
+        getErrorMessage(error),
+      ]);
+      try {
+        authorHTML = await (authorEle as ScrapedElement).getOuterHTML();
+      } catch {}
+    }
+    return [authorHTML, author];
+  }
+  async extractMainArticlePostDatetimeElement(): Promise<
+    [ElementHTML, DateTime]
+  > {
+    return [];
+  }
+  async extractMainArticleCategoryElement(): Promise<
+    [ElementHTML, ElementTextContent]
+  > {
+    return [];
+  }
   getInfoExtractor(
     pageType: keyof TypeCNBCActCSSselector,
   ): ArticleInfoExtractor {
     let extractors: Record<keyof TypeCNBCActCSSselector, ArticleInfoExtractor> =
       {
-        mainArticle: MainArticleExtractor,
-        makeItArticle: MakeItArticleExtractor,
-        selectArticle: SelectArticleExtractor,
+        mainArticle: this.mainArticleExtractor,
+        makeItArticle: this.makeItArticleExtractor,
+        selectArticle: this.selectArticleExtractor,
       };
     return extractors[pageType];
   }
@@ -45,6 +139,34 @@ class CNBCAct extends ArticleAct {
   async scrape(): Promise<RawArticlePage> {
     throw new Error('Method not implemented.');
   }
+  async mainArticleExtractor(): Promise<RawArticlePage> {
+    let [contentEles, content] = await this.extractMainArticleContentElements();
+    let [authorEle, author] = await this.extractMainArticleAuthorElement();
+    let [postDatetimeEle, postDatetime] =
+      await this.extractMainArticlePostDatetimeElement();
+    let [categoryEle, category] =
+      await this.extractMainArticleCategoryElement();
+    let otherLinks: OtherLinks = await this.getOtherLinks();
+    return {
+      url: this.scrapeMaster.currentURL(),
+      content_elements: contentEles,
+      author_element: authorEle,
+      post_datetime_element: postDatetimeEle,
+      category_element: categoryEle,
+      content: content,
+      author: author,
+      post_datetime: postDatetime,
+      category: category,
+      scrape_status: this._statusHandler.scrapeStatus,
+      scraped_at: DateTime.now().toUTC(),
+      other_article_links: otherLinks.news,
+      other_links: otherLinks.other,
+    };
+  }
+  async makeItArticleExtractor(): Promise<RawArticlePage> {
+    throw new Error('Not Implemented');
+  }
+  async selectArticleExtractor(): Promise<RawArticlePage> {
+    throw new Error('Not Implemented');
+  }
 }
-
-export default CNBCAct;

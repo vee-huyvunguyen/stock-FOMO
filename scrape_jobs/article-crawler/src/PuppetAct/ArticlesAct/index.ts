@@ -1,4 +1,9 @@
-import { ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
+import {
+  ElementHTML,
+  ElementTextContent,
+  ScrapedElement,
+} from '../../PuppetShow/ScrapedElement';
+import { CSSSelector, ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
 import {
   ElementsPageTypeConfig,
   PageType,
@@ -15,18 +20,7 @@ type OtherLinks = {
   news: string[];
 };
 
-abstract class ArticleInfoExtractor {
-  constructor(
-    public scrapeMaster: ScrapeMaster,
-    public elements: TypeBaseCSSSelector,
-    public statusHandler: ScrapeStatusHandler,
-  ) {
-    this.scrapeMaster = scrapeMaster;
-    this.elements = elements;
-    this.statusHandler = statusHandler;
-  }
-  abstract extract(otherLinks: OtherLinks): Promise<RawArticlePage>;
-}
+type ArticleInfoExtractor = () => Promise<RawArticlePage>;
 abstract class ArticleAct {
   protected _statusHandler: ScrapeStatusHandler;
 
@@ -138,6 +132,13 @@ abstract class ArticleAct {
       }
     });
     return otherLinks;
+  }
+  async extractElementStatusCheck(
+    cssSelector: CSSSelector,
+    eleNameDebug: string,
+    parentElement?: ScrapedElement,
+  ): Promise<[ElementHTML | undefined, ElementTextContent | undefined]> {
+    throw new Error('Unimplemented');
   }
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;

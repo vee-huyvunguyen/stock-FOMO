@@ -1,6 +1,9 @@
 import { Viewport, GoToOptions } from 'puppeteer';
-import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import { ScrapedElement, ElementTextContent } from '../ScrapedElement';
+import { BaseWatcher } from '@/PuppetShow/TheWatcher/BaseWatcher';
+import {
+  ScrapedElement,
+  ElementTextContent,
+} from '@/PuppetShow/ScrapedElement';
 import { CheerioAPI, Element } from 'cheerio';
 import { RobotsFile } from 'crawlee';
 

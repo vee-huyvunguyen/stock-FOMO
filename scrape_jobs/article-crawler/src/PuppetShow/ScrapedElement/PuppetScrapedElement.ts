@@ -1,5 +1,5 @@
 import { ClickOptions, ElementHandle, JSHandle, Page } from 'puppeteer';
-import { ScrapedElement } from '.';
+import { ScrapedElement } from '@/PuppetShow/ScrapedElement';
 
 class PuppetScrapedElement implements ScrapedElement<Page, ElementHandle> {
   constructor(

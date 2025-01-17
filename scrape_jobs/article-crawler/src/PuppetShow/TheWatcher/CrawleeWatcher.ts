@@ -1,6 +1,10 @@
-import { BaseWatcher, WatchThings, CheckLogResult } from './BaseWatcher';
+import {
+  BaseWatcher,
+  WatchThings,
+  CheckLogResult,
+} from '@/PuppetShow/TheWatcher/BaseWatcher';
 import { Log } from 'crawlee';
-import { checkObjectToLog } from './watcherUtils';
+import { isNotValuable } from '@/PuppetShow/TheWatcher/watcherUtils';
 
 export default class CrawleeWatcher implements BaseWatcher {
   constructor(public crawleeLogger: Log) {
@@ -22,17 +26,17 @@ export default class CrawleeWatcher implements BaseWatcher {
     this.crawleeLogger.warning(msg);
   }
   checkInfo<T>(toCheck: T, watchThings: WatchThings): CheckLogResult<T> {
-    const needsLog = checkObjectToLog(toCheck);
+    const needsLog = isNotValuable(toCheck);
     needsLog ? this.info(watchThings) : undefined;
     return { needsLog, checkedObj: toCheck };
   }
   checkError<T>(toCheck: T, watchThings: WatchThings): CheckLogResult<T> {
-    const needsLog = checkObjectToLog(toCheck);
+    const needsLog = isNotValuable(toCheck);
     needsLog ? this.error(watchThings) : undefined;
     return { needsLog, checkedObj: toCheck };
   }
   checkWarn<T>(toCheck: T, watchThings: WatchThings): CheckLogResult<T> {
-    const needsLog = checkObjectToLog(toCheck);
+    const needsLog = isNotValuable(toCheck);
     needsLog ? this.info(watchThings) : undefined;
     return { needsLog, checkedObj: toCheck };
   }

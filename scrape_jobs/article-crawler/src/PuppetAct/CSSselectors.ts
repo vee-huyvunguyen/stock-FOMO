@@ -1,4 +1,4 @@
-import { CSSSelector } from '../PuppetShow/ScrapeMaster';
+import { CSSSelector } from '@/PuppetShow/ScrapeMaster';
 
 type ElementAttritbuteName = string;
 type ElementAttritbute = string;

@@ -1,7 +1,7 @@
 import { Page, Browser, GoToOptions, ElementHandle } from 'puppeteer';
-import PuppetScrapedElement from '../ScrapedElement/PuppetScrapedElement';
-import { BaseWatcher } from '../TheWatcher/BaseWatcher';
-import { ScrapeMaster, ScrapeMasterConfig } from '.';
+import PuppetScrapedElement from '@/PuppetShow/ScrapedElement/PuppetScrapedElement';
+import { BaseWatcher } from '@/PuppetShow/TheWatcher/BaseWatcher';
+import { ScrapeMaster, ScrapeMasterConfig } from '@/PuppetShow/ScrapeMaster';
 import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;

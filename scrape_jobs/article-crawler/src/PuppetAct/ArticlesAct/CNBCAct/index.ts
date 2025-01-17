@@ -1,13 +1,18 @@
-import { ArticleAct, ArticleInfoExtractor, OtherLinks } from '..';
-import { ScrapeMaster } from '../../../PuppetShow/ScrapeMaster';
-import { RawArticlePage } from '../schemas';
-import { PageType, TypeCNBCActCSSselector } from '../../CSSselectors';
-import { getErrorMessage } from '../../../utils';
+import {
+  ArticleAct,
+  ArticleInfoExtractor,
+  ElementsExtractedContent,
+  OtherLinks,
+} from '@/PuppetAct/ArticlesAct';
+import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
+import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
+import { PageType, TypeCNBCActCSSselector } from '@/PuppetAct/CSSselectors';
+import { getErrorMessage } from '@/utils';
 import {
   ElementHTML,
   ElementTextContent,
   ScrapedElement,
-} from '../../../PuppetShow/ScrapedElement';
+} from '@/PuppetShow/ScrapedElement';
 import { DateTime } from 'luxon';
 
 export default class CNBCAct extends ArticleAct {
@@ -34,10 +39,27 @@ export default class CNBCAct extends ArticleAct {
       return regex.test(url);
     }
   }
-  async extractMainArticleContentElements(): Promise<
-    [ElementHTML[] | undefined, ElementTextContent[] | undefined]
-  > {
+  async extractMainArticleContentElements(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'article-content';
+    let results: ElementsExtractedContent = {
+      textContent: [],
+      eleHTML: [],
+    };
+    let elementsCheck = await this.extractElementsStatusCheck(
+      this.elements.mainArticle.contentElements,
+      fieldNameDebug,
+    );
+    if (elementsCheck.length == 0) {
+      return results;
+    } else {
+      for (const element of elementsCheck) {
+        if (element.eleTextContent || element.eleHTML) {
+          results.textContent.push(element.eleTextContent);
+          results.eleHTML.push(element.eleHTML);
+        }
+      }
+    }
+
     let contentEles;
     try {
       contentEles = await this.scrapeMaster.selectElements(

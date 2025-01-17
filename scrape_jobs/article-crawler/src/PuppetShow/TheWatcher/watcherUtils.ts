@@ -4,8 +4,8 @@ import isEmpty from 'lodash/isEmpty';
  * @param {any} toCheck:T object to check
  * @returns {any} boolean: true if needs to be log
  */
-function checkObjectToLog(toCheck: any): boolean {
+function isNotValuable(toCheck: any): boolean {
   return !toCheck || isEmpty(toCheck) || toCheck === '';
 }
 
-export { checkObjectToLog };
+export { isNotValuable };

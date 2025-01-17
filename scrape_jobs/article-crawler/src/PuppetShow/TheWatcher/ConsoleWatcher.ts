@@ -3,8 +3,8 @@ import {
   BaseWatcher,
   WatchThings,
   CheckLogResult,
-} from './BaseWatcher';
-import { checkObjectToLog } from './watcherUtils';
+} from '@/PuppetShow/TheWatcher/BaseWatcher';
+import { isNotValuable } from '@/PuppetShow/TheWatcher/watcherUtils';
 
 class ConsoleWatcher implements BaseWatcher {
   public constructor(public config: WatchConfig) {
@@ -41,17 +41,17 @@ class ConsoleWatcher implements BaseWatcher {
     }
   }
   checkInfo<T>(toCheck: T, watchThings: WatchThings): CheckLogResult<T> {
-    const needsLog = checkObjectToLog(toCheck);
+    const needsLog = isNotValuable(toCheck);
     needsLog ? this.info(watchThings) : undefined;
     return { needsLog, checkedObj: toCheck };
   }
   checkError<T>(toCheck: T, watchThings: WatchThings): CheckLogResult<T> {
-    const needsLog = checkObjectToLog(toCheck);
+    const needsLog = isNotValuable(toCheck);
     needsLog ? this.error(watchThings) : undefined;
     return { needsLog, checkedObj: toCheck };
   }
   checkWarn<T>(toCheck: T, watchThings: WatchThings): CheckLogResult<T> {
-    const needsLog = checkObjectToLog(toCheck);
+    const needsLog = isNotValuable(toCheck);
     needsLog ? this.info(watchThings) : undefined;
     return { needsLog, checkedObj: toCheck };
   }

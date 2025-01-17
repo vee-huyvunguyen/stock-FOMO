@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
-import { getErrorMessage } from '../../utils';
-import { PageType } from '../CSSselectors';
+import { getErrorMessage } from '@/utils';
+import { PageType } from '@/PuppetAct/CSSselectors';
 
 type FieldName = string;
 type FieldError = string;

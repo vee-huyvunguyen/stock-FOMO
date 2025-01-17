@@ -2,14 +2,19 @@ import {
   ElementHTML,
   ElementTextContent,
   ScrapedElement,
-} from '../../PuppetShow/ScrapedElement';
-import { CSSSelector, ScrapeMaster } from '../../PuppetShow/ScrapeMaster';
+} from '@/PuppetShow/ScrapedElement';
+import { CSSSelector, ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
+import { getErrorMessage } from '@/utils';
 import {
   ElementsPageTypeConfig,
   PageType,
   TypeBaseCSSSelector,
-} from '../CSSselectors';
-import { RawArticlePage, ScrapeStatus, ScrapeStatusHandler } from './schemas';
+} from '@/PuppetAct/CSSselectors';
+import {
+  RawArticlePage,
+  ScrapeStatus,
+  ScrapeStatusHandler,
+} from '@/PuppetAct/ArticlesAct/schemas';
 
 type PageClassification = {
   success: boolean;
@@ -21,6 +26,24 @@ type OtherLinks = {
 };
 
 type ArticleInfoExtractor = () => Promise<RawArticlePage>;
+type ElementExtractCheck =
+  | {
+      isError: false;
+      element: ScrapedElement;
+      eleTextContent: ElementTextContent;
+    }
+  | { isError: true; element: ScrapedElement; eleHTML: ElementHTML } // error, but can debug with html
+  | { isError: true; element: ScrapedElement } // error, but can't debug with html
+  | { isError: true }; // error, failed to extract element
+
+type ElementExtractedContent = {
+  textContent: ElementTextContent;
+  eleHTML: ElementHTML;
+};
+type ElementsExtractedContent = {
+  textContent: ElementTextContent[];
+  eleHTML: ElementHTML[];
+};
 abstract class ArticleAct {
   protected _statusHandler: ScrapeStatusHandler;
 
@@ -114,8 +137,7 @@ abstract class ArticleAct {
       return;
     } else {
       const infoExtractor = this.getInfoExtractor(pageType);
-      const otherLinks = await this.getOtherLinks();
-      return await infoExtractor.extract(otherLinks);
+      return await infoExtractor();
     }
   }
   async getOtherLinks(): Promise<OtherLinks> {
@@ -137,12 +159,123 @@ abstract class ArticleAct {
     cssSelector: CSSSelector,
     eleNameDebug: string,
     parentElement?: ScrapedElement,
-  ): Promise<[ElementHTML | undefined, ElementTextContent | undefined]> {
-    throw new Error('Unimplemented');
+  ): Promise<ElementExtractCheck> {
+    let scrapedElement: ScrapedElement | undefined;
+    try {
+      scrapedElement = await this.scrapeMaster.selectElement(
+        cssSelector,
+        parentElement,
+        eleNameDebug,
+      );
+
+      if (!scrapedElement) {
+        this._statusHandler.addFieldsFailedToScrape([
+          eleNameDebug,
+          'undefined',
+        ]);
+        return { isError: true };
+      } else {
+        try {
+          const textContent = await scrapedElement.text();
+          return {
+            isError: false,
+            element: scrapedElement,
+            eleTextContent: String(textContent),
+          };
+        } catch (err) {
+          this._statusHandler.addFieldsFailedToScrape([
+            eleNameDebug,
+            getErrorMessage(err),
+          ]);
+
+          try {
+            const elementHTML = await (
+              scrapedElement as ScrapedElement
+            ).getOuterHTML();
+            return {
+              isError: true,
+              element: scrapedElement,
+              eleHTML: elementHTML,
+            };
+          } catch {
+            return {
+              isError: true,
+              element: scrapedElement,
+            };
+          }
+        }
+      }
+    } catch (err) {
+      this._statusHandler.addFieldsFailedToScrape([
+        eleNameDebug,
+        getErrorMessage(err),
+      ]);
+      return { isError: true };
+    }
+  }
+  async extractElementsStatusCheck(
+    cssSelector: CSSSelector,
+    eleNameDebug: string,
+    parentElement?: ScrapedElement,
+  ): Promise<ElementExtractCheck[]> {
+    let elements;
+    let results: ElementExtractCheck[] = [];
+    try {
+      elements = await this.scrapeMaster.selectElements(
+        cssSelector,
+        parentElement,
+        eleNameDebug,
+      );
+    } catch (err) {
+      this._statusHandler.addFieldsFailedToScrape([
+        eleNameDebug,
+        getErrorMessage(err),
+      ]);
+      return results;
+    }
+
+    for (const element of elements) {
+      try {
+        const textContent = await element.text();
+        results.push({
+          isError: false,
+          element: element,
+          eleTextContent: String(textContent),
+        });
+      } catch (err) {
+        this._statusHandler.addFieldsFailedToScrape([
+          eleNameDebug,
+          getErrorMessage(err),
+        ]);
+
+        try {
+          const elementHTML = await element.getOuterHTML();
+          results.push({
+            isError: true,
+            element: element,
+            eleHTML: elementHTML,
+          });
+        } catch {
+          results.push({
+            isError: true,
+            element: element,
+          });
+        }
+      }
+    }
+
+    return results;
   }
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;
   abstract scrape(): Promise<RawArticlePage>;
 }
 
-export { ArticleAct, PageClassification, OtherLinks, ArticleInfoExtractor };
+export {
+  ArticleAct,
+  PageClassification,
+  OtherLinks,
+  ArticleInfoExtractor,
+  ElementExtractedContent,
+  ElementsExtractedContent,
+};

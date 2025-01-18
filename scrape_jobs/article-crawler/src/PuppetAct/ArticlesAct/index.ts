@@ -10,11 +10,11 @@ import {
   PageType,
   TypeBaseCSSSelector,
 } from '@/PuppetAct/CSSselectors';
+import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
 import {
-  RawArticlePage,
-  ScrapeStatus,
   ScrapeStatusHandler,
-} from '@/PuppetAct/ArticlesAct/schemas';
+  ScrapeStatus,
+} from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
 
 type PageClassification = {
   success: boolean;
@@ -30,15 +30,14 @@ type ElementExtractCheck =
   | {
       isError: false;
       element: ScrapedElement;
-      eleTextContent: ElementTextContent;
+      propertyValue: ElementTextContent;
     }
-  | { isError: true; element: ScrapedElement; eleHTML: ElementHTML } // error, but can debug with html
-  | { isError: true; element: ScrapedElement } // error, but can't debug with html
-  | { isError: true }; // error, failed to extract element
+  | { isError: true; element: ScrapedElement; eleHTML?: ElementHTML } // error, but can debug with html
+  | { isError: true; eleHTML: undefined }; // error, failed to extract element
 
 type ElementExtractedContent = {
-  textContent: ElementTextContent;
-  eleHTML: ElementHTML;
+  textContent?: ElementTextContent;
+  eleHTML?: ElementHTML;
 };
 type ElementsExtractedContent = {
   textContent: ElementTextContent[];
@@ -158,6 +157,7 @@ abstract class ArticleAct {
   async extractElementStatusCheck(
     cssSelector: CSSSelector,
     eleNameDebug: string,
+    elementProperty: string = 'textContent',
     parentElement?: ScrapedElement,
   ): Promise<ElementExtractCheck> {
     let scrapedElement: ScrapedElement | undefined;
@@ -173,14 +173,19 @@ abstract class ArticleAct {
           eleNameDebug,
           'undefined',
         ]);
-        return { isError: true };
+        return { isError: true, eleHTML: undefined };
       } else {
         try {
-          const textContent = await scrapedElement.text();
+          let propertyValue;
+          if (elementProperty == 'textContent') {
+            propertyValue = await scrapedElement.text();
+          } else {
+            propertyValue = await scrapedElement.getProperty(elementProperty);
+          }
           return {
             isError: false,
             element: scrapedElement,
-            eleTextContent: String(textContent),
+            propertyValue: String(propertyValue),
           };
         } catch (err) {
           this._statusHandler.addFieldsFailedToScrape([
@@ -210,12 +215,13 @@ abstract class ArticleAct {
         eleNameDebug,
         getErrorMessage(err),
       ]);
-      return { isError: true };
+      return { isError: true, eleHTML: undefined };
     }
   }
   async extractElementsStatusCheck(
     cssSelector: CSSSelector,
     eleNameDebug: string,
+    elementProperty: string = 'textContent',
     parentElement?: ScrapedElement,
   ): Promise<ElementExtractCheck[]> {
     let elements;
@@ -236,11 +242,16 @@ abstract class ArticleAct {
 
     for (const element of elements) {
       try {
-        const textContent = await element.text();
+        let propertyValue;
+        if (elementProperty == 'textContent') {
+          propertyValue = await element.text();
+        } else {
+          propertyValue = await element.getProperty(elementProperty);
+        }
         results.push({
           isError: false,
           element: element,
-          eleTextContent: String(textContent),
+          propertyValue: String(propertyValue),
         });
       } catch (err) {
         this._statusHandler.addFieldsFailedToScrape([
@@ -266,6 +277,32 @@ abstract class ArticleAct {
 
     return results;
   }
+  toElementsExtractedContent(
+    elementExtractCheck: ElementExtractCheck[],
+  ): ElementsExtractedContent {
+    let results: ElementsExtractedContent = {
+      textContent: [],
+      eleHTML: [],
+    };
+    elementExtractCheck.forEach((elementCheck) => {
+      if (!elementCheck.isError) {
+        results.textContent.push(elementCheck.propertyValue);
+      } else if (elementCheck.eleHTML) {
+        results.eleHTML.push(elementCheck.eleHTML);
+      }
+    });
+    return results;
+  }
+  toElementExtractedContent(
+    elementExtractCheck: ElementExtractCheck,
+  ): ElementExtractedContent {
+    if (!elementExtractCheck.isError) {
+      return { textContent: elementExtractCheck.propertyValue };
+    } else if (elementExtractCheck.eleHTML) {
+      return { eleHTML: elementExtractCheck.eleHTML };
+    }
+    return { textContent: undefined, eleHTML: undefined };
+  }
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;
   abstract scrape(): Promise<RawArticlePage>;
@@ -273,9 +310,10 @@ abstract class ArticleAct {
 
 export {
   ArticleAct,
-  PageClassification,
-  OtherLinks,
   ArticleInfoExtractor,
+  ElementExtractCheck,
   ElementExtractedContent,
   ElementsExtractedContent,
+  OtherLinks,
+  PageClassification,
 };

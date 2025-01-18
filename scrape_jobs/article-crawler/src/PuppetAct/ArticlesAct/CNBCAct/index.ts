@@ -1,18 +1,14 @@
 import {
   ArticleAct,
   ArticleInfoExtractor,
+  ElementExtractCheck,
+  ElementExtractedContent,
   ElementsExtractedContent,
   OtherLinks,
 } from '@/PuppetAct/ArticlesAct';
 import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
 import { PageType, TypeCNBCActCSSselector } from '@/PuppetAct/CSSselectors';
-import { getErrorMessage } from '@/utils';
-import {
-  ElementHTML,
-  ElementTextContent,
-  ScrapedElement,
-} from '@/PuppetShow/ScrapedElement';
 import { DateTime } from 'luxon';
 
 export default class CNBCAct extends ArticleAct {
@@ -40,111 +36,42 @@ export default class CNBCAct extends ArticleAct {
     }
   }
   async extractMainArticleContentElements(): Promise<ElementsExtractedContent> {
-    const fieldNameDebug = 'article-content';
-    let results: ElementsExtractedContent = {
-      textContent: [],
-      eleHTML: [],
-    };
-    let elementsCheck = await this.extractElementsStatusCheck(
-      this.elements.mainArticle.contentElements,
-      fieldNameDebug,
-    );
-    if (elementsCheck.length == 0) {
-      return results;
-    } else {
-      for (const element of elementsCheck) {
-        if (element.eleTextContent || element.eleHTML) {
-          results.textContent.push(element.eleTextContent);
-          results.eleHTML.push(element.eleHTML);
-        }
-      }
-    }
-
-    let contentEles;
-    try {
-      contentEles = await this.scrapeMaster.selectElements(
+    const fieldNameDebug = 'MainArticle-article-content';
+    let elementsExtractCheck: ElementExtractCheck[] =
+      await this.extractElementsStatusCheck(
         this.elements.mainArticle.contentElements,
-        undefined,
         fieldNameDebug,
       );
-    } catch (err) {
-      this._statusHandler.addFieldsFailedToScrape([
-        fieldNameDebug,
-        getErrorMessage(err),
-      ]);
-      return [[], []];
-    }
-    let contents: ElementTextContent[] = [];
-    let contentsElesHTML: ElementHTML[] = [];
-    for (const ele of contentEles) {
-      try {
-        const tmpContent = await ele.text();
-        if (!tmpContent) {
-          continue;
-        }
-        contents.push(tmpContent);
-      } catch (err) {
-        this._statusHandler.addFieldsFailedToScrape([
-          fieldNameDebug,
-          getErrorMessage(err),
-        ]);
-        try {
-          contentsElesHTML.push(await ele.getOuterHTML());
-        } catch {}
-      }
-    }
-    return [contentsElesHTML, contents];
+    return this.toElementsExtractedContent(elementsExtractCheck);
   }
-  async extractMainArticleAuthorElement(): Promise<
-    [ElementHTML | undefined, ElementTextContent | undefined]
-  > {
-    const fieldNameDebug = 'author-info';
-    let authorEle: ScrapedElement | undefined;
-    let author = undefined;
-    let authorHTML = undefined;
-    let error = undefined;
-    try {
-      authorEle = await this.scrapeMaster.selectElement(
+  async extractMainArticleAuthorElement(): Promise<ElementExtractedContent> {
+    const fieldNameDebug = 'MainArticle-author-info';
+    let elementExtractCheck: ElementExtractCheck =
+      await this.extractElementStatusCheck(
         this.elements.mainArticle.authorElement,
-        undefined,
+        fieldNameDebug,
+        'href',
+      );
+    return this.toElementExtractedContent(elementExtractCheck);
+  }
+  async extractMainArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
+    const fieldNameDebug = 'MainArticle-post-datetime';
+    let elementExtractCheck: ElementExtractCheck =
+      await this.extractElementStatusCheck(
+        this.elements.mainArticle.postDatetimeElement,
         fieldNameDebug,
       );
-      if (!authorEle) {
-        this._statusHandler.addFieldsFailedToScrape([
-          fieldNameDebug,
-          'undefined',
-        ]);
-        return [undefined, undefined];
-      } else {
-        try {
-          author = await authorEle.text();
-        } catch (err) {
-          error = err;
-        }
-      }
-    } catch (err) {
-      error = err;
-    }
-    if (error) {
-      this._statusHandler.addFieldsFailedToScrape([
+    return this.toElementExtractedContent(elementExtractCheck);
+  }
+  async extractMainArticleCategoryElement(): Promise<ElementExtractedContent> {
+    const fieldNameDebug = 'MainArticle-category';
+    let elementExtractCheck: ElementExtractCheck =
+      await this.extractElementStatusCheck(
+        this.elements.mainArticle.categoryElement,
         fieldNameDebug,
-        getErrorMessage(error),
-      ]);
-      try {
-        authorHTML = await (authorEle as ScrapedElement).getOuterHTML();
-      } catch {}
-    }
-    return [authorHTML, author];
-  }
-  async extractMainArticlePostDatetimeElement(): Promise<
-    [ElementHTML, DateTime]
-  > {
-    return [];
-  }
-  async extractMainArticleCategoryElement(): Promise<
-    [ElementHTML, ElementTextContent]
-  > {
-    return [];
+        'href',
+      );
+    return this.toElementExtractedContent(elementExtractCheck);
   }
   getInfoExtractor(
     pageType: keyof TypeCNBCActCSSselector,
@@ -162,23 +89,21 @@ export default class CNBCAct extends ArticleAct {
     throw new Error('Method not implemented.');
   }
   async mainArticleExtractor(): Promise<RawArticlePage> {
-    let [contentEles, content] = await this.extractMainArticleContentElements();
-    let [authorEle, author] = await this.extractMainArticleAuthorElement();
-    let [postDatetimeEle, postDatetime] =
-      await this.extractMainArticlePostDatetimeElement();
-    let [categoryEle, category] =
-      await this.extractMainArticleCategoryElement();
+    let content = await this.extractMainArticleContentElements();
+    let author = await this.extractMainArticleAuthorElement();
+    let postDatetime = await this.extractMainArticlePostDatetimeElement();
+    let category = await this.extractMainArticleCategoryElement();
     let otherLinks: OtherLinks = await this.getOtherLinks();
     return {
       url: this.scrapeMaster.currentURL(),
-      content_elements: contentEles,
-      author_element: authorEle,
-      post_datetime_element: postDatetimeEle,
-      category_element: categoryEle,
-      content: content,
-      author: author,
-      post_datetime: postDatetime,
-      category: category,
+      content_elements: content.eleHTML,
+      author_element: author.eleHTML,
+      post_datetime_element: postDatetime.eleHTML,
+      category_element: category.eleHTML,
+      content: content.textContent,
+      author: author.textContent,
+      post_datetime: postDatetime.textContent,
+      category: category.textContent,
       scrape_status: this._statusHandler.scrapeStatus,
       scraped_at: DateTime.now().toUTC(),
       other_article_links: otherLinks.news,

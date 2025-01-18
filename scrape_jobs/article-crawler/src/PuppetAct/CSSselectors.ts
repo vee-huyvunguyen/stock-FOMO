@@ -35,6 +35,7 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
     authorElement: '.Author-authorName',
     postDatetimeElement:
       'time[data-testid="published-timestamp"][itemprop="datePublished"]',
+    categoryElement: '.ArticleHeader-eyebrow',
   },
   podcastArticle: {
     checkLoadedPageElement: [

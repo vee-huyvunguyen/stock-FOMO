@@ -23,7 +23,8 @@ class CheerioScrapedElement implements ScrapedElement<CheerioAPI, Element> {
     }
   }
   async getProperty(propertyName: string): Promise<string> {
-    return await this.getAttribute(propertyName);
+    const value = this.page(this.element).prop(propertyName);
+    return this.checkRetrievedAttribute(value?.toString(), propertyName);
   }
   async getAttribute(attributeName: string): Promise<string> {
     return this.checkRetrievedAttribute(

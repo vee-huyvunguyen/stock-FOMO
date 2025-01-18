@@ -112,7 +112,7 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
     const foundTagAs = await this.selectElements('a');
     const foundHrefTexts = [];
     for (const ele of foundTagAs) {
-      const href = (await ele.getAttribute('href')) || '';
+      const href = (await ele.href()) || '';
       const text = await ele.text();
       foundHrefTexts.push({ href, text });
     }

@@ -86,6 +86,7 @@ export default class CNBCAct extends ArticleAct {
   }
 
   async scrape(): Promise<RawArticlePage> {
+    await this.loadNewsPage();
     throw new Error('Method not implemented.');
   }
   async mainArticleExtractor(): Promise<RawArticlePage> {

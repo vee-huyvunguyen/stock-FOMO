@@ -16,10 +16,15 @@ import {
   ScrapeStatus,
 } from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
 
-type PageClassification = {
-  success: boolean;
-  pageType?: 'mainArticle' | string;
-};
+type PageClassification =
+  | {
+    success: true;
+    pageType: 'mainArticle' | string;
+  }
+  | {
+    success: false;
+    pageType: undefined;
+  };
 type OtherLinks = {
   other: string[];
   news: string[];
@@ -28,10 +33,10 @@ type OtherLinks = {
 type ArticleInfoExtractor = () => Promise<RawArticlePage>;
 type ElementExtractCheck =
   | {
-      isError: false;
-      element: ScrapedElement;
-      propertyValue: ElementTextContent;
-    }
+    isError: false;
+    element: ScrapedElement;
+    propertyValue: ElementTextContent;
+  }
   | { isError: true; element: ScrapedElement; eleHTML?: ElementHTML } // error, but can debug with html
   | { isError: true; eleHTML: undefined }; // error, failed to extract element
 
@@ -56,6 +61,10 @@ abstract class ArticleAct {
     if (manualPageType) {
       this._statusHandler.updateManuallyParsedPageType(manualPageType);
     }
+    this.scrapeMaster = scrapeMaster;
+    this.articleURL = articleURL;
+    this.elements = elements;
+    this.manualPageType = manualPageType;
   }
   getPageType(): string | undefined {
     return this.manualPageType
@@ -76,9 +85,6 @@ abstract class ArticleAct {
   async checkLoadedNewsPage(): Promise<boolean> {
     let checkPage = await this.CategorizeLoadedPage();
     if (checkPage.success) {
-      if (!checkPage.pageType) {
-        checkPage.pageType = 'mainArticle';
-      }
       this._statusHandler.updateDetectedPageType(checkPage.pageType);
       if (this.elements[checkPage.pageType].undesired) {
         this._statusHandler.updateUndesiredPageError();
@@ -107,18 +113,20 @@ abstract class ArticleAct {
   }
 
   async CategorizeLoadedPage(): Promise<PageClassification> {
-    let pageCheck: PageClassification = { success: false };
+    let pageCheck: PageClassification = { success: false, pageType: undefined };
 
     for (const [pageType, pageElements] of Object.entries(this.elements)) {
       if (pageType == 'mainArticle') {
         if (await this.checkElementExist(pageElements)) {
-          pageCheck.success = true;
-          pageCheck.pageType = 'mainArticle';
+          // main article is the parent category
+          // subsequent check can result in different pageType
+          // so when a page is detected as mainArticle, it is still necessary to check other pageType
+          pageCheck = { success: true, pageType: 'mainArticle' };
+          // no break here
         }
       } else {
         if (await this.checkElementExist(pageElements)) {
-          pageCheck.pageType = pageType;
-          break;
+          return { success: true, pageType: pageType };
         }
       }
     }

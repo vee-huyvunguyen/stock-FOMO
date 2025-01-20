@@ -16,46 +16,33 @@ type TypeBaseCSSSelector = {
   mainArticle: ElementsPageTypeConfig;
   [key: string]: ElementsPageTypeConfig;
 };
-type TypeCNBCActCSSselector = {
-  podcastArticle: ElementsPageTypeConfig;
-  makeItArticle: ElementsPageTypeConfig;
-  proArticle: ElementsPageTypeConfig;
-  selectArticle: ElementsPageTypeConfig;
-} & TypeBaseCSSSelector;
 
-const CNBCActCSSselector: TypeCNBCActCSSselector = {
+const CNBCActCSSselector: TypeBaseCSSSelector = {
   mainArticle: {
     checkLoadedPageElement: [
       '.branding-menu-logo',
       'href',
-      '//www.cnbc.com/world/',
+      'https://www.cnbc.com/world/',
     ],
     undesired: false,
     contentElements: '.PageBuilder-article',
-    authorElement: '.Author-authorName',
+    authorElements: '.Author-authorName',
     postDatetimeElement:
       'time[data-testid="published-timestamp"][itemprop="datePublished"]',
     categoryElement: '.ArticleHeader-eyebrow',
-  },
-  podcastArticle: {
-    checkLoadedPageElement: [
-      '.PageHeaderWithTuneInText-title',
-      'innerHTML',
-      'Podcasts',
-    ],
-    undesired: true,
   },
   makeItArticle: {
     checkLoadedPageElement: [
       '.MakeItGlobalNav-styles-makeit-logo--sXqSs',
       'href',
-      '//www.cnbc.com/make-it/',
+      "https://www.cnbc.com/make-it/",
     ],
     undesired: false,
-  },
-  proArticle: {
-    checkLoadedPageElement: ['.ProPill-proPillLink', 'href', '/pro/'],
-    undesired: true,
+    // TODO: check if the author elements can be selected with multiple authors
+    contentElements: '[data-module="ArticleBody"]',
+    authorElements: '.Author-styles-makeit-authorName--_ANaL"',
+    postDatetimeElement: '.ArticleHeader-styles-makeit-time--hKeEh',
+    categoryElement: '.ArticleHeader-styles-makeit-eyebrow--Degp4',
   },
   selectArticle: {
     checkLoadedPageElement: [
@@ -64,12 +51,23 @@ const CNBCActCSSselector: TypeCNBCActCSSselector = {
       'https://www.cnbc.com/select/',
     ],
     undesired: false,
+    contentElements: '[data-module="ArticleBody"]',
+    authorElement: '.Author-styles-makeit-authorName--_ANaL"',
+    postDatetimeElement: '.ArticleHeader-styles-makeit-time--hKeEh',
+    categoryElement: '.ArticleHeader-styles-makeit-eyebrow--Degp4',
+  },
+  podcastArticle: {
+    checkLoadedPageElement: ['.PageHeaderWithTuneInText-title', 'innerHTML', 'Podcasts'],
+    undesired: true,
+  },
+  proArticle: {
+    checkLoadedPageElement: ['.ProPill-proPillLink', 'href', "https://www.cnbc.com/pro/"],
+    undesired: true,
   },
 };
 
 export {
   CNBCActCSSselector,
-  TypeCNBCActCSSselector,
   TypeBaseCSSSelector,
   ElementsPageTypeConfig,
   PageType,

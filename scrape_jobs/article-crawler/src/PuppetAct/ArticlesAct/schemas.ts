@@ -3,6 +3,7 @@ import { ScrapeStatus } from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
 
 type RawArticlePage = {
   url: string;
+  pageTitle: string;
   content_elements?: string[];
   author_element?: string;
   post_datetime_element?: string;

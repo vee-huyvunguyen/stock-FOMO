@@ -8,14 +8,14 @@ import {
 } from '@/PuppetAct/ArticlesAct';
 import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
-import { PageType, TypeCNBCActCSSselector } from '@/PuppetAct/CSSselectors';
-import { DateTime } from 'luxon';
+import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/CSSselectors';
+
 
 export default class CNBCAct extends ArticleAct {
   constructor(
     scrapeMaster: ScrapeMaster,
     articleURL: string,
-    elements: TypeCNBCActCSSselector,
+    elements: TypeBaseCSSSelector,
     manualPageType?: string,
   ) {
     super(scrapeMaster, articleURL, elements, manualPageType);
@@ -74,9 +74,9 @@ export default class CNBCAct extends ArticleAct {
     return this.toElementExtractedContent(elementExtractCheck);
   }
   getInfoExtractor(
-    pageType: keyof TypeCNBCActCSSselector,
+    pageType: keyof TypeBaseCSSSelector,
   ): ArticleInfoExtractor {
-    let extractors: Record<keyof TypeCNBCActCSSselector, ArticleInfoExtractor> =
+    let extractors: Record<keyof TypeBaseCSSSelector, ArticleInfoExtractor> =
       {
         mainArticle: this.mainArticleExtractor,
         makeItArticle: this.makeItArticleExtractor,
@@ -85,10 +85,6 @@ export default class CNBCAct extends ArticleAct {
     return extractors[pageType];
   }
 
-  async scrape(): Promise<RawArticlePage> {
-    await this.loadNewsPage();
-    throw new Error('Method not implemented.');
-  }
   async mainArticleExtractor(): Promise<RawArticlePage> {
     let content = await this.extractMainArticleContentElements();
     let author = await this.extractMainArticleAuthorElement();
@@ -96,7 +92,6 @@ export default class CNBCAct extends ArticleAct {
     let category = await this.extractMainArticleCategoryElement();
     let otherLinks: OtherLinks = await this.getOtherLinks();
     return {
-      url: this.scrapeMaster.currentURL(),
       content_elements: content.eleHTML,
       author_element: author.eleHTML,
       post_datetime_element: postDatetime.eleHTML,
@@ -105,14 +100,68 @@ export default class CNBCAct extends ArticleAct {
       author: author.textContent,
       post_datetime: postDatetime.textContent,
       category: category.textContent,
-      scrape_status: this._statusHandler.scrapeStatus,
-      scraped_at: DateTime.now().toUTC(),
       other_article_links: otherLinks.news,
       other_links: otherLinks.other,
+      ...(await this.getDefaultRawArticlePage()),
     };
   }
+  async extractMakeItArticleContentElements(): Promise<ElementsExtractedContent> {
+    const fieldNameDebug = 'MakeItArticle-article-content';
+    let elementsExtractCheck: ElementExtractCheck[] =
+      await this.extractElementsStatusCheck(
+        this.elements.makeItArticle.contentElements,
+        fieldNameDebug,
+      );
+    return this.toElementsExtractedContent(elementsExtractCheck);
+  }
+  async extractMakeItArticleAuthorElement(): Promise<ElementExtractedContent> {
+    const fieldNameDebug = 'MakeItArticle-author-info';
+    let elementExtractCheck: ElementExtractCheck =
+      await this.extractElementStatusCheck(
+        this.elements.makeItArticle.authorElement,
+        fieldNameDebug,
+        "href"
+      );
+    return this.toElementExtractedContent(elementExtractCheck);
+  }
+  async extractMakeItArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
+    const fieldNameDebug = 'MakeItArticle-post-datetime';
+    let elementExtractCheck: ElementExtractCheck =
+      await this.extractElementStatusCheck(
+        this.elements.makeItArticle.postDatetimeElement,
+        fieldNameDebug,
+      );
+    return this.toElementExtractedContent(elementExtractCheck);
+  }
+  async extractMakeItArticleCategoryElement(): Promise<ElementExtractedContent> {
+    const fieldNameDebug = 'MakeItArticle-category';
+    let elementExtractCheck: ElementExtractCheck =
+      await this.extractElementStatusCheck(
+        this.elements.makeItArticle.categoryElement,
+        fieldNameDebug,
+        'href',
+      );
+    return this.toElementExtractedContent(elementExtractCheck);
+  }
   async makeItArticleExtractor(): Promise<RawArticlePage> {
-    throw new Error('Not Implemented');
+    let content = await this.extractMakeItArticleContentElements();
+    let author = await this.extractMakeItArticleAuthorElement();
+    let postDatetime = await this.extractMakeItArticlePostDatetimeElement();
+    let category = await this.extractMakeItArticleCategoryElement();
+    let otherLinks: OtherLinks = await this.getOtherLinks();
+    return {
+      content_elements: content.eleHTML,
+      author_element: author.eleHTML,
+      post_datetime_element: postDatetime.eleHTML,
+      category_element: category.eleHTML,
+      content: content.textContent,
+      author: author.textContent,
+      post_datetime: postDatetime.textContent,
+      category: category.textContent,
+      other_article_links: otherLinks.news,
+      other_links: otherLinks.other,
+      ...(await this.getDefaultRawArticlePage()),
+    };
   }
   async selectArticleExtractor(): Promise<RawArticlePage> {
     throw new Error('Not Implemented');

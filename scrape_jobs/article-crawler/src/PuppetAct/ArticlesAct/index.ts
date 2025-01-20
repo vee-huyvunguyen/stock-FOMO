@@ -15,6 +15,7 @@ import {
   ScrapeStatusHandler,
   ScrapeStatus,
 } from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
+import { DateTime } from 'luxon';
 
 type PageClassification =
   | {
@@ -311,9 +312,30 @@ abstract class ArticleAct {
     }
     return { textContent: undefined, eleHTML: undefined };
   }
+  async getDefaultRawArticlePage(): Promise<RawArticlePage> {
+    return {
+      url: this.scrapeMaster.currentURL(),
+      pageTitle: await this.scrapeMaster.getPageTitle(),
+      scrape_status: this.getStatus(),
+      scraped_at: DateTime.now().toUTC(),
+    };
+  }
+  async scrape(): Promise<RawArticlePage> {
+    const pageIsLoaded = await this.loadNewsPage();
+    if (!pageIsLoaded){
+      return await this.getDefaultRawArticlePage();
+    } else {
+      const pageType = this.getPageType();
+      if (!pageType) {
+        return await this.getDefaultRawArticlePage();
+      } else {
+        const extractor = this.getInfoExtractor(pageType);
+        return await extractor();
+      }
+    }
+  }
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;
-  abstract scrape(): Promise<RawArticlePage>;
 }
 
 export {

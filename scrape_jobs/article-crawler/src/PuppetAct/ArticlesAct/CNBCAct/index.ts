@@ -10,7 +10,6 @@ import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
 import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/CSSselectors';
 
-
 export default class CNBCAct extends ArticleAct {
   constructor(
     scrapeMaster: ScrapeMaster,
@@ -73,15 +72,12 @@ export default class CNBCAct extends ArticleAct {
       );
     return this.toElementExtractedContent(elementExtractCheck);
   }
-  getInfoExtractor(
-    pageType: keyof TypeBaseCSSSelector,
-  ): ArticleInfoExtractor {
-    let extractors: Record<keyof TypeBaseCSSSelector, ArticleInfoExtractor> =
-      {
-        mainArticle: this.mainArticleExtractor,
-        makeItArticle: this.makeItArticleExtractor,
-        selectArticle: this.selectArticleExtractor,
-      };
+  getInfoExtractor(pageType: keyof TypeBaseCSSSelector): ArticleInfoExtractor {
+    let extractors: Record<keyof TypeBaseCSSSelector, ArticleInfoExtractor> = {
+      mainArticle: this.mainArticleExtractor,
+      makeItArticle: this.makeItArticleExtractor,
+      selectArticle: this.selectArticleExtractor,
+    };
     return extractors[pageType];
   }
 
@@ -120,7 +116,7 @@ export default class CNBCAct extends ArticleAct {
       await this.extractElementStatusCheck(
         this.elements.makeItArticle.authorElement,
         fieldNameDebug,
-        "href"
+        'href',
       );
     return this.toElementExtractedContent(elementExtractCheck);
   }

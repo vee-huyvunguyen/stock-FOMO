@@ -35,7 +35,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     checkLoadedPageElement: [
       '.MakeItGlobalNav-styles-makeit-logo--sXqSs',
       'href',
-      "https://www.cnbc.com/make-it/",
+      'https://www.cnbc.com/make-it/',
     ],
     undesired: false,
     // TODO: check if the author elements can be selected with multiple authors
@@ -57,11 +57,19 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     categoryElement: '.ArticleHeader-styles-makeit-eyebrow--Degp4',
   },
   podcastArticle: {
-    checkLoadedPageElement: ['.PageHeaderWithTuneInText-title', 'innerHTML', 'Podcasts'],
+    checkLoadedPageElement: [
+      '.PageHeaderWithTuneInText-title',
+      'innerHTML',
+      'Podcasts',
+    ],
     undesired: true,
   },
   proArticle: {
-    checkLoadedPageElement: ['.ProPill-proPillLink', 'href', "https://www.cnbc.com/pro/"],
+    checkLoadedPageElement: [
+      '.ProPill-proPillLink',
+      'href',
+      'https://www.cnbc.com/pro/',
+    ],
     undesired: true,
   },
 };

@@ -19,13 +19,13 @@ import { DateTime } from 'luxon';
 
 type PageClassification =
   | {
-    success: true;
-    pageType: 'mainArticle' | string;
-  }
+      success: true;
+      pageType: 'mainArticle' | string;
+    }
   | {
-    success: false;
-    pageType: undefined;
-  };
+      success: false;
+      pageType: undefined;
+    };
 type OtherLinks = {
   other: string[];
   news: string[];
@@ -34,10 +34,10 @@ type OtherLinks = {
 type ArticleInfoExtractor = () => Promise<RawArticlePage>;
 type ElementExtractCheck =
   | {
-    isError: false;
-    element: ScrapedElement;
-    propertyValue: ElementTextContent;
-  }
+      isError: false;
+      element: ScrapedElement;
+      propertyValue: ElementTextContent;
+    }
   | { isError: true; element: ScrapedElement; eleHTML?: ElementHTML } // error, but can debug with html
   | { isError: true; eleHTML: undefined }; // error, failed to extract element
 
@@ -322,7 +322,7 @@ abstract class ArticleAct {
   }
   async scrape(): Promise<RawArticlePage> {
     const pageIsLoaded = await this.loadNewsPage();
-    if (!pageIsLoaded){
+    if (!pageIsLoaded) {
       return await this.getDefaultRawArticlePage();
     } else {
       const pageType = this.getPageType();

@@ -21,7 +21,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
   mainArticle: {
     // Example: https://www.cnbc.com/2025/02/03/stock-market-today-live-updates.html
     checkLoadedPageElement: [
-      '.branding-menu-logo',
+      'a.branding-menu-logo',
       'href',
       'https://www.cnbc.com/world/',
     ],

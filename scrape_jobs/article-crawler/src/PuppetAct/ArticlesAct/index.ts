@@ -109,7 +109,7 @@ abstract class ArticleAct<P, T> {
     if (foundElements.length == 0) {
       return false;
     }
-    const attrToCheck = await foundElements[0].getAttribute(attrName);
+    const attrToCheck = await foundElements[0].getProperty(attrName);
     return attrToCheck == attrValueExpect;
   }
 

@@ -1,18 +1,17 @@
 {
-    "extends": "@apify/tsconfig",
-    "compilerOptions": {
-        "module": "ES2022",
-        "target": "ES2022",
-        "outDir": "dist",
-        "noUnusedLocals": false,
-        "lib": ["DOM"],
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["src/*"]
-        }
+  "extends": "@apify/tsconfig",
+  "compilerOptions": {
+    "module": "ES2022",
+    "target": "ES2022",
+    "outDir": "dist",
+    "noUnusedLocals": false,
+    "lib": ["DOM"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
     },
-    "include": [
-        "./src/**/*",
-        "./tests/**/*"
-    ]
+    "sourceMap": true,
+    "inlineSources": true
+  },
+  "include": ["./src/**/*", "./tests/**/*"]
 }

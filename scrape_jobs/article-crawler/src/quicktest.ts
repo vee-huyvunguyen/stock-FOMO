@@ -1,7 +1,9 @@
 import puppeteer from 'puppeteer';
-import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster';
-import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher';
-import CheerioMaster from './PuppetShow/ScrapeMaster/CheerioMaster';
+import PuppetMaster from '@/PuppetShow/ScrapeMaster/PuppetMaster';
+import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
+import CheerioMaster from '@/PuppetShow/ScrapeMaster/CheerioMaster';
+import CNBCAct from '@/PuppetAct/ArticlesAct/CNBCAct';
+import { CNBCActCSSselector } from '@/PuppetAct/CSSselectors';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser
@@ -24,18 +26,15 @@ async function getCheerioMaster(url: string) {
 }
 
 async function main() {
-  const url: string = 'https://quotes.toscrape.com/';
+  const url: string = 'https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html';
   // let master = await getCheerioMaster(url)
   let master = await getPuppetMaster();
-
+  let cnbcAct = new CNBCAct(master, url, CNBCActCSSselector);
   try {
-    await master.goto(url);
-    const titleElement = await master.selectElement(
-      'div.quote:nth-child(1) > span:nth-child(1)',
-    );
-    const innerHTML = await titleElement?.getOuterHTML();
-    console.log(`first qoute's outerHTML is ${innerHTML}`);
+    let article = await cnbcAct.scrape();
+    console.log(article);
   } finally {
+    console.log(cnbcAct.getStatus());
     await master.close();
   }
   // Close the browser

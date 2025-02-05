@@ -32,7 +32,8 @@ async function getCheerioMaster(url: string) {
 }
 
 async function main() {
-  const url: string = 'https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html';
+  const url: string =
+    'https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html';
   // let master = await getCheerioMaster(url)
   let master = await getPuppetMaster();
   let cnbcAct = new CNBCAct(master, url, CNBCActCSSselector);

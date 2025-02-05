@@ -45,11 +45,12 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   }
   async extractMainArticleAuthorElement(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'MainArticle-author-info';
-    let elementsExtractCheck: ElementExtractCheck<P, T>[] = await this.extractElementsStatusCheck(
-      this.elements.mainArticle.authorElements,
-      fieldNameDebug,
-      'href'
-    );
+    let elementsExtractCheck: ElementExtractCheck<P, T>[] =
+      await this.extractElementsStatusCheck(
+        this.elements.mainArticle.authorElements,
+        fieldNameDebug,
+        'href',
+      );
     return this.toElementsExtractedContent(elementsExtractCheck);
   }
   async extractMainArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
@@ -73,18 +74,20 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   }
   async extractMainArticleTitleElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MainArticle-title';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.mainArticle.articleTitleElement,
-      fieldNameDebug
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.mainArticle.articleTitleElement,
+        fieldNameDebug,
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   async extractMainArticleUpdatedDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MainArticle-updated-datetime';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.mainArticle.updatedDatetimeElement,
-      fieldNameDebug
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.mainArticle.updatedDatetimeElement,
+        fieldNameDebug,
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   getInfoExtractor(pageType: keyof TypeBaseCSSSelector): ArticleInfoExtractor {
@@ -133,11 +136,12 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   }
   async extractMakeItArticleAuthorElement(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-author-info';
-    let elementsExtractCheck: ElementExtractCheck<P, T>[] = await this.extractElementsStatusCheck(
-      this.elements.makeItArticle.authorElements,
-      fieldNameDebug,
-      'href'
-    );
+    let elementsExtractCheck: ElementExtractCheck<P, T>[] =
+      await this.extractElementsStatusCheck(
+        this.elements.makeItArticle.authorElements,
+        fieldNameDebug,
+        'href',
+      );
     return this.toElementsExtractedContent(elementsExtractCheck);
   }
   async extractMakeItArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
@@ -161,25 +165,29 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   }
   async extractMakeItArticleTitleElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-title';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.makeItArticle.articleTitleElement,
-      fieldNameDebug
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.makeItArticle.articleTitleElement,
+        fieldNameDebug,
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   async extractMakeItArticleUpdatedDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-updated-datetime';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.makeItArticle.updatedDatetimeElement,
-      fieldNameDebug
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.makeItArticle.updatedDatetimeElement,
+        fieldNameDebug,
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   makeItArticleExtractor = async (): Promise<RawArticlePage> => {
     let content = await this.extractMakeItArticleContentElements();
     let authors = await this.extractMakeItArticleAuthorElement();
-    let publishedDatetime = await this.extractMakeItArticlePostDatetimeElement();
-    let updatedDatetime = await this.extractMakeItArticleUpdatedDatetimeElement();
+    let publishedDatetime =
+      await this.extractMakeItArticlePostDatetimeElement();
+    let updatedDatetime =
+      await this.extractMakeItArticleUpdatedDatetimeElement();
     let category = await this.extractMakeItArticleCategoryElement();
     let title = await this.extractMakeItArticleTitleElement();
     let otherLinks: OtherLinks = await this.getOtherLinks();
@@ -203,50 +211,56 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   };
   async extractSelectArticleContentElements(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'SelectArticle-article-content';
-    let elementsExtractCheck: ElementExtractCheck<P, T>[] = await this.extractElementsStatusCheck(
-      this.elements.selectArticle.contentElements,
-      fieldNameDebug,
-    );
+    let elementsExtractCheck: ElementExtractCheck<P, T>[] =
+      await this.extractElementsStatusCheck(
+        this.elements.selectArticle.contentElements,
+        fieldNameDebug,
+      );
     return this.toElementsExtractedContent(elementsExtractCheck);
   }
   async extractSelectArticleAuthorElement(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'SelectArticle-author-info';
-    let elementsExtractCheck: ElementExtractCheck<P, T>[] = await this.extractElementsStatusCheck(
-      this.elements.selectArticle.authorElement,
-      fieldNameDebug,
-      'href'
-    );
+    let elementsExtractCheck: ElementExtractCheck<P, T>[] =
+      await this.extractElementsStatusCheck(
+        this.elements.selectArticle.authorElement,
+        fieldNameDebug,
+        'href',
+      );
     return this.toElementsExtractedContent(elementsExtractCheck);
   }
   async extractSelectArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'SelectArticle-post-datetime';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.selectArticle.postDatetimeElement,
-      fieldNameDebug,
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.selectArticle.postDatetimeElement,
+        fieldNameDebug,
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   async extractSelectArticleCategoryElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'SelectArticle-category';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.selectArticle.categoryElement,
-      fieldNameDebug,
-      'href',
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.selectArticle.categoryElement,
+        fieldNameDebug,
+        'href',
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   async extractSelectArticleTitleElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'SelectArticle-title';
-    let elementExtractCheck: ElementExtractCheck<P, T> = await this.extractElementStatusCheck(
-      this.elements.selectArticle.articleTitleElement,
-      fieldNameDebug
-    );
+    let elementExtractCheck: ElementExtractCheck<P, T> =
+      await this.extractElementStatusCheck(
+        this.elements.selectArticle.articleTitleElement,
+        fieldNameDebug,
+      );
     return this.toElementExtractedContent(elementExtractCheck);
   }
   selectArticleExtractor = async (): Promise<RawArticlePage> => {
     let content = await this.extractSelectArticleContentElements();
     let authors = await this.extractSelectArticleAuthorElement();
-    let publishedDatetime = await this.extractSelectArticlePostDatetimeElement();
+    let publishedDatetime =
+      await this.extractSelectArticlePostDatetimeElement();
     let category = await this.extractSelectArticleCategoryElement();
     let title = await this.extractSelectArticleTitleElement();
     let otherLinks: OtherLinks = await this.getOtherLinks();

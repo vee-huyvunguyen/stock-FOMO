@@ -19,13 +19,13 @@ import { DateTime } from 'luxon';
 
 type PageClassification =
   | {
-    success: true;
-    pageType: 'mainArticle' | string;
-  }
+      success: true;
+      pageType: 'mainArticle' | string;
+    }
   | {
-    success: false;
-    pageType: undefined;
-  };
+      success: false;
+      pageType: undefined;
+    };
 type OtherLinks = {
   other: string[];
   news: string[];
@@ -34,10 +34,10 @@ type OtherLinks = {
 type ArticleInfoExtractor = () => Promise<RawArticlePage>;
 type ElementExtractCheck<P, T> =
   | {
-    isError: false;
-    element: ScrapedElement<P, T>;
-    propertyValue: ElementTextContent;
-  }
+      isError: false;
+      element: ScrapedElement<P, T>;
+      propertyValue: ElementTextContent;
+    }
   | { isError: true; element: ScrapedElement<P, T>; eleHTML?: ElementHTML }
   | { isError: true; eleHTML: undefined };
 

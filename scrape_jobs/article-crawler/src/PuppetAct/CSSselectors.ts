@@ -47,7 +47,8 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     undesired: false,
     contentElements: '[data-module="ArticleBody"]',
     authorElements: 'a[class^="Author-styles-makeit-authorName--"]',
-    postDatetimeElement: 'time[data-testid="published-timestamp"][itemprop="datePublished"]',
+    postDatetimeElement:
+      'time[data-testid="published-timestamp"][itemprop="datePublished"]',
     updatedDatetimeElement:
       'time[data-testid="lastpublished-timestamp"][itemprop="dateModified"]',
     categoryElement: 'a[class^="ArticleHeader-styles-makeit-eyebrow--"]', // get the href

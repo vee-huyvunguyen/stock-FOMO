@@ -77,7 +77,7 @@ class ScrapeStatusHandler {
   addFieldsFailedToScrape(failedField: [FieldName, FieldError]) {
     const oldFailedFields = this.scrapeStatus.failReport?.fieldsFailedToScrape;
     const newFailedFields = oldFailedFields
-      ? oldFailedFields.concat(failedField)
+      ? [...oldFailedFields, failedField]
       : [failedField];
     this.updateFailReport({
       failStep: 'scrape-element',

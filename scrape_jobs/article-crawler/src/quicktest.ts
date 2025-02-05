@@ -13,7 +13,13 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
   var puppetMaster = new PuppetMaster(
     page,
     browser,
-    { logNullElement: false },
+    {
+      logNullElement: false,
+      defaultGotoOptions: {
+        timeout: 15000,
+        waitUntil: 'networkidle0',
+      },
+    },
     watcher,
   );
   return puppetMaster;
@@ -34,7 +40,7 @@ async function main() {
     let article = await cnbcAct.scrape();
     console.log(article);
   } finally {
-    console.log(cnbcAct.getStatus());
+    console.log(JSON.stringify(cnbcAct.getStatus()));
     await master.close();
   }
   // Close the browser

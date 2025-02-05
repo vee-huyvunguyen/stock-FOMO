@@ -3,7 +3,7 @@ import { ScrapeStatus } from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
 
 type RawArticlePage = {
   url: string;
-  pageTitle: string;
+  page_title: string;
   article_title_element?: string;
   content_elements?: string[];
   author_elements?: string[];
@@ -12,7 +12,7 @@ type RawArticlePage = {
   category_element?: string;
   article_title?: string;
   content?: string[];
-  author?: string[];
+  authors?: string[];
   article_published_datetime?: string;
   article_updated_datetime?: string;
   category?: string;

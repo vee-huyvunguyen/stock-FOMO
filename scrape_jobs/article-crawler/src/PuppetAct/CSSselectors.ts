@@ -27,15 +27,15 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     ],
     undesired: false,
     // Title of the article is not always the .title of the html page
+    // Still have to get it independently
     articleTitleElement: 'h1.LiveBlogHeader-headline',
     contentElements: 'div.PageBuilder-article',
     authorElements: 'a.Author-authorName', // sometimes there are multiple authors
-    // will try to get the datetime attribute, if not found, then get the text content
     postDatetimeElement:
       'time[data-testid="published-timestamp"][itemprop="datePublished"]',
     updatedDatetimeElement:
       'time[data-testid="lastpublished-timestamp"][itemprop="dateModified"]',
-    categoryElement: '.ArticleHeader-eyebrow',
+    categoryElement: '.ArticleHeader-eyebrow', // get the href
   },
   makeItArticle: {
     // Example: https://www.cnbc.com/2025/01/28/tech-worker-saved-up-to-90-percent-of-his-pay-and-retired-with-3point5-million-dollars.html
@@ -63,8 +63,9 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     contentElements: '[data-module="ArticleBody"]',
     authorElement: 'a[class^="Author-styles-select-authorName--"]',
     // Can only get as text, doesn't have datetime attribute
-    // sometimes "Updated 5 minutes ago" -> have to infer later
+    // sometimes "Updated 5 minutes ago" -> still ok and have to infer later
     postDatetimeElement: '[class^="ArticleHeader-styles-select-time--"]',
+    // doesn't have updatedDatetimeElement -> still ok
     categoryElement: '[class^="ArticleHeader-styles-select-eyebrow--"]', // get the href
   },
   podcastArticle: {

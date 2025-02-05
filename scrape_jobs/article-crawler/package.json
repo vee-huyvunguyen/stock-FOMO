@@ -7,6 +7,7 @@
         "@types/lodash": "^4.17.13",
         "@types/luxon": "^3.4.2",
         "axios": "^1.7.9",
+        "cheerio": "^1.0.0",
         "crawlee": "^3.0.0",
         "lodash": "^4.17.21",
         "lodash.difference": "^4.5.0",

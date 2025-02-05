@@ -1,5 +1,6 @@
 1. The problem expanded much more, when account for articles that don't mention a company, but is highly relevent
-    - E.g.: Petrol Companies <-> Any news regarding the Ruso-Ukranian war, and Middle East Wars
+    - E.g.: Petrol Companies <-> Any news mentioning the Ruso-Ukranian war, and wars in Middle East
+    - Can use the other referenced articles inside the page -> group them -> improve relevancy estimation
 2. The "stock-article" dependency will be devided into 4 steps:
     - Quantify the revelancy of the article to a set of [GICS codes](https://www.msci.com/our-solutions/indexes/gics)
     - Quantify the revelancy of the article to The companies inside those codes.

@@ -32,14 +32,14 @@ type OtherLinks = {
 };
 
 type ArticleInfoExtractor = () => Promise<RawArticlePage>;
-type ElementExtractCheck =
+type ElementExtractCheck<P, T> =
   | {
     isError: false;
-    element: ScrapedElement;
+    element: ScrapedElement<P, T>;
     propertyValue: ElementTextContent;
   }
-  | { isError: true; element: ScrapedElement; eleHTML?: ElementHTML } // error, but can debug with html
-  | { isError: true; eleHTML: undefined }; // error, failed to extract element
+  | { isError: true; element: ScrapedElement<P, T>; eleHTML?: ElementHTML }
+  | { isError: true; eleHTML: undefined };
 
 type ElementExtractedContent = {
   textContent?: ElementTextContent;
@@ -49,11 +49,11 @@ type ElementsExtractedContent = {
   textContent: ElementTextContent[];
   eleHTML: ElementHTML[];
 };
-abstract class ArticleAct {
+abstract class ArticleAct<P, T> {
   protected _statusHandler: ScrapeStatusHandler;
 
   constructor(
-    public scrapeMaster: ScrapeMaster,
+    public scrapeMaster: ScrapeMaster<P, T>,
     public articleURL: string,
     public elements: TypeBaseCSSSelector,
     public manualPageType?: string,
@@ -167,9 +167,9 @@ abstract class ArticleAct {
     cssSelector: CSSSelector,
     eleNameDebug: string,
     elementProperty: string = 'textContent',
-    parentElement?: ScrapedElement,
-  ): Promise<ElementExtractCheck> {
-    let scrapedElement: ScrapedElement | undefined;
+    parentElement?: ScrapedElement<P, T>,
+  ): Promise<ElementExtractCheck<P, T>> {
+    let scrapedElement: ScrapedElement<P, T> | undefined;
     try {
       scrapedElement = await this.scrapeMaster.selectElement(
         cssSelector,
@@ -231,10 +231,10 @@ abstract class ArticleAct {
     cssSelector: CSSSelector,
     eleNameDebug: string,
     elementProperty: string = 'textContent',
-    parentElement?: ScrapedElement,
-  ): Promise<ElementExtractCheck[]> {
+    parentElement?: ScrapedElement<P, T>,
+  ): Promise<ElementExtractCheck<P, T>[]> {
     let elements;
-    let results: ElementExtractCheck[] = [];
+    let results: ElementExtractCheck<P, T>[] = [];
     try {
       elements = await this.scrapeMaster.selectElements(
         cssSelector,
@@ -287,7 +287,7 @@ abstract class ArticleAct {
     return results;
   }
   toElementsExtractedContent(
-    elementExtractCheck: ElementExtractCheck[],
+    elementExtractCheck: ElementExtractCheck<P, T>[],
   ): ElementsExtractedContent {
     let results: ElementsExtractedContent = {
       textContent: [],
@@ -303,7 +303,7 @@ abstract class ArticleAct {
     return results;
   }
   toElementExtractedContent(
-    elementExtractCheck: ElementExtractCheck,
+    elementExtractCheck: ElementExtractCheck<P, T>,
   ): ElementExtractedContent {
     if (!elementExtractCheck.isError) {
       return { textContent: elementExtractCheck.propertyValue };

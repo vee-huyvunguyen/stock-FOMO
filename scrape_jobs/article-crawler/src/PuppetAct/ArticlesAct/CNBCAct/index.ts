@@ -10,9 +10,9 @@ import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
 import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/CSSselectors';
 
-export default class CNBCAct extends ArticleAct {
+export default class CNBCAct<P,T> extends ArticleAct<P,T> {
   constructor(
-    scrapeMaster: ScrapeMaster,
+    scrapeMaster: ScrapeMaster<P,T>,
     articleURL: string,
     elements: TypeBaseCSSSelector,
     manualPageType?: string,
@@ -36,7 +36,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMainArticleContentElements(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'MainArticle-article-content';
-    let elementsExtractCheck: ElementExtractCheck[] =
+    let elementsExtractCheck: ElementExtractCheck<P,T>[] =
       await this.extractElementsStatusCheck(
         this.elements.mainArticle.contentElements,
         fieldNameDebug,
@@ -45,7 +45,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMainArticleAuthorElement(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'MainArticle-author-info';
-    let elementsExtractCheck: ElementExtractCheck[] = await this.extractElementsStatusCheck(
+    let elementsExtractCheck: ElementExtractCheck<P,T>[] = await this.extractElementsStatusCheck(
       this.elements.mainArticle.authorElements,
       fieldNameDebug,
       'href'
@@ -54,7 +54,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMainArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MainArticle-post-datetime';
-    let elementExtractCheck: ElementExtractCheck =
+    let elementExtractCheck: ElementExtractCheck<P,T> =
       await this.extractElementStatusCheck(
         this.elements.mainArticle.postDatetimeElement,
         fieldNameDebug,
@@ -63,7 +63,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMainArticleCategoryElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MainArticle-category';
-    let elementExtractCheck: ElementExtractCheck =
+    let elementExtractCheck: ElementExtractCheck<P,T> =
       await this.extractElementStatusCheck(
         this.elements.mainArticle.categoryElement,
         fieldNameDebug,
@@ -73,7 +73,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMainArticleTitleElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MainArticle-title';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.mainArticle.articleTitleElement,
       fieldNameDebug
     );
@@ -81,7 +81,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMainArticleUpdatedDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MainArticle-updated-datetime';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.mainArticle.updatedDatetimeElement,
       fieldNameDebug
     );
@@ -124,7 +124,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMakeItArticleContentElements(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-article-content';
-    let elementsExtractCheck: ElementExtractCheck[] =
+    let elementsExtractCheck: ElementExtractCheck<P,T>[] =
       await this.extractElementsStatusCheck(
         this.elements.makeItArticle.contentElements,
         fieldNameDebug,
@@ -133,7 +133,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMakeItArticleAuthorElement(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-author-info';
-    let elementsExtractCheck: ElementExtractCheck[] = await this.extractElementsStatusCheck(
+    let elementsExtractCheck: ElementExtractCheck<P,T>[] = await this.extractElementsStatusCheck(
       this.elements.makeItArticle.authorElements,
       fieldNameDebug,
       'href'
@@ -142,7 +142,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMakeItArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-post-datetime';
-    let elementExtractCheck: ElementExtractCheck =
+    let elementExtractCheck: ElementExtractCheck<P,T> =
       await this.extractElementStatusCheck(
         this.elements.makeItArticle.postDatetimeElement,
         fieldNameDebug,
@@ -151,7 +151,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMakeItArticleCategoryElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-category';
-    let elementExtractCheck: ElementExtractCheck =
+    let elementExtractCheck: ElementExtractCheck<P,T> =
       await this.extractElementStatusCheck(
         this.elements.makeItArticle.categoryElement,
         fieldNameDebug,
@@ -161,7 +161,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMakeItArticleTitleElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-title';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.makeItArticle.articleTitleElement,
       fieldNameDebug
     );
@@ -169,7 +169,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractMakeItArticleUpdatedDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'MakeItArticle-updated-datetime';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.makeItArticle.updatedDatetimeElement,
       fieldNameDebug
     );
@@ -203,7 +203,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractSelectArticleContentElements(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'SelectArticle-article-content';
-    let elementsExtractCheck: ElementExtractCheck[] = await this.extractElementsStatusCheck(
+    let elementsExtractCheck: ElementExtractCheck<P,T>[] = await this.extractElementsStatusCheck(
       this.elements.selectArticle.contentElements,
       fieldNameDebug,
     );
@@ -211,7 +211,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractSelectArticleAuthorElement(): Promise<ElementsExtractedContent> {
     const fieldNameDebug = 'SelectArticle-author-info';
-    let elementsExtractCheck: ElementExtractCheck[] = await this.extractElementsStatusCheck(
+    let elementsExtractCheck: ElementExtractCheck<P,T>[] = await this.extractElementsStatusCheck(
       this.elements.selectArticle.authorElement,
       fieldNameDebug,
       'href'
@@ -220,7 +220,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractSelectArticlePostDatetimeElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'SelectArticle-post-datetime';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.selectArticle.postDatetimeElement,
       fieldNameDebug,
     );
@@ -228,7 +228,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractSelectArticleCategoryElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'SelectArticle-category';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.selectArticle.categoryElement,
       fieldNameDebug,
       'href',
@@ -237,7 +237,7 @@ export default class CNBCAct extends ArticleAct {
   }
   async extractSelectArticleTitleElement(): Promise<ElementExtractedContent> {
     const fieldNameDebug = 'SelectArticle-title';
-    let elementExtractCheck: ElementExtractCheck = await this.extractElementStatusCheck(
+    let elementExtractCheck: ElementExtractCheck<P,T> = await this.extractElementStatusCheck(
       this.elements.selectArticle.articleTitleElement,
       fieldNameDebug
     );

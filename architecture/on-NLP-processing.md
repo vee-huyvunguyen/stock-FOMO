@@ -11,12 +11,14 @@
         - By Article Categories
         - By News Source.
 3. Logical Components:
-    - A Model for vectorizing the words, companies/org names
-    - A Model for quantify the keywords inside an article
-    - A vector database for keywords' vectors (from articles)
+    - A Method to vectorize the documents (article, GICS codes' definitions, companies' definitions).
+        - Preffered: Hybrid approach: Cache domain-specific entities (company names/GICS codes) while processing full documents
+    - A vector database
     - Calculate the metrics above in **2.**
 4. Physical Components:
     - SparkNLP
     - Weaviate
 5. Reference:
 - https://medium.com/john-snow-labs/the-experts-guide-to-keyword-extraction-from-texts-with-spark-nlp-and-python-9741a076d2d7
+
+

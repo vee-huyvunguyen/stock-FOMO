@@ -16,7 +16,7 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
     {
       logNullElement: false,
       defaultGotoOptions: {
-        timeout: 15000,
+        timeout: 30000,
         waitUntil: 'networkidle0',
       },
     },
@@ -32,19 +32,26 @@ async function getCheerioMaster(url: string) {
 }
 
 async function main() {
-  const url: string =
-    'https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html';
+  const urls: string[] = [
+    // 'https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html',
+    // 'https://www.cnbc.com/2025/02/03/stock-market-today-live-updates.html',
+    // 'https://www.cnbc.com/2025/01/28/tech-worker-saved-up-to-90-percent-of-his-pay-and-retired-with-3point5-million-dollars.html',
+    'https://www.cnbc.com/select/best-mortgage-lenders-first-time-homebuyers/',
+    // 'https://www.cnbc.com/2025/02/04/mondays-turnaround-showed-little-guy-continues-to-drive-bull-market.html'
+  ];
   // let master = await getCheerioMaster(url)
   let master = await getPuppetMaster();
-  let cnbcAct = new CNBCAct(master, url, CNBCActCSSselector);
-  try {
-    let article = await cnbcAct.scrape();
-    console.log(article);
-  } finally {
-    console.log(JSON.stringify(cnbcAct.getStatus()));
-    await master.close();
+  for (const url of urls) {
+    let cnbcAct = new CNBCAct(master, url, CNBCActCSSselector);
+    try {
+      let article = await cnbcAct.scrape();
+      console.log(article);
+    } finally {
+      console.log(JSON.stringify(cnbcAct.getStatus()));
+    }
   }
   // Close the browser
+  await master.close();
 }
 
 // Example usage

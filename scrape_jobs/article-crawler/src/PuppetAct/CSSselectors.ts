@@ -28,7 +28,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     undesired: false,
     // Title of the article is not always the .title of the html page
     // Still have to get it independently
-    articleTitleElement: 'h1.LiveBlogHeader-headline',
+    articleTitleElement: 'h1[class*="-headline"]',
     contentElements: 'div.PageBuilder-article',
     authorElements: 'a.Author-authorName', // sometimes there are multiple authors
     postDatetimeElement:
@@ -45,6 +45,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
       'https://www.cnbc.com/make-it/',
     ],
     undesired: false,
+    articleTitleElement: 'h1[class^="ArticleHeader-styles-makeit-headline--"]',
     contentElements: '[data-module="ArticleBody"]',
     authorElements: 'a[class^="Author-styles-makeit-authorName--"]',
     postDatetimeElement:
@@ -61,6 +62,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
       'https://www.cnbc.com/select/',
     ],
     undesired: false,
+    articleTitleElement: 'h1[class^="ArticleHeader-styles-select-headline--"]',
     contentElements: '[data-module="ArticleBody"]',
     authorElement: 'a[class^="Author-styles-select-authorName--"]',
     // Can only get as text, doesn't have datetime attribute

@@ -149,19 +149,29 @@ abstract class ArticleAct<P, T> {
     }
   }
   async getOtherLinks(): Promise<OtherLinks> {
-    let foundedHrefs = (await this.scrapeMaster.allTagAHrefsTexts()).map(
-      ({ href }) => href,
+    const foundHrefs = (await this.scrapeMaster.allTagAHrefsTexts()).map(
+      ({ href }) => this.normalizeURL(href)
     );
-    let distinctLinks = new Set(foundedHrefs);
-    let otherLinks: OtherLinks = { other: [], news: [] };
-    distinctLinks.forEach((href) => {
+    const seenUrls = new Set<string>();
+    let otherLinks: Set<string> = new Set()
+    let newLinks: Set<string> = new Set()
+
+    for (const href of foundHrefs) {
+
+      if (seenUrls.has(href)) continue;
+      seenUrls.add(href);
+
       if (this.checkURLIsNewsPage(href, this.getPageType() as string)) {
-        otherLinks.news.push(href);
+        newLinks.add(href);
       } else {
-        otherLinks.other.push(href);
+        otherLinks.add(href);
       }
-    });
-    return otherLinks;
+    }
+
+    return {
+      news: Array.from(newLinks),
+      other: Array.from(otherLinks)
+    };
   }
   async extractElementStatusCheck(
     cssSelector: CSSSelector,
@@ -180,7 +190,7 @@ abstract class ArticleAct<P, T> {
       if (!scrapedElement) {
         this._statusHandler.addFieldsFailedToScrape([
           eleNameDebug,
-          'undefined',
+          `wrong selector: ${cssSelector}`,
         ]);
         return { isError: true, eleHTML: undefined };
       } else {
@@ -248,7 +258,13 @@ abstract class ArticleAct<P, T> {
       ]);
       return results;
     }
-
+    if (elements.length == 0) {
+      this._statusHandler.addFieldsFailedToScrape([
+        eleNameDebug,
+        'no elements found',
+      ]);
+      return results;
+    }
     for (const element of elements) {
       try {
         let propertyValue;
@@ -333,6 +349,15 @@ abstract class ArticleAct<P, T> {
         return await extractor();
       }
     }
+  }
+
+  /**
+   * Normalize URL by removing query params/hashes
+   */
+  normalizeURL(url: string): string {
+    // Normalize URLs by stripping query params and hash fragments
+    const normalized = url.split(/[?#]/)[0];
+    return normalized.endsWith('/') ? normalized : `${normalized}/`;
   }
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;

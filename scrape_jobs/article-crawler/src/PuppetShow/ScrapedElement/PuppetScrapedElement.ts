@@ -43,16 +43,20 @@ class PuppetScrapedElement implements ScrapedElement<Page, ElementHandle> {
   }
   async text(): Promise<string> {
     try {
-      const text = await this.element.evaluate(el => {
+      const text = await this.element.evaluate((el) => {
         // Use innerText for rendered text, fallback to shadow DOM
-        return (el as HTMLElement).innerText?.trim() ||
+        return (
+          (el as HTMLElement).innerText?.trim() ||
           el.shadowRoot?.textContent?.trim() ||
-          '';
+          ''
+        );
       });
 
       return text; // Returns empty string for truly empty content
     } catch (error) {
-      throw new Error(`Failed to retrieve text for selector ${this.selector}: ${error}`);
+      throw new Error(
+        `Failed to retrieve text for selector ${this.selector}: ${error}`,
+      );
     }
   }
   async href(): Promise<string> {

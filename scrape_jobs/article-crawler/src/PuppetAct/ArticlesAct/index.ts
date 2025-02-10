@@ -150,14 +150,13 @@ abstract class ArticleAct<P, T> {
   }
   async getOtherLinks(): Promise<OtherLinks> {
     const foundHrefs = (await this.scrapeMaster.allTagAHrefsTexts()).map(
-      ({ href }) => this.normalizeURL(href)
+      ({ href }) => this.normalizeURL(href),
     );
     const seenUrls = new Set<string>();
-    let otherLinks: Set<string> = new Set()
-    let newLinks: Set<string> = new Set()
+    let otherLinks: Set<string> = new Set();
+    let newLinks: Set<string> = new Set();
 
     for (const href of foundHrefs) {
-
       if (seenUrls.has(href)) continue;
       seenUrls.add(href);
 
@@ -170,7 +169,7 @@ abstract class ArticleAct<P, T> {
 
     return {
       news: Array.from(newLinks),
-      other: Array.from(otherLinks)
+      other: Array.from(otherLinks),
     };
   }
   async extractElementStatusCheck(

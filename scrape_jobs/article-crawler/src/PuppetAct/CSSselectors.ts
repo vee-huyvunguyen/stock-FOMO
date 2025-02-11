@@ -83,7 +83,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
   proArticle: {
     // Example: https://www.cnbc.com/2025/02/04/mondays-turnaround-showed-little-guy-continues-to-drive-bull-market.html
     checkLoadedPageElement: [
-      '.ProPill-proPillLink',
+      '.ArticleHeader-wrapperHeroNoImage > a.ProPill-proPillLink[data-type="pro-button"]',
       'href',
       'https://www.cnbc.com/pro/',
     ],

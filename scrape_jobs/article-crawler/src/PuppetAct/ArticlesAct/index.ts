@@ -349,7 +349,24 @@ abstract class ArticleAct<P, T> {
       }
     }
   }
-
+  async scrapeLandingPage(): Promise<RawArticlePage> {
+    const pageIsLoaded = await this.loadNewsPage();
+    let foundLinks: OtherLinks = {
+      other: [],
+      news: [],
+    };
+    if (pageIsLoaded) {
+      foundLinks = await this.getOtherLinks();
+      this._statusHandler.updatePageType('landingPage', 'manuallyParsed');
+    } else {
+      this._statusHandler.updateLoadPageError('landingPage');
+    }
+    return {
+      ...(await this.getDefaultRawArticlePage()),
+      other_links: foundLinks?.other,
+      other_article_links: foundLinks?.news,
+    };
+  }
   /**
    * Normalize URL by removing query params/hashes
    */

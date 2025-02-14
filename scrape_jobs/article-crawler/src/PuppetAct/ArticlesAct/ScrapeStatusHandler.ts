@@ -1,5 +1,5 @@
 import { getErrorMessage } from '@/utils';
-import { PageType } from '@/PuppetAct/CSSselectors';
+import { PageType } from '@/PuppetAct/ActConfig/CSSselectors';
 
 type FieldName = string;
 type FieldError = string;

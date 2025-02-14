@@ -1,7 +1,7 @@
 import { ScrapeMaster } from "@/PuppetShow/ScrapeMaster";
 import { ArticleAct, ArticleInfoExtractor, OtherLinks } from "@/PuppetAct/ArticlesAct";
-import { TypeBaseCSSSelector } from "@/PuppetAct/CSSselectors";
-import { PageType } from "@/PuppetAct/CSSselectors";
+import { TypeBaseCSSSelector } from "@/PuppetAct/ActConfig/CSSselectors";
+import { PageType } from "@/PuppetAct/ActConfig/CSSselectors";
 import { RawArticlePage } from "@/PuppetAct/ArticlesAct/schemas";
 import { ElementsExtractedContent } from "@/PuppetAct/ArticlesAct";
 

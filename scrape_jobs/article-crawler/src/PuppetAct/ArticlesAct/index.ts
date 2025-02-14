@@ -9,7 +9,7 @@ import {
   ElementsPageTypeConfig,
   PageType,
   TypeBaseCSSSelector,
-} from '@/PuppetAct/CSSselectors';
+} from '@/PuppetAct/ActConfig/CSSselectors';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
 import {
   ScrapeStatusHandler,

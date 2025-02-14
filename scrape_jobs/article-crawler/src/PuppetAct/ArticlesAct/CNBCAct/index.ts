@@ -8,7 +8,7 @@ import {
 } from '@/PuppetAct/ArticlesAct';
 import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
-import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/CSSselectors';
+import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/ActConfig/CSSselectors';
 
 export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   constructor(

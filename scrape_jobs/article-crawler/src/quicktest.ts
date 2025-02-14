@@ -3,7 +3,7 @@ import PuppetMaster from '@/PuppetShow/ScrapeMaster/PuppetMaster';
 import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
 import CheerioMaster from '@/PuppetShow/ScrapeMaster/CheerioMaster';
 import CNBCAct from '@/PuppetAct/ArticlesAct/CNBCAct';
-import { CNBCActCSSselector } from '@/PuppetAct/CSSselectors';
+import { CNBCActCSSselector } from '@/PuppetAct/ActConfig/CSSselectors';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser

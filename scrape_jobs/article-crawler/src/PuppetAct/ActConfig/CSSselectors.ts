@@ -172,14 +172,7 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
     updatedDatetimeElement: 'time.article-date__time.article-date__time--updated',
     categoryElement: "header.article-header > div.article-meta.article-meta-upper > div.eyebrow > a"
   }
-  // TODO: implement config to filter out undesired pages, for each news source, with a list of undesired urls.
   // TODO: add fields for tagging the article > update both CSS selectors and RawArticlePage schema
-  // weatherWatch: {},
-  // weatherVideo: {},
-  // booksArticle:{},
-  // nationPage: {},
-  // radioPage: {},
-  // videoPage: {}, 
 };
 
 

@@ -4,6 +4,7 @@ import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
 import CheerioMaster from '@/PuppetShow/ScrapeMaster/CheerioMaster';
 import CNBCAct from '@/PuppetAct/ArticlesAct/CNBCAct';
 import { CNBCActCSSselector } from '@/PuppetAct/ActConfig/CSSselectors';
+import { CNBC_UNDESIRED_URLS } from '@/PuppetAct/ActConfig/UndesiredURLs';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser
@@ -40,10 +41,13 @@ async function main() {
     // 'https://www.cnbc.com/2025/02/04/mondays-turnaround-showed-little-guy-continues-to-drive-bull-market.html'
     'https://www.cnbc.com'
   ];
-  // let master = await getCheerioMaster(url)
-  let master = await getPuppetMaster();
+  let master = await getCheerioMaster(urls[0]);
+  // let master = await getPuppetMaster();
   for (const url of urls) {
-    let cnbcAct = new CNBCAct(master, url, CNBCActCSSselector);
+    let cnbcAct = new CNBCAct(master, url, {
+      elements: CNBCActCSSselector,
+      undesiredURLs: CNBC_UNDESIRED_URLS
+    });
     try {
       let result = await cnbcAct.scrapeLandingPage();
       console.log(result);

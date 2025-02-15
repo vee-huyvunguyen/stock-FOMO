@@ -4,16 +4,17 @@ import { TypeBaseCSSSelector } from "@/PuppetAct/ActConfig/CSSselectors";
 import { PageType } from "@/PuppetAct/ActConfig/CSSselectors";
 import { RawArticlePage } from "@/PuppetAct/ArticlesAct/schemas";
 import { ElementsExtractedContent } from "@/PuppetAct/ArticlesAct";
+import { ArticleActConfig } from "@/PuppetAct/ActConfig";
 
 
 export default class ReutersAct<P, T> extends ArticleAct<P, T> {
     constructor(
         scrapeMaster: ScrapeMaster<P, T>,
         articleURL: string,
-        elements: TypeBaseCSSSelector,
+        actConfig: ArticleActConfig,
         manualPageType?: string,
     ) {
-        super(scrapeMaster, articleURL, elements, manualPageType);
+        super(scrapeMaster, articleURL, actConfig, manualPageType);
     }
 
     checkURLIsNewsPage(url: string, pageType: PageType): boolean {

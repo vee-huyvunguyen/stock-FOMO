@@ -179,6 +179,7 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
 
 export {
   CNBCActCSSselector,
+  FoxNewsActCSSselector,
   TypeBaseCSSSelector,
   ElementsPageTypeConfig,
   PageType,

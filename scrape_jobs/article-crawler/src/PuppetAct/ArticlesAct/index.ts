@@ -16,6 +16,7 @@ import {
   ScrapeStatus,
 } from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
 import { DateTime } from 'luxon';
+import { ArticleActConfig } from '@/PuppetAct/ActConfig';
 
 type PageClassification =
   | {
@@ -51,11 +52,14 @@ type ElementsExtractedContent = {
 };
 abstract class ArticleAct<P, T> {
   protected _statusHandler: ScrapeStatusHandler;
+  protected elements: TypeBaseCSSSelector;
+  protected undesiredURLs: string[];
+  private undesiredURLsRegex: RegExp;
 
   constructor(
     public scrapeMaster: ScrapeMaster<P, T>,
     public articleURL: string,
-    public elements: TypeBaseCSSSelector,
+    public actConfig: ArticleActConfig,
     public manualPageType?: string,
   ) {
     this._statusHandler = ScrapeStatusHandler.new();
@@ -64,9 +68,26 @@ abstract class ArticleAct<P, T> {
     }
     this.scrapeMaster = scrapeMaster;
     this.articleURL = articleURL;
-    this.elements = elements;
+    this.elements = actConfig.elements;
+    this.undesiredURLs = actConfig.undesiredURLs;
+    this.undesiredURLsRegex = ArticleAct.createUndesiredURLsRegex(
+      this.undesiredURLs,
+    );
     this.manualPageType = manualPageType;
   }
+  static createUndesiredURLsRegex(undesiredURLs: string[]): RegExp {
+    return new RegExp(
+      `^(${undesiredURLs.map(url => 
+        url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape regex chars
+      ).join('|')})`
+    );
+    
+  }
+
+  checkURLIsUndesired(url: string): boolean {
+    return this.undesiredURLsRegex.test(url);
+  }
+
   getPageType(): string | undefined {
     return this.manualPageType
       ? this.manualPageType

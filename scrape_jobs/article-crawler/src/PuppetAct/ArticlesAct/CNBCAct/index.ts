@@ -9,18 +9,22 @@ import {
 import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
 import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/ActConfig/CSSselectors';
+import { ArticleActConfig } from '@/PuppetAct/ActConfig';
 
 export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   constructor(
     scrapeMaster: ScrapeMaster<P, T>,
     articleURL: string,
-    elements: TypeBaseCSSSelector,
+    actConfig: ArticleActConfig,
     manualPageType?: string,
   ) {
-    super(scrapeMaster, articleURL, elements, manualPageType);
+    super(scrapeMaster, articleURL, actConfig, manualPageType);
   }
 
   checkURLIsNewsPage(url: string, pageType: PageType): boolean {
+    if (this.checkURLIsUndesired(url)) {
+      return false;
+    }
     if (pageType == 'selectArticle') {
       // The url will have the format of https://www.cnbc.com/select/{article-title}/
       // E.g.: https://www.cnbc.com/select/citi-double-cash-vs-costco-anywhere-visa/

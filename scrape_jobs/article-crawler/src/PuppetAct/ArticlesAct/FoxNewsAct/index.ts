@@ -4,15 +4,16 @@ import { TypeBaseCSSSelector } from "@/PuppetAct/ActConfig/CSSselectors";
 import { PageType } from "@/PuppetAct/ActConfig/CSSselectors";
 import { RawArticlePage } from "@/PuppetAct/ArticlesAct/schemas";
 import { ElementsExtractedContent } from "@/PuppetAct/ArticlesAct";
+import { ArticleActConfig } from "@/PuppetAct/ActConfig";
 
 export default class FoxNewsAct<P, T> extends ArticleAct<P, T> {
     constructor(
         scrapeMaster: ScrapeMaster<P, T>,
         articleURL: string,
-        elements: TypeBaseCSSSelector,
+        actConfig: ArticleActConfig,
         manualPageType?: string,
     ) {
-        super(scrapeMaster, articleURL, elements, manualPageType);
+        super(scrapeMaster, articleURL, actConfig, manualPageType);
     }
 
     checkURLIsNewsPage(url: string, pageType: PageType): boolean {
@@ -28,11 +29,24 @@ export default class FoxNewsAct<P, T> extends ArticleAct<P, T> {
         return this.toElementsExtractedContent(elementsExtractCheck);
     }
 
-    // Similar extraction methods for other elements...
-    // Implementing only core methods to keep response concise
-
     getInfoExtractor(pageType: keyof TypeBaseCSSSelector): ArticleInfoExtractor {
-        throw new Error('Method not implemented.');
+        let extractors: Record<keyof TypeBaseCSSSelector, ArticleInfoExtractor> = {
+            mainArticle: this.mainArticleExtractor,
+            businessArticle: this.businessArticleExtractor,
+            outkickArticle: this.outkickArticleExtractor,
+            weatherArticle: this.weatherArticleExtractor,
+          };
+          return extractors[pageType];
+    }
+
+    businessArticleExtractor = async (): Promise<RawArticlePage> => {
+        throw new Error("Not implemented")
+    }
+    outkickArticleExtractor = async (): Promise<RawArticlePage> => {
+        throw new Error("Not implemented")
+    }
+    weatherArticleExtractor = async (): Promise<RawArticlePage> => {
+        throw new Error("Not implemented")
     }
 
     mainArticleExtractor = async (): Promise<RawArticlePage> => {

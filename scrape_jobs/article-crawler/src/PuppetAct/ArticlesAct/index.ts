@@ -77,11 +77,12 @@ abstract class ArticleAct<P, T> {
   }
   static createUndesiredURLsRegex(undesiredURLs: string[]): RegExp {
     return new RegExp(
-      `^(${undesiredURLs.map(url => 
-        url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape regex chars
-      ).join('|')})`
+      `^(${undesiredURLs
+        .map(
+          (url) => url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), // Escape regex chars
+        )
+        .join('|')})`,
     );
-    
   }
 
   checkURLIsUndesired(url: string): boolean {
@@ -396,6 +397,100 @@ abstract class ArticleAct<P, T> {
     const normalized = url.split(/[?#]/)[0];
     return normalized.endsWith('/') ? normalized : `${normalized}/`;
   }
+  async extractArticleCommonElement(
+    cssSelectorKey: CSSSelector,
+    fieldNameDebug: string,
+    manyElements: true,
+    elementProperty?: string,
+  ): Promise<ElementsExtractedContent>;
+
+  async extractArticleCommonElement(
+    cssSelectorKey: CSSSelector,
+    fieldNameDebug: string,
+    manyElements: false,
+    elementProperty?: string,
+  ): Promise<ElementExtractedContent>;
+
+  async extractArticleCommonElement(
+    cssSelectorKey: CSSSelector,
+    fieldNameDebug: string,
+    manyElements: boolean,
+    elementProperty?: string,
+  ): Promise<ElementExtractedContent | ElementsExtractedContent> {
+    if (!elementProperty) {
+      elementProperty = 'textContent';
+    }
+    const cssSelectors = this.elements[this.getPageType() as string];
+    if (manyElements) {
+      const elementsExtractCheck = await this.extractElementsStatusCheck(
+        cssSelectors[cssSelectorKey],
+        fieldNameDebug,
+        elementProperty,
+      );
+      return this.toElementsExtractedContent(elementsExtractCheck);
+    } else {
+      return this.toElementExtractedContent(
+        await this.extractElementStatusCheck(
+          cssSelectors[cssSelectorKey],
+          fieldNameDebug,
+          elementProperty,
+        ),
+      );
+    }
+  }
+
+  commonArticleExtractor = async (): Promise<RawArticlePage> => {
+    let content = await this.extractArticleCommonElement(
+      'contentElements',
+      'MainArticle-article-content',
+      true,
+    );
+    let authors = await this.extractArticleCommonElement(
+      'authorElements',
+      'MainArticle-author-info',
+      true,
+      'href'
+    );
+    let publishedDatetime = await this.extractArticleCommonElement(
+      'postDatetimeElement',
+      'MainArticle-post-datetime',
+      false,
+    );
+    let updatedDatetime = await this.extractArticleCommonElement(
+      'updatedDatetimeElement',
+      'MainArticle-updated-datetime',
+      false,
+    );
+    let category = await this.extractArticleCommonElement(
+      'categoryElement',
+      'MainArticle-category',
+      false,
+      'href'
+    );
+    let title = await this.extractArticleCommonElement(
+      'articleTitleElement',
+      'MainArticle-title',
+      false,
+    );
+    let otherLinks: OtherLinks = await this.getOtherLinks();
+    return {
+      content_elements: content.eleHTML,
+      author_elements: authors.eleHTML,
+      article_published_datetime_element: publishedDatetime.eleHTML,
+      article_updated_datetime_element: updatedDatetime.eleHTML,
+      article_title_element: title.eleHTML,
+      category_element: category.eleHTML,
+      content: content.textContent,
+      authors: authors.textContent,
+      article_published_datetime: publishedDatetime.textContent,
+      article_updated_datetime: updatedDatetime.textContent,
+      article_title: title.textContent,
+      category: category.textContent,
+      other_article_links: otherLinks.news,
+      other_links: otherLinks.other,
+      ...(await this.getDefaultRawArticlePage()),
+    };
+  };
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;
 }

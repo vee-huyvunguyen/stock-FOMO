@@ -64,7 +64,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
     undesired: false,
     articleTitleElement: 'h1[class^="ArticleHeader-styles-select-headline--"]',
     contentElements: '[data-module="ArticleBody"]',
-    authorElement: 'a[class^="Author-styles-select-authorName--"]',
+    authorElements: 'a[class^="Author-styles-select-authorName--"]',
     // Can only get as text, doesn't have datetime attribute
     // sometimes "Updated 5 minutes ago" -> still ok and have to infer later
     postDatetimeElement: '[class^="ArticleHeader-styles-select-time--"]',
@@ -126,7 +126,7 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
     categoryElement: 'div.article-meta.article-meta-upper > span.eyebrow > a',
   },
   businessArticle: {
-      // Example: https://www.foxbusiness.com/politics/josh-hawley-bernie-sanders-propose-capping-credit-card-interest-rates-10
+      // Example: https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices
     checkLoadedPageElement: [
       'div.branding > a.logo',
       'href',
@@ -142,9 +142,9 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
     categoryElement: 'header.article-header > div.article-meta.article-meta-upper > div.eyebrow > a',
   },
   outkickArticle: {
-    // Example: https://www.foxnews.com/outkick/the-nfl-is-a-joke-and-the-patriots-are-the-worst-team-in-the-league
+    // Example: https://www.outkick.com/culture/rachel-stuhlmann-slides-pink-tennis-outfit-valentines-day-eagles-fans-fighting-baja-blast-pie
     checkLoadedPageElement: [
-      'header.site-header > div > h1.logo > a',
+      'header.site-header > div.inner > div.logo > a',
       'href',
       "https://www.outkick.com/",
     ],
@@ -157,7 +157,7 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
     // categoryElement is not needed, the category part of the url
   },
   weatherArticle: {
-    // Example: https://www.foxnews.com/outkick/the-nfl-is-a-joke-and-the-patriots-are-the-worst-team-in-the-league
+    // Example: https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast
     checkLoadedPageElement: [
       'div.branding span > a.logo',
       'href',

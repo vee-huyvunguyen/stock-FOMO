@@ -1,8 +1,8 @@
-import { TypeBaseCSSSelector } from "@/PuppetAct/ActConfig/CSSselectors"
+import { TypeBaseCSSSelector } from '@/PuppetAct/ActConfig/CSSselectors';
 
 type ArticleActConfig = {
-    elements: TypeBaseCSSSelector,
-    undesiredURLs: string[],
-  }
+  elements: TypeBaseCSSSelector;
+  undesiredURLs: string[];
+};
 
 export { ArticleActConfig };

@@ -5,7 +5,10 @@ import {
 } from '@/PuppetAct/ArticlesAct';
 import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
 import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
-import { PageType, TypeBaseCSSSelector } from '@/PuppetAct/ActConfig/CSSselectors';
+import {
+  PageType,
+  TypeBaseCSSSelector,
+} from '@/PuppetAct/ActConfig/CSSselectors';
 import { ArticleActConfig } from '@/PuppetAct/ActConfig';
 
 export default class CNBCAct<P, T> extends ArticleAct<P, T> {
@@ -55,7 +58,7 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
       'authorElements',
       'MainArticle-author-info',
       true,
-      'href'
+      'href',
     );
     let publishedDatetime = await this.extractArticleCommonElement(
       'postDatetimeElement',
@@ -66,7 +69,7 @@ export default class CNBCAct<P, T> extends ArticleAct<P, T> {
       'categoryElement',
       'MainArticle-category',
       false,
-      'href'
+      'href',
     );
     let title = await this.extractArticleCommonElement(
       'articleTitleElement',

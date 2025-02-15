@@ -11,12 +11,8 @@ const FOXNEWS_UNDESIRED_URLS = [
   'https://nation.foxnews.com',
 ];
 
-const CNBC_UNDESIRED_URLS = [
-  'https://www.cnbc.com/podcasts',
-];
+const CNBC_UNDESIRED_URLS = ['https://www.cnbc.com/podcasts'];
 
-const REUTERS_UNDESIRED_URLS = [
-  
-]
+const REUTERS_UNDESIRED_URLS = [];
 
 export { FOXNEWS_UNDESIRED_URLS, CNBC_UNDESIRED_URLS, REUTERS_UNDESIRED_URLS };

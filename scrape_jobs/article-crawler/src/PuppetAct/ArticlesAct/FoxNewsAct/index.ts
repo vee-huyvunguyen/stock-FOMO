@@ -26,7 +26,6 @@ export default class FoxNewsAct<P, T> extends ArticleAct<P, T> {
     return true;
   }
 
-
   getInfoExtractor(pageType: keyof TypeBaseCSSSelector): ArticleInfoExtractor {
     let extractors: Record<keyof TypeBaseCSSSelector, ArticleInfoExtractor> = {
       mainArticle: this.commonArticleExtractor,
@@ -36,6 +35,4 @@ export default class FoxNewsAct<P, T> extends ArticleAct<P, T> {
     };
     return extractors[pageType];
   }
-
-
 }

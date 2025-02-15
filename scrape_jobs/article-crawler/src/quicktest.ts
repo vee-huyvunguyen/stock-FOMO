@@ -3,8 +3,14 @@ import PuppetMaster from '@/PuppetShow/ScrapeMaster/PuppetMaster';
 import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
 import CheerioMaster from '@/PuppetShow/ScrapeMaster/CheerioMaster';
 import CNBCAct from '@/PuppetAct/ArticlesAct/CNBCAct';
-import { CNBCActCSSselector, FoxNewsActCSSselector } from '@/PuppetAct/ActConfig/CSSselectors';
-import { CNBC_UNDESIRED_URLS, FOXNEWS_UNDESIRED_URLS } from '@/PuppetAct/ActConfig/UndesiredURLs';
+import {
+  CNBCActCSSselector,
+  FoxNewsActCSSselector,
+} from '@/PuppetAct/ActConfig/CSSselectors';
+import {
+  CNBC_UNDESIRED_URLS,
+  FOXNEWS_UNDESIRED_URLS,
+} from '@/PuppetAct/ActConfig/UndesiredURLs';
 import FoxNewsAct from '@/PuppetAct/ArticlesAct/FoxNewsAct';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
@@ -46,20 +52,20 @@ async function main() {
     // 'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
     'https://www.outkick.com/culture/rachel-stuhlmann-slides-pink-tennis-outfit-valentines-day-eagles-fans-fighting-baja-blast-pie',
     // 'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast'
-  ]
+  ];
   let master = await getPuppetMaster();
   for (const url of FoxNewsUrlsTests) {
     let foxNewsAct = new FoxNewsAct(master, url, {
       elements: FoxNewsActCSSselector,
-      undesiredURLs: FOXNEWS_UNDESIRED_URLS
+      undesiredURLs: FOXNEWS_UNDESIRED_URLS,
     });
     try {
-      console.log("_______________________");
+      console.log('_______________________');
       await foxNewsAct.scrape();
       // console.log(result);
     } finally {
       console.log(JSON.stringify(foxNewsAct.getStatus()));
-      console.log("\n");
+      console.log('\n');
     }
   }
   // Close the browser

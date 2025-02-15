@@ -449,7 +449,7 @@ abstract class ArticleAct<P, T> {
       'authorElements',
       'MainArticle-author-info',
       true,
-      'href'
+      'href',
     );
     let publishedDatetime = await this.extractArticleCommonElement(
       'postDatetimeElement',
@@ -465,7 +465,7 @@ abstract class ArticleAct<P, T> {
       'categoryElement',
       'MainArticle-category',
       false,
-      'href'
+      'href',
     );
     let title = await this.extractArticleCommonElement(
       'articleTitleElement',

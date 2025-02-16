@@ -91,19 +91,6 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
   },
 };
 
-const ReutersActCSSselector: TypeBaseCSSSelector = {
-  mainArticle: {
-    checkLoadedPageElement: ['h1.article-title', 'textContent', 'Reuters'],
-    undesired: false,
-    articleTitleElement: 'h1.article-title',
-    contentElements: 'div.article-content',
-    authorElements: 'a.author-name',
-    postDatetimeElement: 'time.article-date',
-    updatedDatetimeElement: 'time.article-date',
-    categoryElement: 'a.article-category',
-  },
-};
-
 const FoxNewsActCSSselector: TypeBaseCSSSelector = {
   mainArticle: {
     // Example: https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says

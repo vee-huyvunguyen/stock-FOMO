@@ -25,7 +25,10 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
       logNullElement: false,
       defaultGotoOptions: {
         timeout: 300000,
-        waitUntil: 'networkidle0',
+        // Take care of the waitUntil option
+        // Some pages take forever to load,
+        // so we choose a more loose option: 'domcontentloaded' or 'load'
+        waitUntil: 'domcontentloaded',
       },
     },
     watcher,
@@ -33,10 +36,9 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
   return puppetMaster;
 }
 
-async function getCheerioMaster(url: string) {
-  const watcher = new ConsoleWatcher({ level: 'warn' });
-  const page = await CheerioMaster.loadCheerioAPI(url);
-  return new CheerioMaster({ logNullElement: false }, page, watcher, url);
+async function getCheerioMaster() {
+  const watcher = new ConsoleWatcher({ level: 'warn' })
+  return new CheerioMaster({ logNullElement: false }, watcher);
 }
 
 async function main() {
@@ -51,20 +53,25 @@ async function main() {
     // 'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
     // 'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
     'https://www.outkick.com/culture/rachel-stuhlmann-slides-pink-tennis-outfit-valentines-day-eagles-fans-fighting-baja-blast-pie',
+    'https://www.outkick.com/analysis/elon-musk-faces-free-speech-conundrum-kanye-west-bobby-burack',
+    'https://www.outkick.com/culture/anheuser-busch-makes-major-beer-change-daytona-500-has-patriots-ready-catch-unwoke-buzz',
     // 'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast'
   ];
   let master = await getPuppetMaster();
   for (const url of FoxNewsUrlsTests) {
+    const startTime = Date.now();
     let foxNewsAct = new FoxNewsAct(master, url, {
       elements: FoxNewsActCSSselector,
       undesiredURLs: FOXNEWS_UNDESIRED_URLS,
     });
     try {
       console.log('_______________________');
-      await foxNewsAct.scrape();
-      // console.log(result);
+      const result = await foxNewsAct.scrape();
+      console.log(result);
     } finally {
-      console.log(JSON.stringify(foxNewsAct.getStatus()));
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+      console.log(`Time taken: ${duration}ms`);
       console.log('\n');
     }
   }

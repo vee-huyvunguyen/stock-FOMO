@@ -23,7 +23,9 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
     public axiosRequestConfig?: AxiosRequestConfig,
   ) {
     if (isUndefined(loadedURL) != isUndefined(page)) {
-      throw new Error('`loadedURL` must be parsed with `page`, or both must be undefined');
+      throw new Error(
+        '`loadedURL` must be parsed with `page`, or both must be undefined',
+      );
     }
     this.watcher = watcher;
     this.page = page;
@@ -73,7 +75,9 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
   }
   currentURL(): string {
     if (isUndefined(this.loadedURL)) {
-      throw new Error('CheerioMaster: `loadedURL` is undefined, maybe the page is not loaded yet');
+      throw new Error(
+        'CheerioMaster: `loadedURL` is undefined, maybe the page is not loaded yet',
+      );
     }
     return this.loadedURL;
   }
@@ -88,20 +92,28 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
     elementName?: string | undefined,
   ): Promise<CheerioScrapedElement[]> {
     if (!this.page) {
-      throw new Error('CheerioMaster: `page` is undefined, maybe the page is not loaded yet');
-    }else{
-    let foundCheerioElements: Element[] = this.checkPage()(
-      selector,
-      parentElement?.element,
-    ).get() as Element[];
-    if (isEmpty(foundCheerioElements)) {
-      this.watcher.warn({
-        msg: `Cant find element '${elementName}' with selector ${selector}`,
-      });
+      throw new Error(
+        'CheerioMaster: `page` is undefined, maybe the page is not loaded yet',
+      );
+    } else {
+      let foundCheerioElements: Element[] = this.checkPage()(
+        selector,
+        parentElement?.element,
+      ).get() as Element[];
+      if (isEmpty(foundCheerioElements)) {
+        this.watcher.warn({
+          msg: `Cant find element '${elementName}' with selector ${selector}`,
+        });
+      }
+      return foundCheerioElements.map(
+        (ele) =>
+          new CheerioScrapedElement(
+            ele as Element,
+            selector,
+            this.page as CheerioAPI,
+          ),
+      );
     }
-    return foundCheerioElements.map(
-      (ele) => new CheerioScrapedElement(ele as Element, selector, this.page as CheerioAPI),
-    )}
   }
   async selectElement(
     selector: string,
@@ -130,7 +142,9 @@ class CheerioMaster implements ScrapeMaster<CheerioAPI, Element> {
   }
   async getPageTitle(): Promise<string> {
     if (!this.page) {
-      throw new Error('CheerioMaster: `page` is undefined, maybe the page is not loaded yet');
+      throw new Error(
+        'CheerioMaster: `page` is undefined, maybe the page is not loaded yet',
+      );
     }
     return this.page('title').text();
   }

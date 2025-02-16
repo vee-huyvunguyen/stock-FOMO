@@ -37,7 +37,7 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
 }
 
 async function getCheerioMaster() {
-  const watcher = new ConsoleWatcher({ level: 'warn' })
+  const watcher = new ConsoleWatcher({ level: 'warn' });
   return new CheerioMaster({ logNullElement: false }, watcher);
 }
 
@@ -53,11 +53,11 @@ async function main() {
     'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
     'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
     'https://www.outkick.com/analysis/elon-musk-faces-free-speech-conundrum-kanye-west-bobby-burack',
-    'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast'
+    'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast',
   ];
   let master = await getPuppetMaster();
   for (const url of FoxNewsUrlsTests) {
-  // for (const url of CNBCUrlsTests) {
+    // for (const url of CNBCUrlsTests) {
     const startTime = Date.now();
     let act = new FoxNewsAct(master, url, {
       elements: FoxNewsActCSSselector,

@@ -444,8 +444,12 @@ abstract class ArticleAct<P, T> {
     }
   }
 
-  commonArticleExtractor = async (fieldToIgnore?: (keyof RawArticlePage)[]): Promise<RawArticlePage> => {
-    if (!fieldToIgnore) {fieldToIgnore = []}
+  commonArticleExtractor = async (
+    fieldToIgnore?: (keyof RawArticlePage)[],
+  ): Promise<RawArticlePage> => {
+    if (!fieldToIgnore) {
+      fieldToIgnore = [];
+    }
     let otherLinks: OtherLinks = await this.getOtherLinks();
     let baseRawArticlePage = {
       ...(await this.getDefaultRawArticlePage()),
@@ -465,8 +469,8 @@ abstract class ArticleAct<P, T> {
       let authors = await this.extractArticleCommonElement(
         'authorElements',
         'MainArticle-author-info',
-      true,
-      'href',
+        true,
+        'href',
       );
       baseRawArticlePage.author_elements = authors.eleHTML;
       baseRawArticlePage.authors = authors.textContent;
@@ -477,8 +481,10 @@ abstract class ArticleAct<P, T> {
         'MainArticle-post-datetime',
         false,
       );
-      baseRawArticlePage.article_published_datetime_element = publishedDatetime.eleHTML;
-      baseRawArticlePage.article_published_datetime = publishedDatetime.textContent;
+      baseRawArticlePage.article_published_datetime_element =
+        publishedDatetime.eleHTML;
+      baseRawArticlePage.article_published_datetime =
+        publishedDatetime.textContent;
     }
     if (!fieldToIgnore.includes('article_updated_datetime')) {
       let updatedDatetime = await this.extractArticleCommonElement(
@@ -486,7 +492,8 @@ abstract class ArticleAct<P, T> {
         'MainArticle-updated-datetime',
         false,
       );
-      baseRawArticlePage.article_updated_datetime_element = updatedDatetime.eleHTML;
+      baseRawArticlePage.article_updated_datetime_element =
+        updatedDatetime.eleHTML;
       baseRawArticlePage.article_updated_datetime = updatedDatetime.textContent;
     }
     if (!fieldToIgnore.includes('article_title')) {

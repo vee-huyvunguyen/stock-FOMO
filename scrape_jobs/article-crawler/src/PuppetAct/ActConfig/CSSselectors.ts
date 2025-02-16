@@ -148,14 +148,15 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
     ],
     undesired: false,
     articleTitleElement:
-      'div.page-content > header.article-header > h1.headline',
+      'div.article-content > header.article-header > h1.headline',
     contentElements: 'div.article-content > div.article-body',
     authorElements: 'div.author-name > span > a',
     postDatetimeElement:
       'span.article-date-published > time.time.time-published',
     updatedDatetimeElement:
       'span.article-date-updated > time.time.time-updated',
-    // categoryElement is not needed, the category part of the url
+    categoryElement:
+      'div.article-meta.article-meta-upper > nav.breadcrumbs > ul > li:nth-child(2) > a',
   },
   weatherArticle: {
     // Example: https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast

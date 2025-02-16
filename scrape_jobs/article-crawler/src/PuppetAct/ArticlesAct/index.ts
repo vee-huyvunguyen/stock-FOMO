@@ -444,57 +444,71 @@ abstract class ArticleAct<P, T> {
     }
   }
 
-  commonArticleExtractor = async (): Promise<RawArticlePage> => {
-    let content = await this.extractArticleCommonElement(
-      'contentElements',
-      'MainArticle-article-content',
-      true,
-    );
-    let authors = await this.extractArticleCommonElement(
-      'authorElements',
-      'MainArticle-author-info',
-      true,
-      'href',
-    );
-    let publishedDatetime = await this.extractArticleCommonElement(
-      'postDatetimeElement',
-      'MainArticle-post-datetime',
-      false,
-    );
-    let updatedDatetime = await this.extractArticleCommonElement(
-      'updatedDatetimeElement',
-      'MainArticle-updated-datetime',
-      false,
-    );
-    let category = await this.extractArticleCommonElement(
-      'categoryElement',
-      'MainArticle-category',
-      false,
-      'href',
-    );
-    let title = await this.extractArticleCommonElement(
-      'articleTitleElement',
-      'MainArticle-title',
-      false,
-    );
+  commonArticleExtractor = async (fieldToIgnore?: (keyof RawArticlePage)[]): Promise<RawArticlePage> => {
+    if (!fieldToIgnore) {fieldToIgnore = []}
     let otherLinks: OtherLinks = await this.getOtherLinks();
-    return {
-      content_elements: content.eleHTML,
-      author_elements: authors.eleHTML,
-      article_published_datetime_element: publishedDatetime.eleHTML,
-      article_updated_datetime_element: updatedDatetime.eleHTML,
-      article_title_element: title.eleHTML,
-      category_element: category.eleHTML,
-      content: content.textContent,
-      authors: authors.textContent,
-      article_published_datetime: publishedDatetime.textContent,
-      article_updated_datetime: updatedDatetime.textContent,
-      article_title: title.textContent,
-      category: category.textContent,
+    let baseRawArticlePage = {
+      ...(await this.getDefaultRawArticlePage()),
       other_article_links: otherLinks.news,
       other_links: otherLinks.other,
-      ...(await this.getDefaultRawArticlePage()),
     };
+    if (!fieldToIgnore.includes('content')) {
+      let content = await this.extractArticleCommonElement(
+        'contentElements',
+        'MainArticle-article-content',
+        true,
+      );
+      baseRawArticlePage.content_elements = content.eleHTML;
+      baseRawArticlePage.content = content.textContent;
+    }
+    if (!fieldToIgnore.includes('authors')) {
+      let authors = await this.extractArticleCommonElement(
+        'authorElements',
+        'MainArticle-author-info',
+      true,
+      'href',
+      );
+      baseRawArticlePage.author_elements = authors.eleHTML;
+      baseRawArticlePage.authors = authors.textContent;
+    }
+    if (!fieldToIgnore.includes('article_published_datetime')) {
+      let publishedDatetime = await this.extractArticleCommonElement(
+        'postDatetimeElement',
+        'MainArticle-post-datetime',
+        false,
+      );
+      baseRawArticlePage.article_published_datetime_element = publishedDatetime.eleHTML;
+      baseRawArticlePage.article_published_datetime = publishedDatetime.textContent;
+    }
+    if (!fieldToIgnore.includes('article_updated_datetime')) {
+      let updatedDatetime = await this.extractArticleCommonElement(
+        'updatedDatetimeElement',
+        'MainArticle-updated-datetime',
+        false,
+      );
+      baseRawArticlePage.article_updated_datetime_element = updatedDatetime.eleHTML;
+      baseRawArticlePage.article_updated_datetime = updatedDatetime.textContent;
+    }
+    if (!fieldToIgnore.includes('article_title')) {
+      let title = await this.extractArticleCommonElement(
+        'articleTitleElement',
+        'MainArticle-title',
+        false,
+      );
+      baseRawArticlePage.article_title_element = title.eleHTML;
+      baseRawArticlePage.article_title = title.textContent;
+    }
+    if (!fieldToIgnore.includes('category')) {
+      let category = await this.extractArticleCommonElement(
+        'categoryElement',
+        'MainArticle-category',
+        false,
+        'href',
+      );
+      baseRawArticlePage.category_element = category.eleHTML;
+      baseRawArticlePage.category = category.textContent;
+    }
+    return baseRawArticlePage;
   };
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;
   abstract getInfoExtractor(pageType: string): ArticleInfoExtractor;

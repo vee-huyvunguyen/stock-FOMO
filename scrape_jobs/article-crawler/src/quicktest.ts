@@ -50,25 +50,29 @@ async function main() {
     // 'https://www.cnbc.com'
   ];
   const FoxNewsUrlsTests: string[] = [
-    // 'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
-    // 'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
-    'https://www.outkick.com/culture/rachel-stuhlmann-slides-pink-tennis-outfit-valentines-day-eagles-fans-fighting-baja-blast-pie',
+    'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
+    'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
     'https://www.outkick.com/analysis/elon-musk-faces-free-speech-conundrum-kanye-west-bobby-burack',
-    'https://www.outkick.com/culture/anheuser-busch-makes-major-beer-change-daytona-500-has-patriots-ready-catch-unwoke-buzz',
-    // 'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast'
+    'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast'
   ];
   let master = await getPuppetMaster();
   for (const url of FoxNewsUrlsTests) {
+  // for (const url of CNBCUrlsTests) {
     const startTime = Date.now();
-    let foxNewsAct = new FoxNewsAct(master, url, {
+    let act = new FoxNewsAct(master, url, {
       elements: FoxNewsActCSSselector,
       undesiredURLs: FOXNEWS_UNDESIRED_URLS,
     });
+    // let act = new CNBCAct(master, url, {
+    //   elements: CNBCActCSSselector,
+    //   undesiredURLs: CNBC_UNDESIRED_URLS,
+    // });
     try {
       console.log('_______________________');
-      const result = await foxNewsAct.scrape();
-      console.log(result);
+      const result = await act.scrape();
+      // console.log(result);
     } finally {
+      console.log(JSON.stringify(act.getStatus()));
       const endTime = Date.now();
       const duration = endTime - startTime;
       console.log(`Time taken: ${duration}ms`);

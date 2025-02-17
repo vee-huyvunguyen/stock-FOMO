@@ -33,3 +33,6 @@
 - Then run `pnpm quicktest` to check installed chromedriver and quick scrape of a landing page.
     - *Note*: If puppeteer still not recognizes the chromedriver, try running:
         - `pnpm dlx puppeteer browsers install chrome@131.0.6778.204 --path ./.cache/puppeteer` 
+### To run the actor locally:
+- Edit the file `tests/Actor/input.json` to add the urls to scrape.
+- Run `apify run --input-file=./tests/Actor/input.json`

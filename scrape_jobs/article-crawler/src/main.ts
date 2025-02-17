@@ -1,33 +1,76 @@
-import puppeteer from 'puppeteer';
-import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster';
-import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher';
+import FoxNewsAct from '@/PuppetAct/ArticlesAct/FoxNewsAct';
+import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
+import PuppetMaster from '@/PuppetShow/ScrapeMaster/PuppetMaster';
+import { CNBC_UNDESIRED_URLS, FOXNEWS_UNDESIRED_URLS } from '@/PuppetAct/ActConfig/UndesiredURLs';
+import { CNBCActCSSselector, FoxNewsActCSSselector } from '@/PuppetAct/ActConfig/CSSselectors';
 
-async function main() {
-  const url: string = 'https://quotes.toscrape.com/';
+import { Actor } from 'apify';
+import { PuppeteerCrawler } from 'crawlee';
+import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct';
 
-  // Launch a headless browser
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  const watcher = new ConsoleWatcher({ level: 'warn' });
-  var puppetMaster = new PuppetMaster(
-    page,
-    browser,
-    { logNullElement: false },
-    watcher,
-  );
-
-  try {
-    await puppetMaster.goto(url);
-    const titleElement = await puppetMaster.selectElement(
-      'div.quote:nth-child(1) > span:nth-child(1)',
-    );
-    const title = await titleElement?.text();
-    console.log(`first qoute is ${title}`);
-  } finally {
-    await browser.close();
+const ACT_REGISTRY = {
+  foxnews: {
+      ActClass: FoxNewsAct,
+      selectors: FoxNewsActCSSselector,
+      undesiredUrls: FOXNEWS_UNDESIRED_URLS
+  },
+  cnbc: {
+      ActClass: CNBCAct,
+      selectors: CNBCActCSSselector,
+      undesiredUrls: CNBC_UNDESIRED_URLS
   }
-  // Close the browser
+} as const;
+
+interface CrawlerInput {
+  urls: Array<{ 
+    url: string;
+    site: keyof typeof ACT_REGISTRY;
+  }>;
+  maxPages?: number;
 }
 
-// Example usage
-main();
+await Actor.main(async () => {
+    const input = await Actor.getInput<CrawlerInput>();
+    if (!input?.urls) {
+        throw new Error('Missing required input: urls');
+    }
+
+    const crawler = new PuppeteerCrawler({
+        maxRequestsPerCrawl: input.maxPages || 100,
+        requestHandler: async ({ page, request }) => {
+            const watcher = new ConsoleWatcher({ level: 'warn' });
+            const scrapeMaster = new PuppetMaster(
+                page, 
+                page.browser(), 
+                { logNullElement: false }, 
+                watcher
+            );
+
+            const site: string = request.userData.site;
+            const siteConfig = ACT_REGISTRY[site as keyof typeof ACT_REGISTRY];
+            if (!siteConfig) {
+                throw new Error(`Unsupported site: ${site}`);
+            }
+
+            const act = new siteConfig.ActClass(
+                scrapeMaster,
+                request.url,
+                {
+                    elements: siteConfig.selectors,
+                    undesiredURLs: siteConfig.undesiredUrls
+                }
+            );
+
+            const data = await act.scrape();
+            await Actor.pushData(data);
+        }
+    });
+
+    // Prepare requests with site metadata
+    const requests = input.urls.map(({ url, site }) => ({
+        url,
+        userData: { site }
+    }));
+
+    await crawler.run(requests);
+});

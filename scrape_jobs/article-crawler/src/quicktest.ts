@@ -50,10 +50,10 @@ async function main() {
     // 'https://www.cnbc.com'
   ];
   const FoxNewsUrlsTests: string[] = [
-    'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
+    // 'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
     'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
     'https://www.outkick.com/analysis/elon-musk-faces-free-speech-conundrum-kanye-west-bobby-burack',
-    'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast',
+    // 'https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast',
   ];
   let master = await getPuppetMaster();
   for (const url of FoxNewsUrlsTests) {
@@ -70,7 +70,7 @@ async function main() {
     try {
       console.log('_______________________');
       const result = await act.scrape();
-      // console.log(result);
+      console.log(result);
     } finally {
       console.log(JSON.stringify(act.getStatus()));
       const endTime = Date.now();

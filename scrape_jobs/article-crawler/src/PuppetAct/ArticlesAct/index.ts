@@ -515,6 +515,16 @@ abstract class ArticleAct<P, T> {
       baseRawArticlePage.category_element = category.eleHTML;
       baseRawArticlePage.category = category.textContent;
     }
+    if (this.elements[this.getPageType() as string].tagElements) {
+      let tags = await this.extractArticleCommonElement(
+        'tagElements',
+        'MainArticle-tags',
+        true,
+        'href',
+      );
+      baseRawArticlePage.tag_elements = tags.eleHTML;
+      baseRawArticlePage.tags = tags.textContent;
+    }
     return baseRawArticlePage;
   };
   abstract checkURLIsNewsPage(url: string, pageType: PageType): boolean;

@@ -9,6 +9,8 @@ type RawArticlePage = {
   author_elements?: string[];
   article_published_datetime_element?: string;
   article_updated_datetime_element?: string;
+  tag_elements?: string[];
+  tags?: string[];
   category_element?: string;
   article_title?: string;
   content?: string[];

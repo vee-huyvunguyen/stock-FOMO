@@ -144,6 +144,7 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
       'span.article-date-updated > time.time.time-updated',
     categoryElement:
       'div.article-meta.article-meta-upper > nav.breadcrumbs > ul > li:nth-child(2) > a',
+    tagElements: 'div.article-tags.tags > ul > li > strong > a',
   },
   weatherArticle: {
     // Example: https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast

@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS scrape.raw_article_pages (
     author_elements TEXT[],
     article_published_datetime_element TEXT,
     article_updated_datetime_element TEXT,
+    tag_elements TEXT[],
+    tags TEXT[],
     category_element TEXT,
     article_title TEXT,
     content TEXT[],

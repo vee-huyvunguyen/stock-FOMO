@@ -1,8 +1,8 @@
 import { Page, Browser, GoToOptions, ElementHandle } from 'puppeteer';
-import PuppetScrapedElement from 'PuppetShow/ScrapedElement/PuppetScrapedElement';
-import { BaseWatcher } from 'PuppetShow/TheWatcher/BaseWatcher';
-import { ScrapeMaster, ScrapeMasterConfig } from 'PuppetShow/ScrapeMaster';
 import { RobotsFile } from 'crawlee';
+import PuppetScrapedElement from '../ScrapedElement/PuppetScrapedElement.js';
+import { BaseWatcher } from '../TheWatcher/BaseWatcher.js';
+import { ScrapeMaster, ScrapeMasterConfig } from '../ScrapeMaster/index.js';
 
 type Miliseconds = number;
 type PSelector = string;
@@ -20,12 +20,15 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
     this.watcher = watcher;
     this.config = this.initConfig(config);
   }
+
   async getRobotsFile(): Promise<RobotsFile> {
     return await RobotsFile.find(this.currentURL());
   }
+
   async getPageTitle(): Promise<string> {
     return await this.page.title();
   }
+
   /**
    * Check for undefined/missing fields in config, an replace theme with default values
    * @param {any} config:PuppetMasterConfig to be checked
@@ -42,6 +45,7 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
     };
     return config;
   }
+
   logErrorNullElement(
     element: PuppetScrapedElement,
     elementName?: string,
@@ -53,23 +57,26 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
     }
     return element;
   }
+
   /**
    * Delay whole programm for miliseconds,
    * @param number duration:Miliseconds
    */
   async delay(duration: Miliseconds) {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
       setTimeout(resolve, duration);
     });
   }
+
   async goto(url: HttpUrl, customGotoOptions?: GoToOptions): Promise<void> {
     this.page.setDefaultNavigationTimeout(0);
-    this.watcher?.info({ msg: 'Loading ' + url });
+    this.watcher?.info({ msg: `Loading ${url}` });
     await Promise.all([
       this.page.waitForNavigation(),
       this.page?.goto(url, customGotoOptions ?? this.config.defaultGotoOptions),
     ]);
   }
+
   checkPage(): Page {
     if (this.page === null || this.page === undefined) {
       throw new Error('Undefined `page`, created page first');
@@ -77,8 +84,11 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
       return this.page;
     }
   }
+
   /**
-   * Select and get the elements based on provided `selector`, if pair-using with a parentElement, `selector` will be used as a `p-selector`. If not, `selector` will be treated as an `xpath`.
+   * Select and get the elements based on provided `selector`,
+   * if pair-using with a parentElement, `selector` will be used as a `p-selector`.
+   * If not, `selector` will be treated as an `xpath`.
    * @param {any} selector:XPathExpression (or PSelector, if a parentElement is parsed)
    * @param {any} parentElement?:ScrapedElement
    * @param {any} elementName?:string for logging
@@ -97,18 +107,18 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
       elements = await this.checkPage().$$(selector as string);
     }
 
-    const scrapedElements = elements.map((ele) =>
-      this.logErrorNullElement(
-        new PuppetScrapedElement(
+    const scrapedElements = elements.map((ele) => this.logErrorNullElement(
+      new PuppetScrapedElement(
           ele as ElementHandle,
           selector as string,
           this.page,
-        ),
-        elementName,
       ),
+      elementName,
+    ),
     );
     return scrapedElements;
   }
+
   async selectElement(
     selector: PSelector | XPathExpression,
     parentElement?: PuppetScrapedElement,
@@ -121,18 +131,20 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
     );
     return elements[0];
   }
+
   async allTagAHrefsTexts(): Promise<{ href: HttpUrl; text: string }[]> {
-    const hrefsTexts = await this.page.$$eval('a', (as) =>
-      as.map((a) => ({
-        href: a.href,
-        text: a.textContent as string,
-      })),
+    const hrefsTexts = await this.page.$$eval('a', (as) => as.map((a) => ({
+      href: a.href,
+      text: a.textContent as string,
+    })),
     );
     return hrefsTexts;
   }
+
   async close(): Promise<void> {
     await this.browser.close();
   }
+
   currentURL(): string {
     return this.page.url();
   }

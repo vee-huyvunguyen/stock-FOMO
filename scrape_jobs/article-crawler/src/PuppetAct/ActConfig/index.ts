@@ -1,4 +1,4 @@
-import { TypeBaseCSSSelector } from 'PuppetAct/ActConfig/CSSselectors';
+import { TypeBaseCSSSelector } from './CSSselectors.js';
 
 type ArticleActConfig = {
   elements: TypeBaseCSSSelector;

@@ -1,19 +1,15 @@
 {
-  "extends": "@apify/tsconfig",
-  "compilerOptions": {
-    "module": "ES2022",
-    "target": "ES2022",
-    "outDir": "dist",
-    "rootDir": "src",
-    "noUnusedLocals": false,
-    "lib": ["DOM"],
-    "baseUrl": "src",
-    "paths": {
-      "@/*": ["src/*"]
+    "extends": "@apify/tsconfig",
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "outDir": "dist",
+        "noUnusedLocals": false,
+        "skipLibCheck": true,
+        "lib": ["DOM"]
     },
-    "sourceMap": true,
-    "inlineSources": true
-  },
-  "include": ["src"],
-  "exclude": ["tests", "node_modules"]
+    "include": [
+        "./src/**/*"
+    ]
 }

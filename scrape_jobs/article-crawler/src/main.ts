@@ -1,18 +1,11 @@
-import FoxNewsAct from 'PuppetAct/ArticlesAct/FoxNewsAct';
-import ConsoleWatcher from 'PuppetShow/TheWatcher/ConsoleWatcher';
-import PuppetMaster from 'PuppetShow/ScrapeMaster/PuppetMaster';
-import {
-  CNBC_UNDESIRED_URLS,
-  FOXNEWS_UNDESIRED_URLS,
-} from 'PuppetAct/ActConfig/UndesiredURLs';
-import {
-  CNBCActCSSselector,
-  FoxNewsActCSSselector,
-} from 'PuppetAct/ActConfig/CSSselectors';
-
 import { Actor } from 'apify';
 import { PuppeteerCrawler } from 'crawlee';
-import CNBCAct from 'PuppetAct/ArticlesAct/CNBCAct';
+import FoxNewsAct from './PuppetAct/ArticlesAct/FoxNewsAct/index.js';
+import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher.js';
+import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster.js';
+import { CNBC_UNDESIRED_URLS, FOXNEWS_UNDESIRED_URLS } from './PuppetAct/ActConfig/UndesiredURLs.js';
+import { CNBCActCSSselector, FoxNewsActCSSselector } from './PuppetAct/ActConfig/CSSselectors.js';
+import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct/index.js';
 
 const ACT_REGISTRY = {
   foxnews: {
@@ -52,7 +45,7 @@ await Actor.main(async () => {
         watcher,
       );
 
-      const site: string = request.userData.site;
+      const { site } = request.userData;
       const siteConfig = ACT_REGISTRY[site as keyof typeof ACT_REGISTRY];
       if (!siteConfig) {
         throw new Error(`Unsupported site: ${site}`);
@@ -65,7 +58,7 @@ await Actor.main(async () => {
 
       // Skip non-news pages before scraping
       if (act.checkURLIsUndesired(request.url)) {
-        console.log(`Skipping non-news page: ${request.url}`);
+        watcher.info({ msg: `Skipping non-news page: ${request.url}` });
         return;
       }
 
@@ -74,9 +67,9 @@ await Actor.main(async () => {
 
       // Enqueue additional article links if present
       if (data.other_article_links?.length) {
-        const requests = data.other_article_links.map(url => ({
+        const requests = data.other_article_links.map((url) => ({
           url,
-          userData: { site } // Maintain same site context
+          userData: { site }, // Maintain same site context
         }));
         await crawler.addRequests(requests);
       }

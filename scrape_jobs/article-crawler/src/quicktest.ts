@@ -1,26 +1,24 @@
 import puppeteer from 'puppeteer';
-import PuppetMaster from 'PuppetShow/ScrapeMaster/PuppetMaster';
-import ConsoleWatcher from 'PuppetShow/TheWatcher/ConsoleWatcher';
-import CheerioMaster from 'PuppetShow/ScrapeMaster/CheerioMaster';
-import CNBCAct from 'PuppetAct/ArticlesAct/CNBCAct';
+import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster.js';
+import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher.js';
+import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct/index.js';
 import {
   CNBCActCSSselector,
   FoxNewsActCSSselector,
-} from 'PuppetAct/ActConfig/CSSselectors';
+} from './PuppetAct/ActConfig/CSSselectors.js';
 import {
   CNBC_UNDESIRED_URLS,
   FOXNEWS_UNDESIRED_URLS,
-} from 'PuppetAct/ActConfig/UndesiredURLs';
-import FoxNewsAct from 'PuppetAct/ArticlesAct/FoxNewsAct';
-import { ScrapeMaster } from 'PuppetShow/ScrapeMaster';
-import { load } from 'cheerio';
+} from './PuppetAct/ActConfig/UndesiredURLs.js';
+import FoxNewsAct from './PuppetAct/ArticlesAct/FoxNewsAct/index.js';
+import { ScrapeMaster } from './PuppetShow/ScrapeMaster/index.js';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const watcher = new ConsoleWatcher({ level: 'warn' });
-  var puppetMaster = new PuppetMaster(
+  const puppetMaster = new PuppetMaster(
     page,
     browser,
     {
@@ -38,11 +36,6 @@ async function getPuppetMaster(): Promise<PuppetMaster> {
   return puppetMaster;
 }
 
-async function getCheerioMaster() {
-  const watcher = new ConsoleWatcher({ level: 'warn' });
-  return new CheerioMaster({ logNullElement: false }, watcher);
-}
-
 async function testFoxNewsAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   const FoxNewsUrlsTests: string[] = [
     'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
@@ -52,7 +45,7 @@ async function testFoxNewsAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   ];
   for (const url of FoxNewsUrlsTests) {
     const startTime = Date.now();
-    let act = new FoxNewsAct(scrapeMaster, url, {
+    const act = new FoxNewsAct(scrapeMaster, url, {
       elements: FoxNewsActCSSselector,
       undesiredURLs: FOXNEWS_UNDESIRED_URLS,
     });
@@ -81,7 +74,7 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   for (const url of CNBCUrlsTests) {
     // for (const url of CNBCUrlsTests) {
     const startTime = Date.now();
-    let act = new CNBCAct(scrapeMaster, url, {
+    const act = new CNBCAct(scrapeMaster, url, {
       elements: CNBCActCSSselector,
       undesiredURLs: CNBC_UNDESIRED_URLS,
     });
@@ -99,48 +92,18 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   }
 }
 
-async function testCheerio() {
-  // Example URL and selector
-  const url =
-    'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html';
-  const selector = 'div.col-sm-6.product_main > h1';
-
+async function main() {
+  const scrapeMaster = await getPuppetMaster();
   try {
-    // Make HTTP request using fetch
-    const response = await fetch(url);
-    const html = await response.text();
-
-    // Load HTML into Cheerio
-    const $ = load(html);
-
-    // Find elements matching selector
-    const elements = $(selector);
-    console.log('Cheerio object type:', elements.constructor.name);
-    console.log(
-      'Node types:',
-      elements.toArray().map((el) => el.constructor.name),
-    );
-
-    // Extract data from elements
-    elements.each((i: number, el: any) => {
-      console.log($(el).text());
-    });
-  } catch (error) {
-    console.error('Error:', error);
+    await testFoxNewsAct(scrapeMaster);
+    await testCNBCAct(scrapeMaster);
+  } finally {
+    await scrapeMaster.close();
   }
 }
-
-async function main() {
-  // let scrapeMaster = await getPuppetMaster();
-  // // let scrapeMaster = await getCheerioMaster();
-  // try{
-
-  //   // await testFoxNewsAct(scrapeMaster);
-  //   // await testCNBCAct(scrapeMaster);
-  // } finally {
-  //   await scrapeMaster.close();
-  // }
-  await testCheerio();
-}
 // Example usage
-main();
+try {
+  await main();
+} catch (error) {
+  console.error(error);
+}

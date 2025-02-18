@@ -3,6 +3,9 @@
 # You can also use any other image from Docker Hub.
 FROM apify/actor-node-puppeteer-chrome:20 AS builder
 
+# Check preinstalled packages
+RUN npm ls crawlee apify puppeteer playwright
+
 # Copy just package.json and package-lock.json
 # to speed up the build using Docker layer cache.
 COPY --chown=myuser package*.json ./
@@ -21,8 +24,8 @@ RUN npm run build
 # Create final image
 FROM apify/actor-node-puppeteer-chrome:20
 
-# Copy only built JS files from builder image
-COPY --from=builder --chown=myuser /home/myuser/dist ./dist
+# Check preinstalled packages
+RUN npm ls crawlee apify puppeteer playwright
 
 # Copy just package.json and package-lock.json
 # to speed up the build using Docker layer cache.
@@ -38,7 +41,11 @@ RUN npm --quiet set progress=false \
     && echo "Node.js version:" \
     && node --version \
     && echo "NPM version:" \
-    && npm --version
+    && npm --version \
+    && rm -r ~/.npm
+
+# Copy built JS files from builder image
+COPY --from=builder --chown=myuser /home/myuser/dist ./dist
 
 # Next, copy the remaining files and directories with the source code.
 # Since we do this after NPM install, quick build will be really fast

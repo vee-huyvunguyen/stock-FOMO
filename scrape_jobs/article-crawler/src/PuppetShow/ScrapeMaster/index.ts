@@ -1,12 +1,12 @@
-import { Viewport, GoToOptions } from 'puppeteer';
-import { BaseWatcher } from 'PuppetShow/TheWatcher/BaseWatcher';
-import {
-  ScrapedElement,
-  ElementTextContent,
-} from 'PuppetShow/ScrapedElement';
 import { CheerioAPI } from 'cheerio';
 import { Element } from 'domhandler';
 import { RobotsFile } from 'crawlee';
+import { Viewport, GoToOptions } from 'puppeteer';
+import { BaseWatcher } from '../TheWatcher/BaseWatcher.js';
+import {
+  ScrapedElement,
+  ElementTextContent,
+} from '../ScrapedElement/index.js';
 
 type Miliseconds = number;
 type CSSSelector = string;

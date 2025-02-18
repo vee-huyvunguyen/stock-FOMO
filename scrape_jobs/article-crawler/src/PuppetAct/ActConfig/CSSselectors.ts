@@ -1,4 +1,4 @@
-import { CSSSelector } from 'PuppetShow/ScrapeMaster';
+import { CSSSelector } from '../../PuppetShow/ScrapeMaster/index.js';
 
 type ElementAttritbuteName = string;
 type ElementAttritbute = string;
@@ -10,7 +10,7 @@ type ElementsPageTypeConfig = {
     ElementAttritbute,
   ];
   undesired: boolean;
-  [key: string]: any; // Allows additional fields with any type
+  [key: string]: string | boolean | [string, string, string]; // Allows additional fields with any type
 };
 type TypeBaseCSSSelector = {
   mainArticle: ElementsPageTypeConfig;

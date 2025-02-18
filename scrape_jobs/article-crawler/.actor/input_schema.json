@@ -1,0 +1,22 @@
+{
+    "title": "Article Crawler Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "urls":{
+            "title": "URLs",
+            "description": "List of URLs to scrape",
+            "type": "array",
+            "editor": "json"
+        },
+        "maxPages":{
+            "title": "Maximum Pages",
+            "description": "Maximum number of pages to crawl (default: 100)",
+            "type": "integer",
+            "minimum": 1,
+            "default": 100,
+            "editor": "number"
+        }
+    },
+    "required": ["urls"]
+}

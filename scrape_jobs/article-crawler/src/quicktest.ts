@@ -43,7 +43,7 @@ async function getCheerioMaster() {
   return new CheerioMaster({ logNullElement: false }, watcher);
 }
 
-async function testFoxNewsAct<P,T>(scrapeMaster: ScrapeMaster<P,T>) {
+async function testFoxNewsAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   const FoxNewsUrlsTests: string[] = [
     'https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says',
     'https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices',
@@ -70,8 +70,7 @@ async function testFoxNewsAct<P,T>(scrapeMaster: ScrapeMaster<P,T>) {
   }
 }
 
-
-async function testCNBCAct<P,T>(scrapeMaster: ScrapeMaster<P,T>) {
+async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   const CNBCUrlsTests: string[] = [
     'https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html',
     'https://www.cnbc.com/2025/02/03/stock-market-today-live-updates.html',
@@ -102,7 +101,8 @@ async function testCNBCAct<P,T>(scrapeMaster: ScrapeMaster<P,T>) {
 
 async function testCheerio() {
   // Example URL and selector
-  const url = 'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html';
+  const url =
+    'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html';
   const selector = 'div.col-sm-6.product_main > h1';
 
   try {
@@ -116,13 +116,15 @@ async function testCheerio() {
     // Find elements matching selector
     const elements = $(selector);
     console.log('Cheerio object type:', elements.constructor.name);
-    console.log('Node types:', elements.toArray().map(el => el.constructor.name));
+    console.log(
+      'Node types:',
+      elements.toArray().map((el) => el.constructor.name),
+    );
 
     // Extract data from elements
     elements.each((i: number, el: any) => {
       console.log($(el).text());
     });
-
   } catch (error) {
     console.error('Error:', error);
   }

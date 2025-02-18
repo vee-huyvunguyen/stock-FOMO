@@ -122,7 +122,7 @@ async function testCheerio() {
     );
 
     // Extract data from elements
-    elements.each((i: number, el: any) => {
+    elements.each((_: number, el: any) => {
       console.log($(el).text());
     });
   } catch (error) {

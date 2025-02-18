@@ -98,15 +98,17 @@ abstract class ArticleAct<P, T> {
     return this._statusHandler.scrapeStatus;
   }
   async loadNewsPage(): Promise<boolean> {
-    try {
-      await this.scrapeMaster.goto(this.articleURL);
-    } catch (err) {
-      this._statusHandler.updateLoadPageError(err);
-      return false;
-    }
-    if (!this.manualPageType) {
-      return await this.checkLoadedNewsPage();
-    }
+    // try {
+    //   await this.scrapeMaster.goto(this.articleURL);
+    // } catch (err) {
+    //   this._statusHandler.updateLoadPageError(err);
+    //   return false;
+    // }
+    // if (!this.manualPageType) {
+    //   return await this.checkLoadedNewsPage();
+    // }
+    // return true;
+    await this.scrapeMaster.goto(this.articleURL);
     return true;
   }
 

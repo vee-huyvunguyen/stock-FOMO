@@ -1,5 +1,6 @@
 import { ClickOptions } from 'puppeteer';
-import { CheerioAPI, Element } from 'cheerio';
+import { CheerioAPI } from 'cheerio';
+import { Element } from 'domhandler';
 
 type ElementHTML = string;
 type ElementTextContent = string;

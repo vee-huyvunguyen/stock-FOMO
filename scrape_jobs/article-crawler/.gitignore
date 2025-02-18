@@ -5,3 +5,5 @@ dist
 node_modules
 storage
 .cache/
+# Added by Apify CLI
+.venv

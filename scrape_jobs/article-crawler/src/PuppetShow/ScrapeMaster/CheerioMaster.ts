@@ -1,6 +1,7 @@
 import { BaseWatcher } from '@/PuppetShow/TheWatcher/BaseWatcher';
 import { ScrapeMaster, ScrapeMasterConfig } from '@/PuppetShow/ScrapeMaster';
-import { CheerioAPI, load as CherioLoad, Element } from 'cheerio';
+import { CheerioAPI, load as CherioLoad } from 'cheerio';
+import { Element } from 'domhandler';
 import CheerioScrapedElement from '@/PuppetShow/ScrapedElement/CheerioScrapedElement';
 import axios, { AxiosRequestConfig } from 'axios';
 import isEmpty from 'lodash/isEmpty';

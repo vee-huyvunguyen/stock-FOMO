@@ -14,7 +14,7 @@ describe('PuppetMaster', () => {
   beforeAll(async () => {
     // Initialize the CheerioMaster
     const page = await CheerioMaster.loadCheerioAPI(url, { httpAgent, httpsAgent });
-    cheerioMaster = new CheerioMaster({ logNullElement: false }, page, watcher, url)
+    cheerioMaster = new CheerioMaster({ logNullElement: false }, watcher, page);
   });
 
   it('should fetch the first quote correctly', async () => {

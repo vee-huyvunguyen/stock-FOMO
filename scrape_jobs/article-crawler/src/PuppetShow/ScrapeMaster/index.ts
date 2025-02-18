@@ -4,7 +4,8 @@ import {
   ScrapedElement,
   ElementTextContent,
 } from '@/PuppetShow/ScrapedElement';
-import { CheerioAPI, Element } from 'cheerio';
+import { CheerioAPI } from 'cheerio';
+import { Element } from 'domhandler';
 import { RobotsFile } from 'crawlee';
 
 type Miliseconds = number;

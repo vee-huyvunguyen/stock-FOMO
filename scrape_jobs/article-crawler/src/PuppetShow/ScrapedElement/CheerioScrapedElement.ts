@@ -1,6 +1,7 @@
 import { ClickOptions } from 'puppeteer';
 import { ScrapedElement } from '@/PuppetShow/ScrapedElement';
-import { Element, CheerioAPI } from 'cheerio';
+import { CheerioAPI } from 'cheerio';
+import { Element } from 'domhandler';
 
 class CheerioScrapedElement implements ScrapedElement<CheerioAPI, Element> {
   constructor(

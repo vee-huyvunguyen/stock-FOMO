@@ -4,14 +4,16 @@
     "module": "ES2022",
     "target": "ES2022",
     "outDir": "dist",
+    "rootDir": "src",
     "noUnusedLocals": false,
     "lib": ["DOM"],
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
       "@/*": ["src/*"]
     },
     "sourceMap": true,
     "inlineSources": true
   },
-  "include": ["./src/**/*", "./tests/**/*"]
+  "include": ["src"],
+  "exclude": ["tests", "node_modules"]
 }

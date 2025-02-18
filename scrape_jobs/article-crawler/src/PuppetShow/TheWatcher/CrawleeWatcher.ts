@@ -2,9 +2,9 @@ import {
   BaseWatcher,
   WatchThings,
   CheckLogResult,
-} from '@/PuppetShow/TheWatcher/BaseWatcher';
+} from 'PuppetShow/TheWatcher/BaseWatcher';
 import { Log } from 'crawlee';
-import { isNotValuable } from '@/PuppetShow/TheWatcher/watcherUtils';
+import { isNotValuable } from 'PuppetShow/TheWatcher/watcherUtils';
 
 export default class CrawleeWatcher implements BaseWatcher {
   constructor(public crawleeLogger: Log) {

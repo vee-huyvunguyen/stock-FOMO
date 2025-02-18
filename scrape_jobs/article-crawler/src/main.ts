@@ -1,18 +1,18 @@
-import FoxNewsAct from '@/PuppetAct/ArticlesAct/FoxNewsAct';
-import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
-import PuppetMaster from '@/PuppetShow/ScrapeMaster/PuppetMaster';
+import FoxNewsAct from 'PuppetAct/ArticlesAct/FoxNewsAct';
+import ConsoleWatcher from 'PuppetShow/TheWatcher/ConsoleWatcher';
+import PuppetMaster from 'PuppetShow/ScrapeMaster/PuppetMaster';
 import {
   CNBC_UNDESIRED_URLS,
   FOXNEWS_UNDESIRED_URLS,
-} from '@/PuppetAct/ActConfig/UndesiredURLs';
+} from 'PuppetAct/ActConfig/UndesiredURLs';
 import {
   CNBCActCSSselector,
   FoxNewsActCSSselector,
-} from '@/PuppetAct/ActConfig/CSSselectors';
+} from 'PuppetAct/ActConfig/CSSselectors';
 
 import { Actor } from 'apify';
 import { PuppeteerCrawler } from 'crawlee';
-import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct';
+import CNBCAct from 'PuppetAct/ArticlesAct/CNBCAct';
 
 const ACT_REGISTRY = {
   foxnews: {
@@ -63,8 +63,23 @@ await Actor.main(async () => {
         undesiredURLs: siteConfig.undesiredUrls,
       });
 
+      // Skip non-news pages before scraping
+      if (act.checkURLIsUndesired(request.url)) {
+        console.log(`Skipping non-news page: ${request.url}`);
+        return;
+      }
+
       const data = await act.scrape();
       await Actor.pushData(data);
+
+      // Enqueue additional article links if present
+      if (data.other_article_links?.length) {
+        const requests = data.other_article_links.map(url => ({
+          url,
+          userData: { site } // Maintain same site context
+        }));
+        await crawler.addRequests(requests);
+      }
     },
   });
 

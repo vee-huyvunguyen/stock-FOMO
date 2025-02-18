@@ -1,7 +1,7 @@
 {
   "urls": [
-    { "url": "https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices", "site": "foxnews" },
-    { "url": "https://www.cnbc.com/2025/02/05/novo-nordisk-nvo-earnings-q4-full-year-fy24.html", "site": "cnbc" }
+    { "url": "https://www.foxbusiness.com/", "site": "foxnews" },
+    { "url": "https://www.cnbc.com/", "site": "cnbc" }
   ],
-  "maxPages": 2
+  "maxPages": 20
 }

@@ -1,5 +1,5 @@
 import { ClickOptions } from 'puppeteer';
-import { ScrapedElement } from '@/PuppetShow/ScrapedElement';
+import { ScrapedElement } from 'PuppetShow/ScrapedElement';
 import { CheerioAPI } from 'cheerio';
 import { Element } from 'domhandler';
 

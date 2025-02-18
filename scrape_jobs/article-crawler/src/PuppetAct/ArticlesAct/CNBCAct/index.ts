@@ -1,15 +1,14 @@
 import {
   ArticleAct,
   ArticleInfoExtractor,
-  OtherLinks,
-} from '@/PuppetAct/ArticlesAct';
-import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
-import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
+} from 'PuppetAct/ArticlesAct';
+import { ScrapeMaster } from 'PuppetShow/ScrapeMaster';
+import { RawArticlePage } from 'PuppetAct/ArticlesAct/schemas';
 import {
   PageType,
   TypeBaseCSSSelector,
-} from '@/PuppetAct/ActConfig/CSSselectors';
-import { ArticleActConfig } from '@/PuppetAct/ActConfig';
+} from 'PuppetAct/ActConfig/CSSselectors';
+import { ArticleActConfig } from 'PuppetAct/ActConfig';
 
 export default class CNBCAct<P, T> extends ArticleAct<P, T> {
   constructor(

@@ -1,18 +1,18 @@
 import puppeteer from 'puppeteer';
-import PuppetMaster from '@/PuppetShow/ScrapeMaster/PuppetMaster';
-import ConsoleWatcher from '@/PuppetShow/TheWatcher/ConsoleWatcher';
-import CheerioMaster from '@/PuppetShow/ScrapeMaster/CheerioMaster';
-import CNBCAct from '@/PuppetAct/ArticlesAct/CNBCAct';
+import PuppetMaster from 'PuppetShow/ScrapeMaster/PuppetMaster';
+import ConsoleWatcher from 'PuppetShow/TheWatcher/ConsoleWatcher';
+import CheerioMaster from 'PuppetShow/ScrapeMaster/CheerioMaster';
+import CNBCAct from 'PuppetAct/ArticlesAct/CNBCAct';
 import {
   CNBCActCSSselector,
   FoxNewsActCSSselector,
-} from '@/PuppetAct/ActConfig/CSSselectors';
+} from 'PuppetAct/ActConfig/CSSselectors';
 import {
   CNBC_UNDESIRED_URLS,
   FOXNEWS_UNDESIRED_URLS,
-} from '@/PuppetAct/ActConfig/UndesiredURLs';
-import FoxNewsAct from '@/PuppetAct/ArticlesAct/FoxNewsAct';
-import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
+} from 'PuppetAct/ActConfig/UndesiredURLs';
+import FoxNewsAct from 'PuppetAct/ArticlesAct/FoxNewsAct';
+import { ScrapeMaster } from 'PuppetShow/ScrapeMaster';
 import { load } from 'cheerio';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {

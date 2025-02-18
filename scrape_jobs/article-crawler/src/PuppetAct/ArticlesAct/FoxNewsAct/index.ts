@@ -1,13 +1,10 @@
-import { ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
+import { ScrapeMaster } from 'PuppetShow/ScrapeMaster';
 import {
   ArticleAct,
-  ArticleInfoExtractor,
-  ElementExtractCheck,
-  ElementExtractedContent,
-  OtherLinks,
-} from '@/PuppetAct/ArticlesAct';
-import { TypeBaseCSSSelector } from '@/PuppetAct/ActConfig/CSSselectors';
-import { ArticleActConfig } from '@/PuppetAct/ActConfig';
+  ArticleInfoExtractor
+} from 'PuppetAct/ArticlesAct';
+import { TypeBaseCSSSelector } from 'PuppetAct/ActConfig/CSSselectors';
+import { ArticleActConfig } from 'PuppetAct/ActConfig';
 
 export default class FoxNewsAct<P, T> extends ArticleAct<P, T> {
   constructor(

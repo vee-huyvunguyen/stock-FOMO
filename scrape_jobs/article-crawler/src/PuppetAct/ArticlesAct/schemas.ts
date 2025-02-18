@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { ScrapeStatus } from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
+import { ScrapeStatus } from 'PuppetAct/ArticlesAct/ScrapeStatusHandler';
 
 type RawArticlePage = {
   url: string;

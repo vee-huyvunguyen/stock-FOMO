@@ -3,8 +3,8 @@ import {
   BaseWatcher,
   WatchThings,
   CheckLogResult,
-} from '@/PuppetShow/TheWatcher/BaseWatcher';
-import { isNotValuable } from '@/PuppetShow/TheWatcher/watcherUtils';
+} from 'PuppetShow/TheWatcher/BaseWatcher';
+import { isNotValuable } from 'PuppetShow/TheWatcher/watcherUtils';
 
 class ConsoleWatcher implements BaseWatcher {
   public constructor(public config: WatchConfig) {

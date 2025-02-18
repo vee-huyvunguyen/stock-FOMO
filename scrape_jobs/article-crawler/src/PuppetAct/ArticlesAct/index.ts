@@ -2,21 +2,21 @@ import {
   ElementHTML,
   ElementTextContent,
   ScrapedElement,
-} from '@/PuppetShow/ScrapedElement';
-import { CSSSelector, ScrapeMaster } from '@/PuppetShow/ScrapeMaster';
-import { getErrorMessage } from '@/utils';
+} from 'PuppetShow/ScrapedElement';
+import { CSSSelector, ScrapeMaster } from 'PuppetShow/ScrapeMaster';
+import { getErrorMessage } from 'utils';
 import {
   ElementsPageTypeConfig,
   PageType,
   TypeBaseCSSSelector,
-} from '@/PuppetAct/ActConfig/CSSselectors';
-import { RawArticlePage } from '@/PuppetAct/ArticlesAct/schemas';
+} from 'PuppetAct/ActConfig/CSSselectors';
+import { RawArticlePage } from 'PuppetAct/ArticlesAct/schemas';
 import {
   ScrapeStatusHandler,
   ScrapeStatus,
-} from '@/PuppetAct/ArticlesAct/ScrapeStatusHandler';
+} from 'PuppetAct/ArticlesAct/ScrapeStatusHandler';
 import { DateTime } from 'luxon';
-import { ArticleActConfig } from '@/PuppetAct/ActConfig';
+import { ArticleActConfig } from 'PuppetAct/ActConfig';
 
 type PageClassification =
   | {

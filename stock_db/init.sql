@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS scrape.pending_pages_to_scrape (
 CREATE TABLE IF NOT EXISTS cleaned.sources (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    url TEXT NOT NULL UNIQUE
+    url TEXT NOT NULL UNIQUE,
+    parent_source_id INTEGER REFERENCES cleaned.sources(id)
 );
 
 CREATE TABLE IF NOT EXISTS cleaned.authors (
@@ -68,6 +69,7 @@ CREATE TABLE IF NOT EXISTS cleaned.categories (
     name TEXT,
     url TEXT UNIQUE,
     source_id INTEGER NOT NULL,
+    parent_category_id INTEGER REFERENCES cleaned.categories(id),
     CONSTRAINT fk_categories_source FOREIGN KEY (source_id) REFERENCES cleaned.sources(id)
 );
 

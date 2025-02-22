@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  stock_db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_DB=stock_db
+    env_file:
+      - .env
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # DB initialization
+      - postgres_data:/var/lib/postgresql/data  # Persisted data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:  # Named volume for data persistence

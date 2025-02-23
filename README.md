@@ -205,7 +205,7 @@
 | Streamlit         | Amplify Hosting           | Static Site + Fargate BE |
 | dbt               | Fargate Task              | Containerized            |
 | Weaviate          | Fargate + EC2             | Containerized            |
-| Spark NLP         | AWS Glue        | AWS Managed Service      |
+| Spark NLP         | AWS Glue                  | AWS Managed Service      |
 
 Key Features:
 

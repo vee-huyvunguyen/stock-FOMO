@@ -7,6 +7,7 @@ import { CNBC_UNDESIRED_URLS, FOXNEWS_UNDESIRED_URLS } from './PuppetAct/ActConf
 import { CNBCActCSSselector, FoxNewsActCSSselector } from './PuppetAct/ActConfig/CSSselectors.js';
 import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct/index.js';
 import { FOXNEWS_DESIRED_URLS, CNBC_DESIRED_URLS } from './PuppetAct/ActConfig/DesiredURLs.js';
+import { FOXNEWS_CATEGORY_URLS, CNBC_CATEGORY_URLS } from './PuppetAct/ActConfig/CategoryURLS.js';
 
 const ACT_REGISTRY = {
   foxnews: {
@@ -14,12 +15,14 @@ const ACT_REGISTRY = {
     selectors: FoxNewsActCSSselector,
     undesiredURLs: FOXNEWS_UNDESIRED_URLS,
     desiredURLs: FOXNEWS_DESIRED_URLS,
+    skipCategoryPages: FOXNEWS_CATEGORY_URLS,
   },
   cnbc: {
     ActClass: CNBCAct,
     selectors: CNBCActCSSselector,
     undesiredURLs: CNBC_UNDESIRED_URLS,
     desiredURLs: CNBC_DESIRED_URLS,
+    skipCategoryPages: CNBC_CATEGORY_URLS,
   },
 } as const;
 
@@ -29,6 +32,7 @@ interface CrawlerInput {
     site: keyof typeof ACT_REGISTRY;
   }>;
   maxPages?: number;
+  skippingCategoryPages: boolean;
 }
 
 await Actor.main(async () => {
@@ -58,6 +62,7 @@ await Actor.main(async () => {
         elements: siteConfig.selectors,
         undesiredURLs: siteConfig.undesiredURLs,
         desiredURLs: siteConfig.desiredURLs,
+        skipCategoryPages: input.skippingCategoryPages ? siteConfig.skipCategoryPages : undefined,
       });
 
       // Skip non-news pages before scraping

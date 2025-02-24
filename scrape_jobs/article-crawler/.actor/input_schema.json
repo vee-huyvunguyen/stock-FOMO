@@ -16,6 +16,13 @@
             "minimum": 1,
             "default": 100,
             "editor": "number"
+        },
+        "skippingCategoryPages": {
+            "title": "Skipping Category Pages?",
+            "description": "Whether to skip category pages (default: false)",
+            "type": "boolean",
+            "default": true,
+            "editor": "checkbox"
         }
     },
     "required": ["urls"]

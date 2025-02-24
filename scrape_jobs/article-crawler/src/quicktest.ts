@@ -13,6 +13,7 @@ import {
 import FoxNewsAct from './PuppetAct/ArticlesAct/FoxNewsAct/index.js';
 import { ScrapeMaster } from './PuppetShow/ScrapeMaster/index.js';
 import { CNBC_DESIRED_URLS, FOXNEWS_DESIRED_URLS } from './PuppetAct/ActConfig/DesiredURLs.js';
+import { CNBC_CATEGORY_URLS, FOXNEWS_CATEGORY_URLS } from './PuppetAct/ActConfig/CategoryURLS.js';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser
@@ -50,6 +51,7 @@ async function testFoxNewsAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
       elements: FoxNewsActCSSselector,
       undesiredURLs: FOXNEWS_UNDESIRED_URLS,
       desiredURLs: FOXNEWS_DESIRED_URLS,
+      skipCategoryPages: FOXNEWS_CATEGORY_URLS,
     });
     try {
       console.log('_______________________');
@@ -80,6 +82,7 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
       elements: CNBCActCSSselector,
       undesiredURLs: CNBC_UNDESIRED_URLS,
       desiredURLs: CNBC_DESIRED_URLS,
+      skipCategoryPages: CNBC_CATEGORY_URLS,
     });
     try {
       console.log('_______________________');
@@ -95,11 +98,25 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
   }
 }
 
+async function testFunctions<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
+  const act = new FoxNewsAct(scrapeMaster, 'https://www.foxnews.com', {
+    elements: FoxNewsActCSSselector,
+    undesiredURLs: FOXNEWS_UNDESIRED_URLS,
+    desiredURLs: FOXNEWS_DESIRED_URLS,
+    skipCategoryPages: FOXNEWS_CATEGORY_URLS,
+  });
+  console.log(act.checkURLIsCategoryPage('https://www.foxbusiness.com/category/luxury-properties/'));
+  console.log(act.checkURLIsCategoryPage('https://www.foxbusiness.com/economy/'));
+  console.log(act.checkURLIsCategoryPage('https://www.cnbc.com/2025/02/10/trump-aims-at-wasteful-spending-by-ordering-end-to-penny-production.html'));
+  console.log(act.checkURLIsCategoryPage('https://www.cnbc.com/politics/'));
+}
+
 async function main() {
   const scrapeMaster = await getPuppetMaster();
   try {
     await testCNBCAct(scrapeMaster);
     await testFoxNewsAct(scrapeMaster);
+    await testFunctions(scrapeMaster);
   } finally {
     await scrapeMaster.close();
   }

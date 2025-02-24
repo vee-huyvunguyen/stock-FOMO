@@ -4,7 +4,10 @@ import {
   ElementTextContent,
   ScrapedElement,
 } from '../../PuppetShow/ScrapedElement/index.js';
-import { CSSSelector, ScrapeMaster } from '../../PuppetShow/ScrapeMaster/index.js';
+import {
+  CSSSelector,
+  ScrapeMaster,
+} from '../../PuppetShow/ScrapeMaster/index.js';
 import { getErrorMessage } from '../../utils.js';
 import {
   ElementsPageTypeConfig,
@@ -12,10 +15,7 @@ import {
   TypeBaseCSSSelector,
 } from '../ActConfig/CSSselectors.js';
 import { RawArticlePage } from './schemas.js';
-import {
-  ScrapeStatusHandler,
-  ScrapeStatus,
-} from './ScrapeStatusHandler.js';
+import { ScrapeStatusHandler, ScrapeStatus } from './ScrapeStatusHandler.js';
 import { ArticleActConfig } from '../ActConfig/index.js';
 
 type PageClassification =
@@ -56,7 +56,7 @@ abstract class ArticleAct<P, T> {
   protected undesiredURLs: string[];
   private undesiredURLsRegex: RegExp;
   private desiredURLs: RegExp;
-
+  private skipCategoryPages?: RegExp;
   constructor(
     public scrapeMaster: ScrapeMaster<P, T>,
     public articleURL: string,
@@ -73,22 +73,33 @@ abstract class ArticleAct<P, T> {
     this.undesiredURLs = actConfig.undesiredURLs;
     this.undesiredURLsRegex = ArticleAct.createURLsPrefixRegex(this.undesiredURLs);
     this.desiredURLs = ArticleAct.createURLsPrefixRegex(actConfig.desiredURLs);
+    this.skipCategoryPages = actConfig.skipCategoryPages
+      ? ArticleAct.createURLsPrefixRegex(actConfig.skipCategoryPages)
+      : undefined;
     this.manualPageType = manualPageType;
+  }
+
+  checkURLIsCategoryPage(urlStr: string): boolean {
+    const url = new URL(urlStr);
+    // Split pathname and filter empty segments from leading/trailing slashes
+    const pathSegments = url.pathname.split('/').filter((p) => p !== '');
+    return pathSegments.length === 1 || (this.skipCategoryPages?.test(urlStr) ?? false);
   }
 
   static createURLsPrefixRegex(URLsPrefixes: string[]): RegExp {
     return new RegExp(
-      `^(${URLsPrefixes
-        .map(
-          (url) => url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), // Escape regex chars
-        )
-        .join('|')})`,
+      `^(${URLsPrefixes.map(
+        (url) => url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), // Escape regex chars
+      ).join('|')})`,
     );
   }
 
   checkURLIsUndesired(url: string): boolean {
     if (!this.desiredURLs.test(url)) {
-      return false;
+      return true;
+    }
+    if (this.skipCategoryPages) {
+      return this.checkURLIsCategoryPage(url);
     }
     return this.undesiredURLsRegex.test(url);
   }
@@ -417,14 +428,14 @@ abstract class ArticleAct<P, T> {
     cssSelectorKey: CSSSelector,
     fieldNameDebug: string,
     manyElements: true,
-    elementProperty?: string,
+    elementProperty?: string
   ): Promise<ElementsExtractedContent>;
 
   async extractArticleCommonElement(
     cssSelectorKey: CSSSelector,
     fieldNameDebug: string,
     manyElements: false,
-    elementProperty?: string,
+    elementProperty?: string
   ): Promise<ElementExtractedContent>;
 
   async extractArticleCommonElement(

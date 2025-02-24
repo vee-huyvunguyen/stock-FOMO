@@ -105,10 +105,11 @@ async function testFunctions<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
     desiredURLs: FOXNEWS_DESIRED_URLS,
     skipCategoryPages: FOXNEWS_CATEGORY_URLS,
   });
-  console.log(act.checkURLIsCategoryPage('https://www.foxbusiness.com/category/luxury-properties/'));
-  console.log(act.checkURLIsCategoryPage('https://www.foxbusiness.com/economy/'));
-  console.log(act.checkURLIsCategoryPage('https://www.cnbc.com/2025/02/10/trump-aims-at-wasteful-spending-by-ordering-end-to-penny-production.html'));
-  console.log(act.checkURLIsCategoryPage('https://www.cnbc.com/politics/'));
+  console.log(act.checkURLIsUndesired('https://www.foxbusiness.com/category/luxury-properties/'));
+  console.log(act.checkURLIsUndesired('https://www.foxbusiness.com/economy/'));
+  console.log(act.checkURLIsUndesired('https://www.outkick.com/culture/donald-trump-cartel-attacks-fear-inside-america'));
+  console.log(act.checkURLIsUndesired('https://www.foxnews.com/us/mayor-eric-adams-says-nycs-roosevelt-hotel-migrant-shelter-soon-close'));
+  console.log(act.checkURLIsUndesired('https://www.foxbusiness.com/politics/elon-musk-has-warning-federal-employees-still-working-from-home'));
 }
 
 async function main() {

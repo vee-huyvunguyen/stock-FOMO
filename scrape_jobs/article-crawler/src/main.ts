@@ -1,5 +1,5 @@
 import { Actor } from 'apify';
-import { PuppeteerCrawler } from 'crawlee';
+import { PuppeteerCrawler, enqueueLinks } from 'crawlee';
 import FoxNewsAct from './PuppetAct/ArticlesAct/FoxNewsAct/index.js';
 import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher.js';
 import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster.js';
@@ -42,8 +42,8 @@ await Actor.main(async () => {
   }
 
   const crawler = new PuppeteerCrawler({
-    maxRequestsPerCrawl: input.maxPages || 100,
-    requestHandler: async ({ page, request }) => {
+    maxRequestsPerCrawl: input.maxPages,
+    requestHandler: async ({ page, request, crawler: crawlerInstance }) => {
       const watcher = new ConsoleWatcher({ level: 'warn' });
       const scrapeMaster = new PuppetMaster(
         page,
@@ -67,7 +67,14 @@ await Actor.main(async () => {
 
       // Skip non-news pages before scraping
       if (act.checkURLIsUndesired(request.url)) {
-        watcher.info({ msg: `Skipping non-news page: ${request.url}` });
+        const otherLinks = await act.getOtherLinks();
+        if (crawlerInstance?.requestQueue) {
+          await enqueueLinks({
+            urls: otherLinks.news,
+            requestQueue: crawlerInstance.requestQueue,
+            userData: request.userData,
+          });
+        }
         return;
       }
 
@@ -78,9 +85,9 @@ await Actor.main(async () => {
       if (data.other_article_links?.length) {
         const requests = data.other_article_links.map((url) => ({
           url,
-          userData: { site }, // Maintain same site context
+          userData: request.userData, // Maintain same site context
         }));
-        await crawler.addRequests(requests);
+        await crawlerInstance.addRequests(requests);
       }
     },
   });

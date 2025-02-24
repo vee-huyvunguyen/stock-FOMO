@@ -12,6 +12,7 @@ import {
 } from './PuppetAct/ActConfig/UndesiredURLs.js';
 import FoxNewsAct from './PuppetAct/ArticlesAct/FoxNewsAct/index.js';
 import { ScrapeMaster } from './PuppetShow/ScrapeMaster/index.js';
+import { CNBC_DESIRED_URLS, FOXNEWS_DESIRED_URLS } from './PuppetAct/ActConfig/DesiredURLs.js';
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser
@@ -48,6 +49,7 @@ async function testFoxNewsAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
     const act = new FoxNewsAct(scrapeMaster, url, {
       elements: FoxNewsActCSSselector,
       undesiredURLs: FOXNEWS_UNDESIRED_URLS,
+      desiredURLs: FOXNEWS_DESIRED_URLS,
     });
     try {
       console.log('_______________________');
@@ -77,6 +79,7 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
     const act = new CNBCAct(scrapeMaster, url, {
       elements: CNBCActCSSselector,
       undesiredURLs: CNBC_UNDESIRED_URLS,
+      desiredURLs: CNBC_DESIRED_URLS,
     });
     try {
       console.log('_______________________');
@@ -95,8 +98,8 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
 async function main() {
   const scrapeMaster = await getPuppetMaster();
   try {
-    await testFoxNewsAct(scrapeMaster);
     await testCNBCAct(scrapeMaster);
+    await testFoxNewsAct(scrapeMaster);
   } finally {
     await scrapeMaster.close();
   }

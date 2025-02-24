@@ -6,17 +6,20 @@ import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster.js';
 import { CNBC_UNDESIRED_URLS, FOXNEWS_UNDESIRED_URLS } from './PuppetAct/ActConfig/UndesiredURLs.js';
 import { CNBCActCSSselector, FoxNewsActCSSselector } from './PuppetAct/ActConfig/CSSselectors.js';
 import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct/index.js';
+import { FOXNEWS_DESIRED_URLS, CNBC_DESIRED_URLS } from './PuppetAct/ActConfig/DesiredURLs.js';
 
 const ACT_REGISTRY = {
   foxnews: {
     ActClass: FoxNewsAct,
     selectors: FoxNewsActCSSselector,
-    undesiredUrls: FOXNEWS_UNDESIRED_URLS,
+    undesiredURLs: FOXNEWS_UNDESIRED_URLS,
+    desiredURLs: FOXNEWS_DESIRED_URLS,
   },
   cnbc: {
     ActClass: CNBCAct,
     selectors: CNBCActCSSselector,
-    undesiredUrls: CNBC_UNDESIRED_URLS,
+    undesiredURLs: CNBC_UNDESIRED_URLS,
+    desiredURLs: CNBC_DESIRED_URLS,
   },
 } as const;
 
@@ -53,7 +56,8 @@ await Actor.main(async () => {
 
       const act = new siteConfig.ActClass(scrapeMaster, request.url, {
         elements: siteConfig.selectors,
-        undesiredURLs: siteConfig.undesiredUrls,
+        undesiredURLs: siteConfig.undesiredURLs,
+        desiredURLs: siteConfig.desiredURLs,
       });
 
       // Skip non-news pages before scraping

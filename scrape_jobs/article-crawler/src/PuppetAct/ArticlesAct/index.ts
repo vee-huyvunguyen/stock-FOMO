@@ -55,6 +55,7 @@ abstract class ArticleAct<P, T> {
   protected elements: TypeBaseCSSSelector;
   protected undesiredURLs: string[];
   private undesiredURLsRegex: RegExp;
+  private desiredURLs: RegExp;
 
   constructor(
     public scrapeMaster: ScrapeMaster<P, T>,
@@ -70,15 +71,14 @@ abstract class ArticleAct<P, T> {
     this.articleURL = articleURL;
     this.elements = actConfig.elements;
     this.undesiredURLs = actConfig.undesiredURLs;
-    this.undesiredURLsRegex = ArticleAct.createUndesiredURLsRegex(
-      this.undesiredURLs,
-    );
+    this.undesiredURLsRegex = ArticleAct.createURLsPrefixRegex(this.undesiredURLs);
+    this.desiredURLs = ArticleAct.createURLsPrefixRegex(actConfig.desiredURLs);
     this.manualPageType = manualPageType;
   }
 
-  static createUndesiredURLsRegex(undesiredURLs: string[]): RegExp {
+  static createURLsPrefixRegex(URLsPrefixes: string[]): RegExp {
     return new RegExp(
-      `^(${undesiredURLs
+      `^(${URLsPrefixes
         .map(
           (url) => url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), // Escape regex chars
         )
@@ -87,6 +87,9 @@ abstract class ArticleAct<P, T> {
   }
 
   checkURLIsUndesired(url: string): boolean {
+    if (!this.desiredURLs.test(url)) {
+      return false;
+    }
     return this.undesiredURLsRegex.test(url);
   }
 

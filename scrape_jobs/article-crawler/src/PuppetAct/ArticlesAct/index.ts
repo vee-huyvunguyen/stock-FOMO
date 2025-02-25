@@ -421,7 +421,7 @@ abstract class ArticleAct<P, T> {
   normalizeURL(url: string): string {
     // Normalize URLs by stripping query params and hash fragments
     const normalized = url.split(/[?#]/)[0];
-    return normalized.endsWith('/') ? normalized : `${normalized}/`;
+    return normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
   }
 
   async extractArticleCommonElement(

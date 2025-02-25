@@ -1,7 +1,7 @@
 {
   "urls": [
-    { "url": "https://www.foxbusiness.com/", "site": "foxnews" },
     { "url": "https://www.cnbc.com/", "site": "cnbc" }
   ],
-  "maxPages": 20
+  "maxPages": 20,
+  "skippingCategoryPages": true
 }

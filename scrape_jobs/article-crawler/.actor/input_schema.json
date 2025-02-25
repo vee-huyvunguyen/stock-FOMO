@@ -1,29 +1,39 @@
 {
-    "title": "Article Crawler Input",
-    "type": "object",
-    "schemaVersion": 1,
-    "properties": {
-        "urls":{
-            "title": "URLs",
-            "description": "List of URLs to scrape",
-            "type": "array",
-            "editor": "json"
+  "title": "Article Crawler Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "urls": {
+      "title": "URLs",
+      "description": "List of URLs to scrape",
+      "type": "array",
+      "editor": "json",
+      "default": [
+        {
+          "url": "https://www.foxbusiness.com/category/government-spending",
+          "site": "foxnews"
         },
-        "maxPages":{
-            "title": "Maximum Pages",
-            "description": "Maximum number of pages to crawl (default: 100)",
-            "type": "integer",
-            "minimum": 1,
-            "default": 100,
-            "editor": "number"
-        },
-        "skippingCategoryPages": {
-            "title": "Skipping Category Pages?",
-            "description": "Whether to skip category pages (default: false)",
-            "type": "boolean",
-            "default": true,
-            "editor": "checkbox"
+        {
+          "url": "https://www.cnbc.com/2025/02/10/trump-aims-at-wasteful-spending-by-ordering-end-to-penny-production.html",
+          "site": "cnbc"
         }
+      ]
     },
-    "required": ["urls"]
+    "maxPages": {
+      "title": "Maximum Pages",
+      "description": "Maximum number of pages to crawl (default: 100)",
+      "type": "integer",
+      "minimum": 1,
+      "default": 100,
+      "editor": "number"
+    },
+    "skippingCategoryPages": {
+      "title": "Skipping Category Pages?",
+      "description": "Whether to skip category pages (default: false)",
+      "type": "boolean",
+      "default": true,
+      "editor": "checkbox"
+    }
+  },
+  "required": ["urls"]
 }

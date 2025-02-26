@@ -197,7 +197,7 @@
 
 | Project Component | AWS Equivalent            | Deployment Method        |
 | ----------------- | ------------------------- | ------------------------ |
-| Apache Airflow    | MWAA (Managed Workflows)  | AWS Managed Service      |
+| Apache Airflow    | Astronomer                | IaaS                     |
 | PostgreSQL        | RDS PostgreSQL            | AWS Managed Service      |
 | Crawlee Scrapers  | Apify Platform            | External Service         |
 | PySpark           | AWS Glue (Serverless ETL) | Managed Spark Jobs       |
@@ -211,5 +211,6 @@ Key Features:
 
 - **AWS Glue** replaces EMR for serverless Spark execution
 - Maintains open-source compatibility through managed services
+- Astronomer for the ability to scale to zero
 - Fargate containers for custom components
 - Apify integration for managed scraping

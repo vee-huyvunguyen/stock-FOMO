@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   spark-master:
     image: bitnami/spark:3.5.4
@@ -9,32 +7,33 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+      - SPARK_MASTER_WEBUI_PORT=8081
     ports:
-      - "8080:8080"  # Spark Web UI
-      - "7077:7077"  # Spark master port
+      - "8081:8081"
+      - "7077:7077"
     volumes:
-      - ./data:/data  # Mount a local directory for data
+      - spark-data:/bitnami
+      - ./apps:/opt/spark-apps
+      - ./data:/opt/spark-data
     networks:
-      - spark-network
+      - airflow
 
   spark-worker:
     image: bitnami/spark:3.5.4
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+    volumes:
+      - spark-data:/bitnami
+      - ./apps:/opt/spark-apps
+      - ./data:/opt/spark-data
     depends_on:
       - spark-master
-    volumes:
-      - ./data:/data  # Mount a local directory for data
     networks:
-      - spark-network
-
-networks:
-  spark-network:
-    driver: bridge
+      - airflow

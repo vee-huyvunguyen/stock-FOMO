@@ -17,6 +17,7 @@
 		"lodash": "^4.17.21",
 		"lodash.difference": "^4.5.0",
 		"luxon": "^3.5.0",
+		"prisma": "^6.4.1",
 		"puppeteer": "*",
 		"ts-node": "^10.9.2"
 	},
@@ -36,15 +37,21 @@
 		"build": "tsc",
 		"lint": "eslint ./src --ext .ts",
 		"lint:fix": "eslint ./src --ext .ts --fix",
-        "quicktest": "tsx --require tsconfig-paths/register src/quicktest.ts",
+		"quicktest": "tsx --require tsconfig-paths/register src/quicktest.ts",
 		"test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
 	},
 	"author": "It's not you it's me",
 	"license": "ISC",
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"@prisma/engines",
 			"esbuild",
+			"prisma",
 			"puppeteer"
+		],
+		"ignoredBuiltDependencies": [
+			"@prisma/engines",
+			"prisma"
 		]
 	}
 }

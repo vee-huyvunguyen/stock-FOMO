@@ -17,7 +17,14 @@ import { CNBC_CATEGORY_URLS, FOXNEWS_CATEGORY_URLS } from './PuppetAct/ActConfig
 
 async function getPuppetMaster(): Promise<PuppetMaster> {
   // Launch a headless browser
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: false, // Make browser visible
+    slowMo: 100, // Slow down operations by 100ms for better visibility
+    defaultViewport: {
+      width: 1280,
+      height: 800,
+    },
+  });
   const page = await browser.newPage();
   const watcher = new ConsoleWatcher({ level: 'warn' });
   const puppetMaster = new PuppetMaster(
@@ -99,17 +106,13 @@ async function testCNBCAct<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
 }
 
 async function testFunctions<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
-  const act = new FoxNewsAct(scrapeMaster, 'https://www.foxnews.com', {
+  const act = new FoxNewsAct(scrapeMaster, 'https://www.outkick.com/', {
     elements: FoxNewsActCSSselector,
     undesiredURLs: FOXNEWS_UNDESIRED_URLS,
     desiredURLs: FOXNEWS_DESIRED_URLS,
     skipCategoryPages: FOXNEWS_CATEGORY_URLS,
   });
-  console.log(act.checkURLIsUndesired('https://www.foxbusiness.com/category/luxury-properties/'));
-  console.log(act.checkURLIsUndesired('https://www.foxbusiness.com/economy/'));
-  console.log(act.checkURLIsUndesired('https://www.outkick.com/culture/donald-trump-cartel-attacks-fear-inside-america'));
-  console.log(act.checkURLIsUndesired('https://www.foxnews.com/us/mayor-eric-adams-says-nycs-roosevelt-hotel-migrant-shelter-soon-close'));
-  console.log(act.checkURLIsUndesired('https://www.foxbusiness.com/politics/elon-musk-has-warning-federal-employees-still-working-from-home'));
+  console.log(await act.scrapeLandingPage());
 }
 
 async function main() {

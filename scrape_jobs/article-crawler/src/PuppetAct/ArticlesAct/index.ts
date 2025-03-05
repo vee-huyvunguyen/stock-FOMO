@@ -115,12 +115,11 @@ abstract class ArticleAct<P, T> {
   }
 
   async loadNewsPage(): Promise<boolean> {
-    try {
-      await this.scrapeMaster.goto(this.articleURL);
-    } catch (err) {
-      this._statusHandler.updateLoadPageError(err);
-      return false;
-    }
+    await this.scrapeMaster.goto(this.articleURL);
+    // if (this.scrapeMaster instanceof PuppetMaster) {
+    // TODO: simulate human interaction on the loaded browser
+    //   await this.scrapeMaster.scrollToEnd();
+    // }
     if (!this.manualPageType) {
       return await this.checkLoadedNewsPage();
     }
@@ -145,13 +144,20 @@ abstract class ArticleAct<P, T> {
   async checkElementExist(
     elementConfig: ElementsPageTypeConfig,
   ): Promise<boolean> {
-    const [eleSelector, attrName, attrValueExpect] = elementConfig.checkLoadedPageElement;
-    const foundElements = await this.scrapeMaster.selectElements(eleSelector);
-    if (foundElements.length === 0) {
-      return false;
+    for (
+      const [eleSelector, attrName, attrValueExpect]
+      of elementConfig.checkLoadedPageElement
+    ) {
+      const foundElements = await this.scrapeMaster.selectElements(eleSelector);
+      if (foundElements.length === 0) {
+        return false;
+      }
+      const attrToCheck = await foundElements[0].getProperty(attrName);
+      if (attrToCheck === attrValueExpect) {
+        return true;
+      }
     }
-    const attrToCheck = await foundElements[0].getProperty(attrName);
-    return attrToCheck === attrValueExpect;
+    return false;
   }
 
   async CategorizeLoadedPage(): Promise<PageClassification> {
@@ -420,8 +426,7 @@ abstract class ArticleAct<P, T> {
    */
   normalizeURL(url: string): string {
     // Normalize URLs by stripping query params and hash fragments
-    const normalized = url.split(/[?#]/)[0];
-    return normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
+    return url.split(/[?#]/)[0];
   }
 
   async extractArticleCommonElement(

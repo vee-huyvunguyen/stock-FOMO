@@ -30,6 +30,38 @@ export default class PuppetMaster implements ScrapeMaster<Page, ElementHandle> {
   }
 
   /**
+   * Scrolls to the end of the page smoothly over a specified duration
+   * @param {Miliseconds} duration - Time in milliseconds to complete the scroll (default: 3000ms)
+   * @returns {Promise<void>}
+   */
+  async scrollToEnd(duration: Miliseconds = 3000): Promise<void> {
+    const page = this.checkPage();
+
+    // Get initial scroll height
+    const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+
+    // Calculate how many steps we need for a smooth scroll
+    // Aiming for roughly 60fps (16.7ms per frame)
+    const steps = Math.floor(duration / 16.7);
+    const scrollStep = scrollHeight / steps;
+
+    // Perform the scroll in steps
+    for (let i = 0; i < steps; i++) {
+      await page.evaluate((step, currentStep) => {
+        window.scrollTo(0, step * (currentStep + 1));
+      }, scrollStep, i);
+
+      // Small delay between scroll steps
+      await this.delay(16.7);
+    }
+
+    // Ensure we've reached the bottom
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  }
+
+  /**
    * Check for undefined/missing fields in config, an replace theme with default values
    * @param {any} config:PuppetMasterConfig to be checked
    * @returns {any}

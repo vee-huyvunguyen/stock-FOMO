@@ -33,6 +33,13 @@
       "type": "boolean",
       "default": true,
       "editor": "checkbox"
+    },
+    "JDBCConnectionString": {
+      "title": "JDBC Connection String",
+      "type": "string",
+      "description": "The connection string for the database, for storing RawArticlePages",
+      "editor": "textfield",
+      "isSecret": true
     }
   },
   "required": ["urls"]

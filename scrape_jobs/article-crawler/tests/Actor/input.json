@@ -1,7 +1,10 @@
 {
   "urls": [
-    { "url": "https://www.cnbc.com/", "site": "cnbc" }
+    { "url": "https://www.outkick.com/", "site": "foxnews" },
+    { "url": "https://www.cnbc.com/2025/01/28/tech-worker-saved-up-to-90-percent-of-his-pay-and-retired-with-3point5-million-dollars.html", "site": "cnbc" },
+    { "url": "https://www.cnbc.com/select/best-mortgage-lenders-first-time-homebuyers/", "site": "cnbc" }
   ],
-  "maxPages": 20,
-  "skippingCategoryPages": true
+  "maxPages": 200,
+  "skippingCategoryPages": true,
+  "JDBCConnectionString": "postgresql://postgres:vee-huyvunguyen@127.0.0.1:5432/stock_db?schema=scrape"
 }

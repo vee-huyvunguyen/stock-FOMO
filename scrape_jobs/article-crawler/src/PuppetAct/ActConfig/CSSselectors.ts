@@ -8,9 +8,9 @@ type ElementsPageTypeConfig = {
     CSSSelector,
     ElementAttritbuteName,
     ElementAttritbute,
-  ];
+  ][];
   undesired: boolean;
-  [key: string]: string | boolean | [string, string, string]; // Allows additional fields with any type
+  [key: string]: string | boolean | [string, string, string][]; // Allows additional fields with any type
 };
 type TypeBaseCSSSelector = {
   mainArticle: ElementsPageTypeConfig;
@@ -20,11 +20,15 @@ type TypeBaseCSSSelector = {
 const CNBCActCSSselector: TypeBaseCSSSelector = {
   mainArticle: {
     // Example: https://www.cnbc.com/2025/02/03/stock-market-today-live-updates.html
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       'a.branding-menu-logo',
       'href',
       'https://www.cnbc.com/world/',
-    ],
+    ], [
+      'a.branding-menu-logo',
+      'href',
+      'https://www.cnbc.com/',
+    ]],
     undesired: false,
     // Title of the article is not always the .title of the html page
     // Still have to get it independently
@@ -39,11 +43,11 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
   },
   makeItArticle: {
     // Example: https://www.cnbc.com/2025/01/28/tech-worker-saved-up-to-90-percent-of-his-pay-and-retired-with-3point5-million-dollars.html
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       '.MakeItGlobalNav-styles-makeit-logo--sXqSs',
       'href',
       'https://www.cnbc.com/make-it/',
-    ],
+    ]],
     undesired: false,
     articleTitleElement: 'h1[class^="ArticleHeader-styles-makeit-headline--"]',
     contentElements: '[data-module="ArticleBody"]',
@@ -56,11 +60,11 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
   },
   selectArticle: {
     // Example: https://www.cnbc.com/select/best-mortgage-lenders-first-time-homebuyers/
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       '.logo-wrap > a:nth-child(1)',
       'href',
       'https://www.cnbc.com/select/',
-    ],
+    ]],
     undesired: false,
     articleTitleElement: 'h1[class^="ArticleHeader-styles-select-headline--"]',
     contentElements: '[data-module="ArticleBody"]',
@@ -73,20 +77,20 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
   },
   podcastArticle: {
     // Example: https://www.cnbc.com/podcasts/the-takeout/
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       '.PageHeaderWithTuneInText-title',
       'innerHTML',
       'Podcasts',
-    ],
+    ]],
     undesired: true,
   },
   proArticle: {
     // Example: https://www.cnbc.com/2025/02/04/mondays-turnaround-showed-little-guy-continues-to-drive-bull-market.html
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       '.ArticleHeader-wrapperHeroNoImage > a.ProPill-proPillLink[data-type="pro-button"]',
       'href',
       'https://www.cnbc.com/pro/',
-    ],
+    ]],
     undesired: true,
   },
 };
@@ -94,7 +98,7 @@ const CNBCActCSSselector: TypeBaseCSSSelector = {
 const FoxNewsActCSSselector: TypeBaseCSSSelector = {
   mainArticle: {
     // Example: https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says
-    checkLoadedPageElement: ['a.logo', 'href', 'https://www.foxnews.com/'],
+    checkLoadedPageElement: [['a.logo', 'href', 'https://www.foxnews.com/']],
     undesired: false,
     articleTitleElement:
       'div.article-meta.article-meta-upper > h1.headline.speakable',
@@ -109,11 +113,11 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
   },
   businessArticle: {
     // Example: https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       'div.branding > a.logo',
       'href',
       'https://www.foxbusiness.com/',
-    ],
+    ]],
     undesired: false,
     articleTitleElement: 'header.article-header > h1.headline',
     contentElements: 'div.article-content',
@@ -128,11 +132,11 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
   },
   outkickArticle: {
     // Example: https://www.outkick.com/culture/rachel-stuhlmann-slides-pink-tennis-outfit-valentines-day-eagles-fans-fighting-baja-blast-pie
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       'header.site-header > div.inner > div.logo > a',
       'href',
       'https://www.outkick.com/',
-    ],
+    ]],
     undesired: false,
     articleTitleElement:
       'div.article-content > header.article-header > h1.headline',
@@ -148,11 +152,11 @@ const FoxNewsActCSSselector: TypeBaseCSSSelector = {
   },
   weatherArticle: {
     // Example: https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast
-    checkLoadedPageElement: [
+    checkLoadedPageElement: [[
       'div.branding span > a.logo',
       'href',
       'https://www.foxweather.com/',
-    ],
+    ]],
     undesired: false,
     articleTitleElement: 'header.article-header > h1.headline',
     contentElements: 'div.article-content > div.article-body',

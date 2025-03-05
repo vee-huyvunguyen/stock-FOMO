@@ -1,13 +1,14 @@
 import { Actor } from 'apify';
 import { PuppeteerCrawler, enqueueLinks } from 'crawlee';
 import FoxNewsAct from './PuppetAct/ArticlesAct/FoxNewsAct/index.js';
-import ConsoleWatcher from './PuppetShow/TheWatcher/ConsoleWatcher.js';
 import PuppetMaster from './PuppetShow/ScrapeMaster/PuppetMaster.js';
 import { CNBC_UNDESIRED_URLS, FOXNEWS_UNDESIRED_URLS } from './PuppetAct/ActConfig/UndesiredURLs.js';
 import { CNBCActCSSselector, FoxNewsActCSSselector } from './PuppetAct/ActConfig/CSSselectors.js';
 import CNBCAct from './PuppetAct/ArticlesAct/CNBCAct/index.js';
 import { FOXNEWS_DESIRED_URLS, CNBC_DESIRED_URLS } from './PuppetAct/ActConfig/DesiredURLs.js';
 import { FOXNEWS_CATEGORY_URLS, CNBC_CATEGORY_URLS } from './PuppetAct/ActConfig/CategoryURLS.js';
+import { pushDataToDB } from './utils.js';
+import CrawleeWatcher from './PuppetShow/TheWatcher/CrawleeWatcher.js';
 
 const ACT_REGISTRY = {
   foxnews: {
@@ -33,6 +34,7 @@ interface CrawlerInput {
   }>;
   maxPages?: number;
   skippingCategoryPages: boolean;
+  JDBCConnectionString?: string;
 }
 
 await Actor.main(async () => {
@@ -43,8 +45,8 @@ await Actor.main(async () => {
 
   const crawler = new PuppeteerCrawler({
     maxRequestsPerCrawl: input.maxPages,
-    requestHandler: async ({ page, request, crawler: crawlerInstance }) => {
-      const watcher = new ConsoleWatcher({ level: 'warn' });
+    requestHandler: async ({ page, request, crawler: crawlerInstance, log }) => {
+      const watcher = new CrawleeWatcher(log);
       const scrapeMaster = new PuppetMaster(
         page,
         page.browser(),
@@ -79,7 +81,12 @@ await Actor.main(async () => {
       }
 
       const data = await act.scrape();
-      await Actor.pushData(data);
+      if (input.JDBCConnectionString) {
+        process.env.DATABASE_URL = input.JDBCConnectionString;
+        await pushDataToDB(data, watcher);
+      } else {
+        await Actor.pushData(data);
+      }
 
       // Enqueue additional article links if present
       if (data.other_article_links?.length) {

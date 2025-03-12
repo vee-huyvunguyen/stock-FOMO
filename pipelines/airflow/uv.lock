@@ -5,3 +5,27 @@ requires-python = ">=3.11"
 name = "airflow"
 version = "0.1.0"
 source = { virtual = "." }
+dependencies = [
+    { name = "dbt" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "dbt", specifier = ">=1.0.0.38.31" }]
+
+[[package]]
+name = "dbt"
+version = "1.0.0.38.31"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "setuptools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/90/a3/51565deaccaf66bd570acd0f9c64f6f090d80586640349ef244b12d5a8e2/dbt-1.0.0.38.31.tar.gz", hash = "sha256:36c017ae7568ae5b7eee5494c0430f7c9e60d616df9943c943ad8756dde447fe", size = 3317 }
+
+[[package]]
+name = "setuptools"
+version = "76.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/32/d2/7b171caf085ba0d40d8391f54e1c75a1cda9255f542becf84575cfd8a732/setuptools-76.0.0.tar.gz", hash = "sha256:43b4ee60e10b0d0ee98ad11918e114c70701bc6051662a9a675a0496c1a158f4", size = 1349387 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/37/66/d2d7e6ad554f3a7c7297c3f8ef6e22643ad3d35ef5c63bf488bc89f32f31/setuptools-76.0.0-py3-none-any.whl", hash = "sha256:199466a166ff664970d0ee145839f5582cb9bca7a0a3a2e795b6a9cb2308e9c6", size = 1236106 },
+]

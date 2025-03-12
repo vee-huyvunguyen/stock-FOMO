@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: raw_articles_validated
+    description: "Validated articles from the scrape.raw_article_pages table"
+    columns:
+      - name: id
+        description: "Primary key of the article"
+        tests:
+          - not_null
+          - unique
+      
+      - name: url
+        description: "URL of the article"
+        tests:
+          - not_null
+          - unique
+          - valid_url_format
+      
+      - name: article_title
+        description: "Title of the article"
+        tests:
+          - not_null:
+              where: "article_title_element is not null"
+      
+      - name: content
+        description: "Content of the article"
+        tests:
+          - not_null:
+              where: "content_elements is not null"
+      
+      - name: author
+        description: "Author of the article"
+        tests:
+          - not_null:
+              where: "author_elements is not null"
+
+      - name: scraped_at
+        description: "Timestamp when the article was scraped"
+        tests:
+          - not_null
+      
+      - name: inserted_at
+        description: "Timestamp when the article was inserted"
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "url ~ '^https?://'"
+          description: "URL should start with http:// or https://"
+      
+      - dbt_utils.expression_is_true:
+          expression: "scrape_status->>'validated' = 'true'"
+          description: "Only validated articles should be included"

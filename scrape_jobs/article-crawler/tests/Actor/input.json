@@ -1,8 +1,8 @@
 {
   "urls": [
-    { "url": "https://www.outkick.com/culture/rachel-stuhlmann-slides-pink-tennis-outfit-valentines-day-eagles-fans-fighting-baja-blast-pie", "site": "foxnews" },
-    { "url": "https://www.cnbc.com/2025/01/28/tech-worker-saved-up-to-90-percent-of-his-pay-and-retired-with-3point5-million-dollars.html", "site": "cnbc" },
-    { "url": "https://www.cnbc.com/select/best-mortgage-lenders-first-time-homebuyers/", "site": "cnbc" }
+    { "url": "https://www.foxnews.com/us/4-fema-employees-fired-over-egregious-payments-migrants-dhs-says", "site": "foxnews" },
+    { "url": "https://www.foxbusiness.com/media/jon-taffer-schools-democrat-leader-pointing-fingers-trump-over-rising-prices", "site": "foxnews" },
+    { "url": "https://www.foxweather.com/weather-news/saturday-sunday-storm-snow-rain-severe-midwest-northeast-southeast", "site": "foxnews" }   
   ],
   "maxPages": 200,
   "skippingCategoryPages": true,

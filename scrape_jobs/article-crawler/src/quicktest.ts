@@ -112,7 +112,7 @@ async function testFunctions<P, T>(scrapeMaster: ScrapeMaster<P, T>) {
     desiredURLs: FOXNEWS_DESIRED_URLS,
     skipCategoryPages: FOXNEWS_CATEGORY_URLS,
   });
-  console.log(await act.scrapeLandingPage());
+  console.log(await act.checkURLIsUndesired('https://www.foxbusiness.com/video/6368650694112'));
 }
 
 async function main() {

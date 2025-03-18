@@ -98,10 +98,13 @@ abstract class ArticleAct<P, T> {
     if (!this.desiredURLs.test(url)) {
       return true;
     }
+    if (this.undesiredURLsRegex.test(url)) {
+      return true;
+    }
     if (this.skipCategoryPages) {
       return this.checkURLIsCategoryPage(url);
     }
-    return this.undesiredURLsRegex.test(url);
+    return false;
   }
 
   getPageType(): string | undefined {
